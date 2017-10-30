@@ -5,11 +5,12 @@ import io.audium.audiumbackend.services.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-public class SongController {
+public class LibraryController {
 
     @Autowired
     private SongService songService;

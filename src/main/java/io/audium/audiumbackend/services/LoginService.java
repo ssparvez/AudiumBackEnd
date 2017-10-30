@@ -1,10 +1,13 @@
-package io.audium.audiumbackend.login;
+package io.audium.audiumbackend.services;
 import com.auth0.jwt.*;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import java.io.UnsupportedEncodingException;
+import io.audium.audiumbackend.repositories.LoginRepository;
+import io.audium.audiumbackend.entities.Account;
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,4 +1,7 @@
-package io.audium.audiumbackend.login;
+package io.audium.audiumbackend.controllers;
+
+import io.audium.audiumbackend.services.LoginService;
+import io.audium.audiumbackend.entities.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
