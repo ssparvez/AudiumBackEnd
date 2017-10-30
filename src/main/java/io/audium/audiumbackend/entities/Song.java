@@ -10,19 +10,26 @@ public class Song {
     private Long songid;
     private String title;
     private java.sql.Time duration;
-  private Long playsthismonth;
-  private Long totalplays;
-  private String file;
-  private String year;
-  private Long genreid;
+    private Long playsthismonth;
+    private Long totalplays;
+    private String file;
+    private String year;
+    private Long genreid;
     private Long isexplicit;
 
-  @ManyToMany
+    @ManyToMany
     @JoinTable(
-            name="artist_song",
-            joinColumns=@JoinColumn(name="songid", referencedColumnName="songid"),
-            inverseJoinColumns=@JoinColumn(name="artistid", referencedColumnName="artistid"))
+            name = "artist_song",
+            joinColumns = @JoinColumn(name = "songid", referencedColumnName = "songid"),
+            inverseJoinColumns = @JoinColumn(name = "artistid", referencedColumnName = "artistid"))
     private List<Artist> artists;
+
+    @ManyToOne
+    @JoinTable(
+            name = "album_song",
+            joinColumns = @JoinColumn(name = "songid", referencedColumnName = "songid"),
+            inverseJoinColumns = @JoinColumn(name = "albumid", referencedColumnName = "albumid"))
+    private Album album;
 
     public Song() {
     }
@@ -38,79 +45,80 @@ public class Song {
         this.genreid = genreid;
         this.isexplicit = isexplicit;
         this.artists = artists;
+        this.album = album;
     }
 
     public Long getSongid() {
-    return songid;
-  }
+        return songid;
+    }
 
-  public void setSongid(Long songid) {
-    this.songid = songid;
-  }
+    public void setSongid(Long songid) {
+        this.songid = songid;
+    }
 
-  public String getTitle() {
-    return title;
-  }
+    public String getTitle() {
+        return title;
+    }
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-  public java.sql.Time getDuration() {
-    return duration;
-  }
+    public java.sql.Time getDuration() {
+        return duration;
+    }
 
-  public void setDuration(java.sql.Time duration) {
-    this.duration = duration;
-  }
+    public void setDuration(java.sql.Time duration) {
+        this.duration = duration;
+    }
 
-  public Long getPlaysthismonth() {
-    return playsthismonth;
-  }
+    public Long getPlaysthismonth() {
+        return playsthismonth;
+    }
 
-  public void setPlaysthismonth(Long playsthismonth) {
-    this.playsthismonth = playsthismonth;
-  }
+    public void setPlaysthismonth(Long playsthismonth) {
+        this.playsthismonth = playsthismonth;
+    }
 
-  public Long getTotalplays() {
-    return totalplays;
-  }
+    public Long getTotalplays() {
+        return totalplays;
+    }
 
-  public void setTotalplays(Long totalplays) {
-    this.totalplays = totalplays;
-  }
+    public void setTotalplays(Long totalplays) {
+        this.totalplays = totalplays;
+    }
 
-  public String getFile() {
-    return file;
-  }
+    public String getFile() {
+        return file;
+    }
 
-  public void setFile(String file) {
-    this.file = file;
-  }
+    public void setFile(String file) {
+        this.file = file;
+    }
 
-  public String getYear() {
-    return year;
-  }
+    public String getYear() {
+        return year;
+    }
 
-  public void setYear(String year) {
-    this.year = year;
-  }
+    public void setYear(String year) {
+        this.year = year;
+    }
 
-  public Long getGenreid() {
-    return genreid;
-  }
+    public Long getGenreid() {
+        return genreid;
+    }
 
-  public void setGenreid(Long genreid) {
-    this.genreid = genreid;
-  }
+    public void setGenreid(Long genreid) {
+        this.genreid = genreid;
+    }
 
-  public Long getIsexplicit() {
-    return isexplicit;
-  }
+    public Long getIsexplicit() {
+        return isexplicit;
+    }
 
-  public void setIsexplicit(Long isexplicit) {
-    this.isexplicit = isexplicit;
-  }
+    public void setIsexplicit(Long isexplicit) {
+        this.isexplicit = isexplicit;
+    }
 
     public List<Artist> getArtists() {
         return artists;
@@ -129,5 +137,13 @@ public class Song {
 //            }
 //        }
 //        return null;
+    }
+
+    public Album getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(Album album) {
+        this.album = album;
     }
 }

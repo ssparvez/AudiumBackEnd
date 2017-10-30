@@ -1,4 +1,4 @@
-package io.audium.audiumbackend.login;
+package io.audium.audiumbackend.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

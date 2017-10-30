@@ -1,5 +1,6 @@
-package io.audium.audiumbackend.login;
+package io.audium.audiumbackend.repositories;
 
+import io.audium.audiumbackend.entities.Account;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 

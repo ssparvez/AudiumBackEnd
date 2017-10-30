@@ -1,7 +1,7 @@
 package io.audium.audiumbackend.controllers;
 
 import io.audium.audiumbackend.entities.Song;
-import io.audium.audiumbackend.services.SongService;
+import io.audium.audiumbackend.services.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,38 +9,38 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-public class SongController {
+public class LibraryController {
 
     @Autowired
-    private SongService songService;
+    private LibraryService libraryService;
 
     @GetMapping(value = "/songs")
     public List<Song> getAllSongs() {
-        return songService.getAllSongs();
+        return libraryService.getAllSongs();
     }
 
     @GetMapping(value = "/songs/{id}")
     public Song getSong(@PathVariable long id) {
-        return songService.getSong(id);
+        return libraryService.getSong(id);
     }
 
     @PostMapping(value = "/songs")
     public void addSong(@RequestBody Song song) { // request body takes a json format of object and converts to java obj
-        songService.addSong(song);
+        libraryService.addSong(song);
     }
 
     @PutMapping(value = "/songs/{id}")
     public void updateSong(@PathVariable String id, @RequestBody Song song) { // request body takes a json format of object and converts to java obj
-        songService.updateSong(id, song);
+        libraryService.updateSong(id, song);
     }
 
     @DeleteMapping(value = "/songs/{id}")
     public void removeSong(@PathVariable String id) {
-        songService.removeSong(id);
+        libraryService.removeSong(id);
     }
 
     @PostMapping(value = "songs/changeArtist/")
     public void changeArtist() {
-        songService.changeArtist();
+        libraryService.changeArtist();
     }
 }
