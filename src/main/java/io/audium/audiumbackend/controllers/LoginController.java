@@ -12,7 +12,7 @@ public class LoginController {
 
 
     @RequestMapping(method = RequestMethod.POST, value = "/login")
-    public String checkLoginInfo(@RequestBody Account account) {
+    public String checkLoginInfo( @RequestBody Account account) {
         return loginService.checkLoginInfo(account.getUsername(), account.getPassword());
     }
 

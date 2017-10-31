@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
 @Service
 public class LoginService {
@@ -22,8 +23,13 @@ public class LoginService {
                 Algorithm algorithm = Algorithm.HMAC256("cse308");
                 String token = JWT.create()
                         .withClaim("username",account.getUsername())
+                        .withClaim("accountID",account.getAccountid())
+                        .withClaim("firstName",account.getFirstname())
+                        .withClaim("lastName",account.getLastname())
                         .withClaim("email",account.getEmail())
+                        .withClaim("role", account.getRole())
                         .withIssuer("audium")
+                        //.withExpiresAt( new Date(1800000))
                         .sign(algorithm);
                 return token;
             } catch (UnsupportedEncodingException exception){
