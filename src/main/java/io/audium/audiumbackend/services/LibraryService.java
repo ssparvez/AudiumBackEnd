@@ -31,7 +31,6 @@ public class LibraryService {
     }
     //TESTING
     public void changeArtist() {
-        System.out.println("yo");
         //Song song = songRepository.findBySongid(new Long(1));
         Artist artist = songRepository.findBySongid(1).getArtist(new Long(2));
         artist.setName("T.C.");
