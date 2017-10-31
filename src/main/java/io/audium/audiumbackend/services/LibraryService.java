@@ -1,7 +1,9 @@
 package io.audium.audiumbackend.services;
 
 import io.audium.audiumbackend.entities.Artist;
+import io.audium.audiumbackend.entities.Playlist;
 import io.audium.audiumbackend.repositories.ArtistRepository;
+import io.audium.audiumbackend.repositories.PlaylistRepository;
 import io.audium.audiumbackend.repositories.SongRepository;
 import io.audium.audiumbackend.entities.Song;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ public class LibraryService {
     private SongRepository songRepository;
     @Autowired
     private ArtistRepository artistRepository;
+    @Autowired
+    private PlaylistRepository playlistRepository;
 
     public List<Song> getAllSongs() {
         List<Song> songs = new ArrayList<>();
@@ -23,7 +27,6 @@ public class LibraryService {
         for (Song song: songs) {
             System.out.println(song.getTitle());
         }
-        System.out.println(songs.toString());
         return songs;
     }
     //TESTING
@@ -52,5 +55,20 @@ public class LibraryService {
 
     public void removeSong(String id) {
         songRepository.delete(id);
+    }
+
+    public List<Playlist> getAllPlaylists() {
+        List<Playlist> playlists = new ArrayList<>();
+        playlistRepository.findAll().forEach(playlists::add); // this line gets from the db and converts data into objects
+        for (Playlist playlist: playlists) {
+            System.out.println(playlist.getName());
+        }
+        return playlists;
+    }
+
+    public List<Artist> getAllArtists() {
+        List<Artist> artists = new ArrayList<>();
+        artistRepository.findAll().forEach(artists::add); // this line gets from the db and converts data into objects
+        return artists;
     }
 }

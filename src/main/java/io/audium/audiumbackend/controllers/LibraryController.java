@@ -1,5 +1,7 @@
 package io.audium.audiumbackend.controllers;
 
+import io.audium.audiumbackend.entities.Artist;
+import io.audium.audiumbackend.entities.Playlist;
 import io.audium.audiumbackend.entities.Song;
 import io.audium.audiumbackend.services.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +45,15 @@ public class LibraryController {
     @PostMapping(value = "songs/changeArtist/")
     public void changeArtist() {
         libraryService.changeArtist();
+    }
+
+    @GetMapping(value = "/playlists")
+    public List<Playlist> getAllPlaylists() {
+        return libraryService.getAllPlaylists();
+    }
+
+    @GetMapping(value = "/artists")
+    public List<Artist> getAllArtists() {
+        return libraryService.getAllArtists();
     }
 }

@@ -1,8 +1,8 @@
 package io.audium.audiumbackend.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 public class CustomerAccount {
@@ -11,6 +11,13 @@ public class CustomerAccount {
     private String username;
     private java.sql.Date dateofbirth;
     private String gender;
+
+    @OneToMany
+    @JoinTable(
+            name = "customer_song",
+            joinColumns = @JoinColumn(name = "customerid", referencedColumnName = "customerid"),
+            inverseJoinColumns = @JoinColumn(name = "songid", referencedColumnName = "songid"))
+    private List<Song> songs;
 
     public CustomerAccount() {
     }
@@ -52,5 +59,13 @@ public class CustomerAccount {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public List<Song> getSongs() {
+        return songs;
+    }
+
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
     }
 }
