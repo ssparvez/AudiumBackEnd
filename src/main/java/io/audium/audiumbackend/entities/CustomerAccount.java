@@ -19,6 +19,13 @@ public class CustomerAccount {
             inverseJoinColumns = @JoinColumn(name = "songid", referencedColumnName = "songid"))
     private List<Song> songs;
 
+    @OneToMany
+    @JoinTable(
+            name = "customer_song",
+            joinColumns = @JoinColumn(name = "customerid", referencedColumnName = "customerid"),
+            inverseJoinColumns = @JoinColumn(name = "songid", referencedColumnName = "songid"))
+    private List<Playlist> playlists;
+
     public CustomerAccount() {
     }
 
