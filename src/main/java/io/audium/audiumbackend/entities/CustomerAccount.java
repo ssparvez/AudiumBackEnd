@@ -5,52 +5,30 @@ import java.sql.Date;
 import java.util.List;
 
 @Entity
-public class CustomerAccount {
-    @Id
-    private Long customerid;
-    private String username;
+@Table(name="customeraccount")
+@PrimaryKeyJoinColumn(name = "accountid", referencedColumnName = "accountid")
+public class CustomerAccount extends Account{
+
     private java.sql.Date dateofbirth;
     private String gender;
 
-    @OneToMany
+
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "customer_song",
-            joinColumns = @JoinColumn(name = "customerid", referencedColumnName = "customerid"),
+            joinColumns = @JoinColumn(name = "accountid", referencedColumnName = "accountid"),
             inverseJoinColumns = @JoinColumn(name = "songid", referencedColumnName = "songid"))
     private List<Song> songs;
 
-    @OneToMany
-    @JoinTable(
-            name = "customer_song",
-            joinColumns = @JoinColumn(name = "customerid", referencedColumnName = "customerid"),
-            inverseJoinColumns = @JoinColumn(name = "songid", referencedColumnName = "songid"))
-    private List<Playlist> playlists;
 
     public CustomerAccount() {
     }
 
-    public CustomerAccount(Long customerid, String username, Date dateofbirth, String gender) {
-        this.customerid = customerid;
-        this.username = username;
+    public CustomerAccount( Date dateofbirth, String gender) {
         this.dateofbirth = dateofbirth;
         this.gender = gender;
     }
 
-    public Long getCustomerid() {
-        return customerid;
-    }
-
-    public void setCustomerid(Long customerid) {
-        this.customerid = customerid;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public java.sql.Date getDateofbirth() {
         return dateofbirth;

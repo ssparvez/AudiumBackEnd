@@ -1,12 +1,12 @@
 package io.audium.audiumbackend.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Account {
     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
   private Long accountid;
   private String email;
   private String password;

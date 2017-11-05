@@ -24,5 +24,4 @@ public class LoginController {
         return authenticationService.checkLoginInfo(account.getUsername(), account.getPassword());
     }
 
-
 }

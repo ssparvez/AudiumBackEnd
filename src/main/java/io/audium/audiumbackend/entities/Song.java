@@ -10,12 +10,11 @@ public class Song {
     private Long songid;
     private String title;
     private java.sql.Time duration;
-    private Long playsthismonth;
-    private Long totalplays;
     private String file;
     private String year;
     private Long genreid;
     private Long isexplicit;
+    private String lyrics;
 
     @ManyToMany
     @JoinTable(
@@ -38,8 +37,6 @@ public class Song {
         this.songid = songid;
         this.title = title;
         this.duration = duration;
-        this.playsthismonth = playsthismonth;
-        this.totalplays = totalplays;
         this.file = file;
         this.year = year;
         this.genreid = genreid;
@@ -72,21 +69,6 @@ public class Song {
         this.duration = duration;
     }
 
-    public Long getPlaysthismonth() {
-        return playsthismonth;
-    }
-
-    public void setPlaysthismonth(Long playsthismonth) {
-        this.playsthismonth = playsthismonth;
-    }
-
-    public Long getTotalplays() {
-        return totalplays;
-    }
-
-    public void setTotalplays(Long totalplays) {
-        this.totalplays = totalplays;
-    }
 
     public String getFile() {
         return file;
@@ -118,6 +100,14 @@ public class Song {
 
     public void setIsexplicit(Long isexplicit) {
         this.isexplicit = isexplicit;
+    }
+
+    public String getLyrics() {
+        return lyrics;
+    }
+
+    public void setLyrics(String lyrics) {
+        this.lyrics = lyrics;
     }
 
     public List<Artist> getArtists() {
