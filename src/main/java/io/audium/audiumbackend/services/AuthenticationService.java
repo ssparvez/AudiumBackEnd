@@ -21,6 +21,7 @@ public class AuthenticationService {
 
     public String checkLoginInfo(String username, String password) {
        List<Object[]> lst = authenticationRepository.verifyLoginInfo(username, password);
+
         if ( !lst.isEmpty()) {
 
             try {
