@@ -19,6 +19,10 @@ public class Playlist {
             inverseJoinColumns = @JoinColumn(name = "songid", referencedColumnName = "songid"))
     private List<Song> songs;
 
+
+    public Playlist() {
+    }
+
     public Playlist(Long playlistid, Long creatorid, String name, String description, Long ispublic, List<Song> songs) {
         this.playlistid = playlistid;
         this.creatorid = creatorid;
@@ -27,6 +31,8 @@ public class Playlist {
         this.ispublic = ispublic;
         this.songs = songs;
     }
+
+
 
     public Long getPlaylistid() {
         return playlistid;
