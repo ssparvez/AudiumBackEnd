@@ -1,8 +1,10 @@
 package io.audium.audiumbackend.services;
 
 import io.audium.audiumbackend.entities.Artist;
+import io.audium.audiumbackend.entities.CustomerAccount;
 import io.audium.audiumbackend.entities.Playlist;
 import io.audium.audiumbackend.repositories.ArtistRepository;
+import io.audium.audiumbackend.repositories.CustomerAccountRepository;
 import io.audium.audiumbackend.repositories.PlaylistRepository;
 import io.audium.audiumbackend.repositories.SongRepository;
 import io.audium.audiumbackend.entities.Song;
@@ -14,6 +16,8 @@ import java.util.List;
 
 @Service
 public class LibraryService {
+    @Autowired
+    private CustomerAccountRepository customerAccountRepository;
     @Autowired
     private SongRepository songRepository;
     @Autowired
@@ -69,5 +73,13 @@ public class LibraryService {
         List<Artist> artists = new ArrayList<>();
         artistRepository.findAll().forEach(artists::add); // this line gets from the db and converts data into objects
         return artists;
+    }
+
+    public List<Song> getLibrarySongs(long accountId) {
+        List<Song> librarySongs = customerAccountRepository.findByAccountid(accountId).getSongs();
+        for (Song song: librarySongs) {
+            System.out.println(song.getTitle());
+        }
+        return librarySongs;
     }
 }

@@ -56,4 +56,9 @@ public class LibraryController {
     public List<Artist> getAllArtists() {
         return libraryService.getAllArtists();
     }
+
+    @GetMapping(value = "/accounts/{id}/songs")
+    public List<Song> getLibrarySongs(@PathVariable long id) {
+        return libraryService.getLibrarySongs(id);
+    }
 }

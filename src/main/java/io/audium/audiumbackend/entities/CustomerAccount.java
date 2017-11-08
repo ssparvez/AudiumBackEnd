@@ -13,14 +13,14 @@ public class CustomerAccount extends Account{
     private String gender;
 
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "customer_song",
             joinColumns = @JoinColumn(name = "accountid", referencedColumnName = "accountid"),
             inverseJoinColumns = @JoinColumn(name = "songid", referencedColumnName = "songid"))
     private List<Song> songs;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "playlist_follower",
             joinColumns = @JoinColumn(name = "accountid", referencedColumnName = "accountid"),
