@@ -13,7 +13,7 @@ public class CustomerAccount extends Account{
     private String gender;
 
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "customer_song",
             joinColumns = @JoinColumn(name = "accountid", referencedColumnName = "accountid"),

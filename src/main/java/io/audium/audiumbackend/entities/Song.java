@@ -23,17 +23,17 @@ public class Song {
             inverseJoinColumns = @JoinColumn(name = "artistid", referencedColumnName = "artistid"))
     private List<Artist> artists;
 
-    @ManyToOne
+    @ManyToMany
     @JoinTable(
             name = "album_song",
             joinColumns = @JoinColumn(name = "songid", referencedColumnName = "songid"),
             inverseJoinColumns = @JoinColumn(name = "albumid", referencedColumnName = "albumid"))
-    private Album album;
+    private List<Album> albums;
 
     public Song() {
     }
 
-    public Song(Long songid, String title, Time duration, Long playsthismonth, Long totalplays, String file, String year, Long genreid, Long isexplicit, List<Artist> artists) {
+    public Song(Long songid, String title, Time duration, Long playsthismonth, Long totalplays, String file, String year, Long genreid, Long isexplicit, List<Artist> artists,  List<Album> albums) {
         this.songid = songid;
         this.title = title;
         this.duration = duration;
@@ -42,7 +42,6 @@ public class Song {
         this.genreid = genreid;
         this.isexplicit = isexplicit;
         this.artists = artists;
-        this.album = album;
     }
 
     public Long getSongid() {
@@ -129,11 +128,11 @@ public class Song {
 //        return null;
     }
 
-    public Album getAlbum() {
-        return album;
+    public List<Album> getAlbums() {
+        return albums;
     }
 
-    public void setAlbum(Album album) {
-        this.album = album;
+    public void setAlbums(List<Album> albums) {
+        this.albums = albums;
     }
 }
