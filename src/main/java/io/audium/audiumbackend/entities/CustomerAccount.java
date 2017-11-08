@@ -20,7 +20,7 @@ public class CustomerAccount extends Account{
             inverseJoinColumns = @JoinColumn(name = "songid", referencedColumnName = "songid"))
     private List<Song> songs;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "playlist_follower",
             joinColumns = @JoinColumn(name = "accountid", referencedColumnName = "accountid"),
