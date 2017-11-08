@@ -9,4 +9,6 @@ public interface CustomerAccountRepository extends CrudRepository<CustomerAccoun
 
     public CustomerAccount deleteByAccountid(long id);
 
+    public CustomerAccount findByAccountid( long id);
+
 }
