@@ -1,13 +1,10 @@
 package io.audium.audiumbackend.services;
 
-import io.audium.audiumbackend.entities.Artist;
-import io.audium.audiumbackend.entities.CustomerAccount;
-import io.audium.audiumbackend.entities.Playlist;
+import io.audium.audiumbackend.entities.*;
 import io.audium.audiumbackend.repositories.ArtistRepository;
 import io.audium.audiumbackend.repositories.CustomerAccountRepository;
 import io.audium.audiumbackend.repositories.PlaylistRepository;
 import io.audium.audiumbackend.repositories.SongRepository;
-import io.audium.audiumbackend.entities.Song;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,26 +57,35 @@ public class LibraryService {
         songRepository.delete(id);
     }
 
-    public List<Playlist> getAllPlaylists() {
-        List<Playlist> playlists = new ArrayList<>();
-        playlistRepository.findAll().forEach(playlists::add); // this line gets from the db and converts data into objects
-        for (Playlist playlist: playlists) {
-            System.out.println(playlist.getName());
-        }
-        return playlists;
-    }
-
     public List<Artist> getAllArtists() {
         List<Artist> artists = new ArrayList<>();
         artistRepository.findAll().forEach(artists::add); // this line gets from the db and converts data into objects
         return artists;
     }
 
-    public List<Song> getLibrarySongs(long accountId) {
-        List<Song> librarySongs = customerAccountRepository.findByAccountid(accountId).getSongs();
-        for (Song song: librarySongs) {
+    public List<Song> getLibrarySongs(long id) {
+        CustomerAccount customerAccount = customerAccountRepository.findByAccountid(id);
+        for (Song song: customerAccount.getSongs()) {
             System.out.println(song.getTitle());
         }
-        return librarySongs;
+        return customerAccount.getSongs();
+    }
+
+    public List<Playlist> getLibraryPlaylists(long id) {
+        CustomerAccount customerAccount = customerAccountRepository.findByAccountid(id);
+        return customerAccount.getPlaylists();
+    }
+
+    // NEEDS WORK
+    public List<Album> getLibraryAlbums(long id) {
+        CustomerAccount customerAccount = customerAccountRepository.findByAccountid(id);
+        List<Song> songs = customerAccount.getSongs();
+        List<Album> albums = new ArrayList<>();
+        return albums;
+    }
+
+    public List<Song> getLibraryPlaylistSongs(long accountId, long playlistId) {
+        Playlist playlist = playlistRepository.findByPlaylistid(playlistId);
+        return playlist.getSongs();
     }
 }

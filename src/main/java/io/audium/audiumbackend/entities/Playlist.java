@@ -73,4 +73,12 @@ public class Playlist {
     public void setIspublic(Long ispublic) {
         this.ispublic = ispublic;
     }
+
+    public List<Song> getSongs() {
+        return songs;
+    }
+
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
+    }
 }

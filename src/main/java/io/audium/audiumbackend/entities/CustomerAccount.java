@@ -24,8 +24,8 @@ public class CustomerAccount extends Account{
     @JoinTable(
             name = "playlist_follower",
             joinColumns = @JoinColumn(name = "accountid", referencedColumnName = "accountid"),
-            inverseJoinColumns = @JoinColumn(name = "cus", referencedColumnName = "songid"))
-    private List<Song> playlists;
+            inverseJoinColumns = @JoinColumn(name = "playlistid", referencedColumnName = "playlistid"))
+    private List<Playlist> playlists;
 
 
     public CustomerAccount() {
@@ -59,5 +59,13 @@ public class CustomerAccount extends Account{
 
     public void setSongs(List<Song> songs) {
         this.songs = songs;
+    }
+
+    public List<Playlist> getPlaylists() {
+        return playlists;
+    }
+
+    public void setPlaylists(List<Playlist> playlists) {
+        this.playlists = playlists;
     }
 }
