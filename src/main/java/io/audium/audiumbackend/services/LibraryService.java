@@ -49,7 +49,7 @@ public class LibraryService {
         songRepository.save(song);
     }
 
-    public void updateSong(String id, Song song) {
+    public void updateSong(long id, Song song) {
         songRepository.save(song); // this method finds the object in the db then saves
     }
 
@@ -63,17 +63,13 @@ public class LibraryService {
         return artists;
     }
 
+    //
     public List<Song> getLibrarySongs(long id) {
-        CustomerAccount customerAccount = customerAccountRepository.findByAccountid(id);
-        for (Song song: customerAccount.getSongs()) {
-            System.out.println(song.getTitle());
-        }
-        return customerAccount.getSongs();
+        return songRepository.findCustomerSongs(id);
     }
 
     public List<Playlist> getLibraryPlaylists(long id) {
-        CustomerAccount customerAccount = customerAccountRepository.findByAccountid(id);
-        return customerAccount.getPlaylists();
+        return playlistRepository.findCustomerPlaylists(id);
     }
 
     // NEEDS WORK

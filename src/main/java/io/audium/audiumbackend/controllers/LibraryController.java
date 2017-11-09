@@ -34,7 +34,7 @@ public class LibraryController {
     }
 
     @PutMapping(value = "/songs/{id}")
-    public void updateSong(@PathVariable String id, @RequestBody Song song) { // request body takes a json format of object and converts to java obj
+    public void updateSong(@PathVariable long id, @RequestBody Song song) { // request body takes a json format of object and converts to java obj
         libraryService.updateSong(id, song);
     }
 
