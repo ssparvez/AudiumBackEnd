@@ -12,4 +12,7 @@ public interface SongRepository extends CrudRepository<Song, String> {
 
     @Transactional
     public Song findBySongid(long songid);
+
+    @Query("select S from Customer_Song  C, Song S where C.accountid = ?1 and S.songid = C.songid")
+    public List<Song> findCustomerSongs(long accountid);
 }

@@ -7,7 +7,7 @@ import java.util.List;
 public class Playlist {
     @Id
     private Long playlistid;
-    private Long creatorid;
+    private Long accountid;
     private String name;
     private String description;
     private Long ispublic;
@@ -23,13 +23,12 @@ public class Playlist {
     public Playlist() {
     }
 
-    public Playlist(Long playlistid, Long creatorid, String name, String description, Long ispublic, List<Song> songs) {
+    public Playlist(Long playlistid, Long accountid, String name, String description, Long ispublic) {
         this.playlistid = playlistid;
-        this.creatorid = creatorid;
+        this.accountid = accountid;
         this.name = name;
         this.description = description;
         this.ispublic = ispublic;
-        this.songs = songs;
     }
 
 
@@ -42,12 +41,12 @@ public class Playlist {
         this.playlistid = playlistid;
     }
 
-    public Long getCreatorid() {
-        return creatorid;
+    public Long getAccountid() {
+        return accountid;
     }
 
-    public void setCreatorid(Long creatorid) {
-        this.creatorid = creatorid;
+    public void setAccountid(Long accountid) {
+        this.accountid = accountid;
     }
 
     public String getName() {
@@ -72,5 +71,13 @@ public class Playlist {
 
     public void setIspublic(Long ispublic) {
         this.ispublic = ispublic;
+    }
+
+    public List<Song> getSongs() {
+        return songs;
+    }
+
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
     }
 }

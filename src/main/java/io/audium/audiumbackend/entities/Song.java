@@ -33,7 +33,7 @@ public class Song {
     public Song() {
     }
 
-    public Song(Long songid, String title, Time duration, Long playsthismonth, Long totalplays, String file, String year, Long genreid, Long isexplicit, List<Album> albums) {
+    public Song(Long songid, String title, Time duration, Long playsthismonth, Long totalplays, String file, String year, Long genreid, Long isexplicit, String lyrics) {
         this.songid = songid;
         this.title = title;
         this.duration = duration;
@@ -41,6 +41,7 @@ public class Song {
         this.year = year;
         this.genreid = genreid;
         this.isexplicit = isexplicit;
+        this.lyrics = lyrics;
     }
 
     public Long getSongid() {
