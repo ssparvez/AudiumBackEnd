@@ -74,7 +74,7 @@ public class LibraryService {
 
     // NEEDS WORK
     public List<Album> getLibraryAlbums(long id) {
-        CustomerAccount customerAccount = customerAccountRepository.findByAccountid(id);
+        Customer customerAccount = customerAccountRepository.findByAccountid(id);
         List<Song> songs = customerAccount.getSongs();
         List<Album> albums = new ArrayList<>();
         return albums;
