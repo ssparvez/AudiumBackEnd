@@ -2,9 +2,11 @@ package io.audium.audiumbackend.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-public class Customer_Song {
+@Table(name="customer_song")
+public class CustomerSong {
   @Id
   private Long songid;
   private java.sql.Timestamp timeadded;

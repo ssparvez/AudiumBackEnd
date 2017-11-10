@@ -1,10 +1,7 @@
 package io.audium.audiumbackend.services;
 
 import io.audium.audiumbackend.entities.*;
-import io.audium.audiumbackend.repositories.ArtistRepository;
-import io.audium.audiumbackend.repositories.CustomerAccountRepository;
-import io.audium.audiumbackend.repositories.PlaylistRepository;
-import io.audium.audiumbackend.repositories.SongRepository;
+import io.audium.audiumbackend.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +14,8 @@ public class LibraryService {
     private CustomerAccountRepository customerAccountRepository;
     @Autowired
     private SongRepository songRepository;
+    @Autowired
+    private AlbumRepository albumRepository;
     @Autowired
     private ArtistRepository artistRepository;
     @Autowired
@@ -57,10 +56,8 @@ public class LibraryService {
         songRepository.delete(id);
     }
 
-    public List<Artist> getAllArtists() {
-        List<Artist> artists = new ArrayList<>();
-        artistRepository.findAll().forEach(artists::add); // this line gets from the db and converts data into objects
-        return artists;
+    public List<Artist> getLibraryArtists(long id) {
+        return artistRepository.findCustomerArtists(id);
     }
 
     //
@@ -74,10 +71,7 @@ public class LibraryService {
 
     // NEEDS WORK
     public List<Album> getLibraryAlbums(long id) {
-        Customer customerAccount = customerAccountRepository.findByAccountid(id);
-        List<Song> songs = customerAccount.getSongs();
-        List<Album> albums = new ArrayList<>();
-        return albums;
+        return albumRepository.findCustomerAlbums(id);
     }
 
     public List<Song> getLibraryPlaylistSongs(long accountId, long playlistId) {

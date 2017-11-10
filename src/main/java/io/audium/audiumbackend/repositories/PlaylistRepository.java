@@ -12,7 +12,7 @@ public interface PlaylistRepository extends CrudRepository<Playlist, String> {
     @Transactional
     public Playlist findByPlaylistid(long playlistid);
 
-    @Query("select P from Playlist_Follower  C, Playlist P where C.accountid = ?1 and P.playlistid = C.playlistid")
+    @Query("select P from PlaylistFollower  C, Playlist P where C.accountid = ?1 and P.playlistid = C.playlistid")
     public List<Playlist> findCustomerPlaylists(long accountid);
 
 }

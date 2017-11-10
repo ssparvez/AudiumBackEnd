@@ -2,9 +2,11 @@ package io.audium.audiumbackend.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-public class Playlist_Follower {
+@Table(name="playlist_follower")
+public class PlaylistFollower {
   @Id
   private Long playlistid;
   private Long accountid;
