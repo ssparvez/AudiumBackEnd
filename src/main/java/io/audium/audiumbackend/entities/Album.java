@@ -1,7 +1,7 @@
 package io.audium.audiumbackend.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Album {
@@ -10,7 +10,14 @@ public class Album {
   private String title;
   private String year;
 
+  @ManyToOne
+  @JoinColumn(
+          name = "artistid"
+  )
+  private Artist artist;
+
   public Album() {
+
   }
 
   public Album(Long albumid, String title, String year) {
@@ -41,5 +48,13 @@ public class Album {
 
   public void setYear(String year) {
     this.year = year;
+  }
+
+  public Artist getArtist() {
+    return artist;
+  }
+
+  public void setArtist(Artist artist) {
+    this.artist = artist;
   }
 }

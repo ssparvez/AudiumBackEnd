@@ -2,6 +2,8 @@ package io.audium.audiumbackend.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class Artist {
@@ -11,6 +13,9 @@ public class Artist {
   private Long accountid;
   private String name;
   private String bio;
+
+  @OneToMany(mappedBy = "artist")
+  private List<Album> albums;
 
   public Artist() {
   }
