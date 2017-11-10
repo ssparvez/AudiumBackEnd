@@ -5,9 +5,9 @@ import java.sql.Date;
 import java.util.List;
 
 @Entity
-@Table(name="customeraccount")
+@Table(name="customer")
 @PrimaryKeyJoinColumn(name = "accountid", referencedColumnName = "accountid")
-public class CustomerAccount extends Account{
+public class Customer extends Account{
 
     private java.sql.Date dateofbirth;
     private String gender;
@@ -28,10 +28,10 @@ public class CustomerAccount extends Account{
     private List<Playlist> playlists;
 
 
-    public CustomerAccount() {
+    public Customer() {
     }
 
-    public CustomerAccount( Date dateofbirth, String gender) {
+    public Customer(Date dateofbirth, String gender) {
         this.dateofbirth = dateofbirth;
         this.gender = gender;
     }
