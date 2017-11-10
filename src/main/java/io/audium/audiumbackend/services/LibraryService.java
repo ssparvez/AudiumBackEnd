@@ -1,7 +1,6 @@
 package io.audium.audiumbackend.services;
 
 import io.audium.audiumbackend.entities.Artist;
-import io.audium.audiumbackend.entities.CustomerAccount;
 import io.audium.audiumbackend.entities.Playlist;
 import io.audium.audiumbackend.repositories.ArtistRepository;
 import io.audium.audiumbackend.repositories.CustomerAccountRepository;

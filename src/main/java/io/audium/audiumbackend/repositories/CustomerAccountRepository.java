@@ -1,19 +1,17 @@
 package io.audium.audiumbackend.repositories;
 
-import io.audium.audiumbackend.entities.CustomerAccount;
-import org.springframework.data.jpa.repository.Query;
+import io.audium.audiumbackend.entities.Customer;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 
-public interface CustomerAccountRepository extends CrudRepository<CustomerAccount, Long> {
+public interface CustomerAccountRepository extends CrudRepository<Customer, Long> {
 
-
-    @Transactional
-    public CustomerAccount deleteByAccountid(long id);
 
     @Transactional
-    public CustomerAccount findByAccountid( long id);
+    public Customer deleteByAccountid(long id);
+
+    @Transactional
+    public Customer findByAccountid(long id);
 
 }
