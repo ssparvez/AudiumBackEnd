@@ -8,15 +8,15 @@ import javax.persistence.Table;
 @Table(name = "playlist_follower")
 public class PlaylistFollower {
   @Id
-  private Long playlistid;
+  private Long playlistId;
   private Long accountId;
 
-  public Long getPlaylistid() {
-    return playlistid;
+  public Long getPlaylistId() {
+    return playlistId;
   }
 
-  public void setPlaylistid(Long playlistid) {
-    this.playlistid = playlistid;
+  public void setPlaylistId(Long playlistId) {
+    this.playlistId = playlistId;
   }
 
   public Long getAccountId() {

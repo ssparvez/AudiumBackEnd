@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface PlaylistRepository extends CrudRepository<Playlist, String> {
   @Transactional
-  public Playlist findByPlaylistid(long playlistid);
+  public Playlist findByPlaylistId(long playlistId);
 
-  @Query("select P from PlaylistFollower  C, Playlist P where C.accountId = ?1 and P.playlistid = C.playlistid")
+  @Query("SELECT P FROM PlaylistFollower  PF, Playlist P WHERE PF.accountId = ?1 AND P.playlistId = PF.playlistId")
   public List<Playlist> findCustomerPlaylists(long accountId);
 
 }

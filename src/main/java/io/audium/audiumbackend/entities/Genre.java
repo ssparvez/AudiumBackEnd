@@ -6,15 +6,15 @@ import javax.persistence.Id;
 @Entity
 public class Genre {
   @Id
-  private Long genreid;
+  private Long genreId;
   private String name;
 
-  public Long getGenreid() {
-    return genreid;
+  public Long getGenreId() {
+    return genreId;
   }
 
-  public void setGenreid(Long genreid) {
-    this.genreid = genreid;
+  public void setGenreId(Long genreId) {
+    this.genreId = genreId;
   }
 
   public String getName() {

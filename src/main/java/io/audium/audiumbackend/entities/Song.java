@@ -7,49 +7,49 @@ import java.util.List;
 @Entity
 public class Song {
   @Id
-  private Long songid;
+  private Long songId;
   private String title;
   private java.sql.Time duration;
   private String file;
   private String year;
-  private Long genreid;
-  private Long isexplicit;
+  private Long genreId;
+  private Long isExplicit;
   private String lyrics;
 
   @ManyToMany
   @JoinTable(
     name = "artist_song",
-    joinColumns = @JoinColumn(name = "songid", referencedColumnName = "songid"),
-    inverseJoinColumns = @JoinColumn(name = "artistid", referencedColumnName = "artistid"))
+    joinColumns = @JoinColumn(name = "songId", referencedColumnName = "songId"),
+    inverseJoinColumns = @JoinColumn(name = "artistId", referencedColumnName = "artistId"))
   private List<Artist> artists;
 
   @ManyToMany
   @JoinTable(
     name = "album_song",
-    joinColumns = @JoinColumn(name = "songid", referencedColumnName = "songid"),
-    inverseJoinColumns = @JoinColumn(name = "albumid", referencedColumnName = "albumid"))
+    joinColumns = @JoinColumn(name = "songId", referencedColumnName = "songId"),
+    inverseJoinColumns = @JoinColumn(name = "albumId", referencedColumnName = "albumId"))
   private List<Album> albums;
 
   public Song() {
   }
 
-  public Song(Long songid, String title, Time duration, Long playsthismonth, Long totalplays, String file, String year, Long genreid, Long isexplicit, String lyrics) {
-    this.songid = songid;
+  public Song(Long songId, String title, Time duration, Long playsthismonth, Long totalplays, String file, String year, Long genreId, Long isExplicit, String lyrics) {
+    this.songId = songId;
     this.title = title;
     this.duration = duration;
     this.file = file;
     this.year = year;
-    this.genreid = genreid;
-    this.isexplicit = isexplicit;
+    this.genreId = genreId;
+    this.isExplicit = isExplicit;
     this.lyrics = lyrics;
   }
 
-  public Long getSongid() {
-    return songid;
+  public Long getSongId() {
+    return songId;
   }
 
-  public void setSongid(Long songid) {
-    this.songid = songid;
+  public void setSongId(Long songId) {
+    this.songId = songId;
   }
 
   public String getTitle() {
@@ -85,20 +85,20 @@ public class Song {
     this.year = year;
   }
 
-  public Long getGenreid() {
-    return genreid;
+  public Long getGenreId() {
+    return genreId;
   }
 
-  public void setGenreid(Long genreid) {
-    this.genreid = genreid;
+  public void setGenreId(Long genreId) {
+    this.genreId = genreId;
   }
 
-  public Long getIsexplicit() {
-    return isexplicit;
+  public Long getIsExplicit() {
+    return isExplicit;
   }
 
-  public void setIsexplicit(Long isexplicit) {
-    this.isexplicit = isexplicit;
+  public void setIsExplicit(Long isExplicit) {
+    this.isExplicit = isExplicit;
   }
 
   public String getLyrics() {
@@ -117,11 +117,11 @@ public class Song {
     this.artists = artists;
   }
 
-  public Artist getArtist(Long artistid) {
+  public Artist getArtist(Long artistId) {
     System.out.println(this.artists.get(0).getName());
     return this.artists.get(0);
 //        for (Artist artist : artists) {
-//            if (artist.getArtistid().equals(artistid)) {
+//            if (artist.getArtistId().equals(artistId)) {
 //                return artist;
 //            }
 //        }

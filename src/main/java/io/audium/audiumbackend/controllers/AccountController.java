@@ -27,7 +27,7 @@ public class AccountController {
 
 
   @CrossOrigin
-  @DeleteMapping(value = "/registerr/{id}")
+  @DeleteMapping(value = "/register/{id}")
   public void deleteAccount(@PathVariable Long id) {
     accountService.deleteAccount(id);
   }

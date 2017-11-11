@@ -8,24 +8,24 @@ import javax.persistence.Table;
 @Table(name = "customer_song")
 public class CustomerSong {
   @Id
-  private Long songid;
-  private java.sql.Timestamp timeadded;
+  private Long songId;
+  private java.sql.Timestamp timeAdded;
   private Long accountId;
 
-  public Long getSongid() {
-    return songid;
+  public Long getSongId() {
+    return songId;
   }
 
-  public void setSongid(Long songid) {
-    this.songid = songid;
+  public void setSongId(Long songId) {
+    this.songId = songId;
   }
 
-  public java.sql.Timestamp getTimeadded() {
-    return timeadded;
+  public java.sql.Timestamp getTimeAdded() {
+    return timeAdded;
   }
 
-  public void setTimeadded(java.sql.Timestamp timeadded) {
-    this.timeadded = timeadded;
+  public void setTimeAdded(java.sql.Timestamp timeAdded) {
+    this.timeAdded = timeAdded;
   }
 
   public Long getAccountId() {
