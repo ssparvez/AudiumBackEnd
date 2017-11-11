@@ -14,6 +14,8 @@ target/
 *.iws
 *.iml
 *.ipr
+!.idea/codeStyleSettings.xml
+!.idea/saveactions_settings.xml
 
 ### NetBeans ###
 nbproject/private/
