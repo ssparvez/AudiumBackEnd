@@ -31,9 +31,9 @@ public class AuthenticationService {
                         Customer account = customerAccountRepo.findOne(new Long(lst.get(0)[0].toString()));
                         String token = JWT.create()
                                 .withClaim("username", account.getUsername())
-                                .withClaim("accountId", account.getAccountid())
-                                .withClaim("firstName", account.getFirstname())
-                                .withClaim("lastName", account.getLastname())
+                                .withClaim("accountId", account.getAccountId())
+                                .withClaim("firstName", account.getUsername())
+                                .withClaim("lastName", account.getLastName())
                                 .withClaim("email", account.getEmail())
                                 .withClaim("role", account.getRole())
                                 .withClaim("dob", account.getDateofbirth().toString())

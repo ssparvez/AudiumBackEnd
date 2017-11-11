@@ -2,12 +2,14 @@ package io.audium.audiumbackend.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-public class Playlist_Follower {
+@Table(name = "playlist_follower")
+public class PlaylistFollower {
   @Id
   private Long playlistid;
-  private Long accountid;
+  private Long accountId;
 
   public Long getPlaylistid() {
     return playlistid;
@@ -17,11 +19,11 @@ public class Playlist_Follower {
     this.playlistid = playlistid;
   }
 
-  public Long getAccountid() {
-    return accountid;
+  public Long getAccountId() {
+    return accountId;
   }
 
-  public void setAccountid(Long accountid) {
-    this.accountid = accountid;
+  public void setAccountId(Long accountId) {
+    this.accountId = accountId;
   }
 }

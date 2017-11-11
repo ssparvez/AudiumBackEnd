@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 public interface CustomerAccountRepository extends CrudRepository<Customer, Long> {
 
 
-    @Transactional
-    public Customer deleteByAccountid(long id);
+  @Transactional
+  public Customer deleteByAccountId(long id);
 
-    @Transactional
-    public Customer findByAccountid(long id);
+  @Transactional
+  public Customer findByAccountId(long id);
 
 }

@@ -20,13 +20,12 @@ public class VerificationService {
             token = token.substring(token.indexOf(" ")+1);
             Customer account = repo.findOne(id);
 
-
             Algorithm algorithm = Algorithm.HMAC256("cse308");
             JWTVerifier verifier = JWT.require(algorithm)
                     .withClaim("username", account.getUsername())
-                    .withClaim("accountId", account.getAccountid())
-                    .withClaim("firstName", account.getFirstname())
-                    .withClaim("lastName", account.getLastname())
+                    .withClaim("accountId", account.getAccountId())
+                    .withClaim("firstName", account.getFirstName())
+                    .withClaim("lastName", account.getLastName())
                     .withClaim("email", account.getEmail())
                     .withClaim("role", account.getRole())
                     .withClaim("dob", account.getDateofbirth().toString())

@@ -22,7 +22,7 @@
 
         public void registerAccount(Customer customerAccount) {
             customerAccount.setRole("BasicUser");
-            customerAccount.setIsactive(new Long(1));
+            customerAccount.setIsActive(new Long(1));
             customerAccountRepo.save(customerAccount);
             // System.out.println(customerAccount.getAccountid().toString());
 
@@ -39,8 +39,8 @@
         public String updateCustomerAccount(Customer accountToSave, Customer savedAccount) {
 
 
-                savedAccount.setFirstname(accountToSave.getFirstname());
-                savedAccount.setLastname(accountToSave.getLastname());
+                savedAccount.setFirstName(accountToSave.getFirstName());
+                savedAccount.setLastName(accountToSave.getLastName());
                 savedAccount.setGender(accountToSave.getGender());
                 savedAccount.setDateofbirth(accountToSave.getDateofbirth());
                 customerAccountRepo.save(savedAccount);
@@ -48,9 +48,9 @@
                 Algorithm algorithm = Algorithm.HMAC256("cse308");
                         String token = JWT.create()
                                 .withClaim("username", savedAccount.getUsername())
-                                .withClaim("accountId", savedAccount.getAccountid())
-                                .withClaim("firstName", savedAccount.getFirstname())
-                                .withClaim("lastName", savedAccount.getLastname())
+                                .withClaim("accountId", savedAccount.getAccountId())
+                                .withClaim("firstName", savedAccount.getFirstName())
+                                .withClaim("lastName", savedAccount.getLastName())
                                 .withClaim("email", savedAccount.getEmail())
                                 .withClaim("role", savedAccount.getRole())
                                 .withClaim("dob", savedAccount.getDateofbirth().toString())

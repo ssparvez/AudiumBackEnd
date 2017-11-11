@@ -2,15 +2,20 @@ package io.audium.audiumbackend.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class Artist {
   @Id
   private Long artistid;
   private Long labelid;
-  private Long accountid;
+  private Long accountId;
   private String name;
   private String bio;
+
+  @OneToMany(mappedBy = "artist")
+  private List<Album> albums;
 
   public Artist() {
   }
@@ -47,11 +52,11 @@ public class Artist {
     this.bio = bio;
   }
 
-  public Long getAccountid() {
-    return accountid;
+  public Long getAccountId() {
+    return accountId;
   }
 
-  public void setAccountid(Long accountid) {
-    this.accountid = accountid;
+  public void setAccountId(Long accountId) {
+    this.accountId = accountId;
   }
 }

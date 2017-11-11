@@ -10,15 +10,10 @@ import java.util.List;
 
 public interface SongRepository extends CrudRepository<Song, String> {
 
-    @Transactional
-    public Song findBySongid(long songid);
+  @Transactional
+  public Song findBySongid(long songid);
 
-    @Query("select s from Song s inner join customer_song c on c.accountid = ?1")
-    public List<Song> findCustomerSongs(long accountid);
+  @Transactional
+  @Query("SELECT S FROM CustomerSong  C, Song S WHERE C.accountId = ?1 AND S.songid = C.songid")
+  public List<Song> findCustomerSongs(long accountId);
 }
-
-
-//    SELECT people.fname, hats.hat
-//        FROM people
-//        INNER JOIN hats_collection
-//        ON hats_collection.person_id = people.person_id

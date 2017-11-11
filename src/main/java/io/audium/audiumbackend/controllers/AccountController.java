@@ -27,7 +27,7 @@ public class AccountController {
 
 
     @CrossOrigin
-    @DeleteMapping(value = "/registerr/{id}")
+    @DeleteMapping(value = "/register/{id}")
     public void deleteAccount( @PathVariable Long id ) {
         accountService.deleteAccount(id);
     }
@@ -37,7 +37,7 @@ public class AccountController {
     public ResponseEntity updateAccount(@RequestHeader(value="Authorization") String token,
                                         @RequestBody Customer newAccount) {
 
-        Customer oldAccount = verify.verifyIntegrityCustomerAccount(token,newAccount.getAccountid());
+        Customer oldAccount = verify.verifyIntegrityCustomerAccount(token,newAccount.getAccountId());
         if (oldAccount != null ) {
 
             String tokenToReturn = accountService.updateCustomerAccount(newAccount, oldAccount);
