@@ -17,8 +17,6 @@ public class VerificationService {
 
     public Customer verifyIntegrityCustomerAccount(String token, long id) {
         try {
-
-            System.out.println(token);
             token = token.substring(token.indexOf(" ")+1);
             Customer account = repo.findOne(id);
 

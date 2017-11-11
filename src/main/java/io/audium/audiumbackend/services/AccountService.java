@@ -36,19 +36,16 @@
             accountRepo.deleteById(id);
         }
 
-        public String updateAccount(Customer accountToSave, Customer savedAccount) {
+        public String updateCustomerAccount(Customer accountToSave, Customer savedAccount) {
 
-            if ( accountToSave.getRole().equals("BasicUser") || accountToSave.getRole().equals("PremiumUser") ) {
+
                 savedAccount.setFirstname(accountToSave.getFirstname());
                 savedAccount.setLastname(accountToSave.getLastname());
                 savedAccount.setGender(accountToSave.getGender());
                 savedAccount.setDateofbirth(accountToSave.getDateofbirth());
-            }
-            customerAccountRepo.save(savedAccount);
+                customerAccountRepo.save(savedAccount);
             try {
                 Algorithm algorithm = Algorithm.HMAC256("cse308");
-                switch(accountToSave.getRole()) {
-                    case "BasicUser":
                         String token = JWT.create()
                                 .withClaim("username", savedAccount.getUsername())
                                 .withClaim("accountId", savedAccount.getAccountid())
@@ -63,7 +60,6 @@
                                 //.withExpiresAt( new Date(1800000))
                                 .sign(algorithm);
                         return token;
-                }
             } catch (UnsupportedEncodingException exception){
                 //UTF-8 encoding not supported
             } catch (JWTCreationException exception){

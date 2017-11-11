@@ -13,6 +13,12 @@ public interface SongRepository extends CrudRepository<Song, String> {
     @Transactional
     public Song findBySongid(long songid);
 
-    @Query("select S from Customer_Song  C, Song S where C.accountid = ?1 and S.songid = C.songid")
+    @Query("select s from Song s inner join customer_song c on c.accountid = ?1")
     public List<Song> findCustomerSongs(long accountid);
 }
+
+
+//    SELECT people.fname, hats.hat
+//        FROM people
+//        INNER JOIN hats_collection
+//        ON hats_collection.person_id = people.person_id

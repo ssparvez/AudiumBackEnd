@@ -27,7 +27,7 @@ public class AuthenticationService {
                 Algorithm algorithm = Algorithm.HMAC256("cse308");
 
                 switch(lst.get(0)[1].toString()) {
-                    case "BasicUser":
+                    default:
                         Customer account = customerAccountRepo.findOne(new Long(lst.get(0)[0].toString()));
                         String token = JWT.create()
                                 .withClaim("username", account.getUsername())
@@ -42,6 +42,7 @@ public class AuthenticationService {
                                 //.withExpiresAt( new Date(1800000))
                                 .sign(algorithm);
                         return token;
+
                 }
             } catch (UnsupportedEncodingException exception){
                 //UTF-8 encoding not supported

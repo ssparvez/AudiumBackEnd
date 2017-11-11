@@ -40,7 +40,7 @@ public class AccountController {
         Customer oldAccount = verify.verifyIntegrityCustomerAccount(token,newAccount.getAccountid());
         if (oldAccount != null ) {
 
-            String tokenToReturn = accountService.updateAccount(newAccount, oldAccount);
+            String tokenToReturn = accountService.updateCustomerAccount(newAccount, oldAccount);
 
             if ( tokenToReturn != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(tokenToReturn);
