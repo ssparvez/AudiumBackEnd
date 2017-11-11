@@ -10,7 +10,7 @@ public class Artist {
   @Id
   private Long artistid;
   private Long labelid;
-  private Long accountid;
+  private Long accountId;
   private String name;
   private String bio;
 
@@ -52,11 +52,11 @@ public class Artist {
     this.bio = bio;
   }
 
-  public Long getAccountid() {
-    return accountid;
+  public Long getAccountId() {
+    return accountId;
   }
 
-  public void setAccountid(Long accountid) {
-    this.accountid = accountid;
+  public void setAccountId(Long accountId) {
+    this.accountId = accountId;
   }
 }

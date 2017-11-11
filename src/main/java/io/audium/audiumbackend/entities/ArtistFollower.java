@@ -9,7 +9,7 @@ import javax.persistence.Table;
 public class ArtistFollower {
   @Id
   private Long artistid;
-  private Long accountid;
+  private Long accountId;
 
   public Long getArtistid() {
     return artistid;
@@ -19,11 +19,11 @@ public class ArtistFollower {
     this.artistid = artistid;
   }
 
-  public Long getAccountid() {
-    return accountid;
+  public Long getAccountId() {
+    return accountId;
   }
 
-  public void setAccountid(Long accountid) {
-    this.accountid = accountid;
+  public void setAccountId(Long accountId) {
+    this.accountId = accountId;
   }
 }

@@ -5,18 +5,18 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="customer_album")
+@Table(name = "customer_album")
 public class CustomerAlbum {
   @Id
-  private Long accountid;
+  private Long accountId;
   private Long albumid;
 
-  public Long getAccountid() {
-    return accountid;
+  public Long getAccountId() {
+    return accountId;
   }
 
-  public void setAccountid(Long accountid) {
-    this.accountid = accountid;
+  public void setAccountId(Long accountId) {
+    this.accountId = accountId;
   }
 
   public Long getAlbumid() {

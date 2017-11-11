@@ -1,7 +1,9 @@
 package io.audium.audiumbackend.entities;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Album {
@@ -12,7 +14,7 @@ public class Album {
 
   @ManyToOne
   @JoinColumn(
-          name = "artistid"
+    name = "artistid"
   )
   private Artist artist;
 

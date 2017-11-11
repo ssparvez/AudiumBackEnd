@@ -5,79 +5,78 @@ import java.util.List;
 
 @Entity
 public class Playlist {
-    @Id
-    private Long playlistid;
-    private Long accountid;
-    private String name;
-    private String description;
-    private Long ispublic;
+  @Id
+  private Long playlistid;
+  private Long accountId;
+  private String name;
+  private String description;
+  private Long ispublic;
 
-    @ManyToMany
-    @JoinTable(
-            name = "playlist_song",
-            joinColumns = @JoinColumn(name = "playlistid", referencedColumnName = "playlistid"),
-            inverseJoinColumns = @JoinColumn(name = "songid", referencedColumnName = "songid"))
-    private List<Song> songs;
-
-
-    public Playlist() {
-    }
-
-    public Playlist(Long playlistid, Long accountid, String name, String description, Long ispublic) {
-        this.playlistid = playlistid;
-        this.accountid = accountid;
-        this.name = name;
-        this.description = description;
-        this.ispublic = ispublic;
-    }
+  @ManyToMany
+  @JoinTable(
+    name = "playlist_song",
+    joinColumns = @JoinColumn(name = "playlistid", referencedColumnName = "playlistid"),
+    inverseJoinColumns = @JoinColumn(name = "songid", referencedColumnName = "songid"))
+  private List<Song> songs;
 
 
+  public Playlist() {
+  }
 
-    public Long getPlaylistid() {
-        return playlistid;
-    }
+  public Playlist(Long playlistid, Long accountId, String name, String description, Long ispublic) {
+    this.playlistid = playlistid;
+    this.accountId = accountId;
+    this.name = name;
+    this.description = description;
+    this.ispublic = ispublic;
+  }
 
-    public void setPlaylistid(Long playlistid) {
-        this.playlistid = playlistid;
-    }
 
-    public Long getAccountid() {
-        return accountid;
-    }
+  public Long getPlaylistid() {
+    return playlistid;
+  }
 
-    public void setAccountid(Long accountid) {
-        this.accountid = accountid;
-    }
+  public void setPlaylistid(Long playlistid) {
+    this.playlistid = playlistid;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public Long getAccountId() {
+    return accountId;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setAccountId(Long accountId) {
+    this.accountId = accountId;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public Long getIspublic() {
-        return ispublic;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setIspublic(Long ispublic) {
-        this.ispublic = ispublic;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public List<Song> getSongs() {
-        return songs;
-    }
+  public Long getIspublic() {
+    return ispublic;
+  }
 
-    public void setSongs(List<Song> songs) {
-        this.songs = songs;
-    }
+  public void setIspublic(Long ispublic) {
+    this.ispublic = ispublic;
+  }
+
+  public List<Song> getSongs() {
+    return songs;
+  }
+
+  public void setSongs(List<Song> songs) {
+    this.songs = songs;
+  }
 }

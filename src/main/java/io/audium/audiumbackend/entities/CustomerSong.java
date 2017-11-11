@@ -5,12 +5,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="customer_song")
+@Table(name = "customer_song")
 public class CustomerSong {
   @Id
   private Long songid;
   private java.sql.Timestamp timeadded;
-  private Long accountid;
+  private Long accountId;
 
   public Long getSongid() {
     return songid;
@@ -28,11 +28,11 @@ public class CustomerSong {
     this.timeadded = timeadded;
   }
 
-  public Long getAccountid() {
-    return accountid;
+  public Long getAccountId() {
+    return accountId;
   }
 
-  public void setAccountid(Long accountid) {
-    this.accountid = accountid;
+  public void setAccountId(Long accountId) {
+    this.accountId = accountId;
   }
 }

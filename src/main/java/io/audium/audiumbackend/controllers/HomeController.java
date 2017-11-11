@@ -10,11 +10,11 @@ import java.util.List;
 
 @RestController
 public class HomeController {
-    @Autowired
-    private HomeService homeService;
+  @Autowired
+  private HomeService homeService;
 
-    @GetMapping(value = "/genres")
-    public List<Genre> getAllGenres() {
-        return homeService.getAllGenres();
-    }
+  @GetMapping(value = "/genres")
+  public List<Genre> getAllGenres() {
+    return homeService.getAllGenres();
+  }
 }

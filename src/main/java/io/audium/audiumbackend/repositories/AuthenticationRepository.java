@@ -10,10 +10,9 @@ import java.util.List;
 public interface AuthenticationRepository extends CrudRepository<Account, String> {
 
 
-
-    @Transactional
-    @Query("SELECT A.accountid, A.role FROM Account A WHERE (A.username = ?1 OR A.email = ?1) and A.password = ?2")
-    public List<Object[]> verifyLoginInfo(String username, String password);
+  @Transactional
+  @Query("SELECT A.accountId, A.role FROM Account A WHERE (A.username = ?1 OR A.email = ?1) AND A.passwordHash = ?2")
+  public List<Object[]> verifyLoginInfo(String username, String passwordHash);
 
 
 }

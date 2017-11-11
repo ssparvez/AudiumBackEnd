@@ -5,37 +5,37 @@ import javax.persistence.*;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Account {
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-  private Long accountid;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long accountId;
   private String email;
-  private String password;
-  private String firstname;
-  private String lastname;
+  private String passwordHash;
+  private String firstName;
+  private String lastName;
   private String role;
-  private Long isactive;
+  private Long isActive;
   private String username;
 
-    public Account() {
-    }
-
-    public Account(Long accountid, String email, String password, String firstname, String lastname, String role, Long isactive, String username) {
-        this.accountid = accountid;
-        this.email = email;
-        this.password = password;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.role = role;
-        this.isactive = isactive;
-        this.username = username;
-    }
-
-    public Long getAccountid() {
-    return accountid;
+  public Account() {
   }
 
-  public void setAccountid(Long accountid) {
-    this.accountid = accountid;
+  public Account(Long accountId, String email, String passwordHash, String firstName, String lastName, String role, Long isActive, String username) {
+    this.accountId = accountId;
+    this.email = email;
+    this.passwordHash = passwordHash;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.role = role;
+    this.isActive = isActive;
+    this.username = username;
+  }
+
+  public Long getAccountId() {
+    return accountId;
+  }
+
+  public void setAccountId(Long accountId) {
+    this.accountId = accountId;
   }
 
   public String getEmail() {
@@ -46,28 +46,28 @@ public class Account {
     this.email = email;
   }
 
-  public String getPassword() {
-    return password;
+  public String getPasswordHash() {
+    return passwordHash;
   }
 
-  public void setPassword(String password) {
-    this.password = password;
+  public void setPasswordHash(String passwordHash) {
+    this.passwordHash = passwordHash;
   }
 
-  public String getFirstname() {
-    return firstname;
+  public String getFirstName() {
+    return firstName;
   }
 
-  public void setFirstname(String firstname) {
-    this.firstname = firstname;
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
   }
 
-  public String getLastname() {
-    return lastname;
+  public String getLastName() {
+    return lastName;
   }
 
-  public void setLastname(String lastname) {
-    this.lastname = lastname;
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
   }
 
   public String getRole() {
@@ -78,12 +78,12 @@ public class Account {
     this.role = role;
   }
 
-  public Long getIsactive() {
-    return isactive;
+  public Long getIsActive() {
+    return isActive;
   }
 
-  public void setIsactive(Long isactive) {
-    this.isactive = isactive;
+  public void setIsActive(Long isActive) {
+    this.isActive = isActive;
   }
 
   public String getUsername() {
