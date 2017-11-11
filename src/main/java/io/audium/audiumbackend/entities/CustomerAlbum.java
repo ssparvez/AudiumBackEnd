@@ -7,23 +7,23 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "customer_album")
 public class CustomerAlbum {
-  @Id
-  private Long accountId;
-  private Long albumId;
+    @Id
+    private Long accountId;
+    private Long albumId;
 
-  public Long getAccountId() {
-    return accountId;
-  }
+    public Long getAccountId() {
+        return accountId;
+    }
 
-  public void setAccountId(Long accountId) {
-    this.accountId = accountId;
-  }
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
+    }
 
-  public Long getAlbumId() {
-    return albumId;
-  }
+    public Long getAlbumId() {
+        return albumId;
+    }
 
-  public void setAlbumId(Long albumId) {
-    this.albumId = albumId;
-  }
+    public void setAlbumId(Long albumId) {
+        this.albumId = albumId;
+    }
 }

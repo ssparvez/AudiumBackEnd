@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 public interface AccountRepository extends CrudRepository<Account, Long> {
 
 
-  @Transactional
-  @Modifying
-  @Query("DELETE FROM Account A WHERE A.accountId = ?1")
-  public void deleteById(Long id);
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Account A WHERE A.accountId = ?1")
+    public void deleteById(Long id);
 
 }

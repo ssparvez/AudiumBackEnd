@@ -7,56 +7,56 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Album {
-  @Id
-  private Long albumId;
-  private String title;
-  private String year;
+    @Id
+    private Long albumId;
+    private String title;
+    private String year;
 
-  @ManyToOne
-  @JoinColumn(
-    name = "artistId"
-  )
-  private Artist artist;
+    @ManyToOne
+    @JoinColumn(
+        name = "artistId"
+    )
+    private Artist artist;
 
-  public Album() {
+    public Album() {
 
-  }
+    }
 
-  public Album(Long albumId, String title, String year) {
-    this.albumId = albumId;
-    this.title = title;
-    this.year = year;
-  }
+    public Album(Long albumId, String title, String year) {
+        this.albumId = albumId;
+        this.title = title;
+        this.year = year;
+    }
 
-  public Long getAlbumId() {
-    return albumId;
-  }
+    public Long getAlbumId() {
+        return albumId;
+    }
 
-  public void setAlbumId(Long albumId) {
-    this.albumId = albumId;
-  }
+    public void setAlbumId(Long albumId) {
+        this.albumId = albumId;
+    }
 
-  public String getTitle() {
-    return title;
-  }
+    public String getTitle() {
+        return title;
+    }
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-  public String getYear() {
-    return year;
-  }
+    public String getYear() {
+        return year;
+    }
 
-  public void setYear(String year) {
-    this.year = year;
-  }
+    public void setYear(String year) {
+        this.year = year;
+    }
 
-  public Artist getArtist() {
-    return artist;
-  }
+    public Artist getArtist() {
+        return artist;
+    }
 
-  public void setArtist(Artist artist) {
-    this.artist = artist;
-  }
+    public void setArtist(Artist artist) {
+        this.artist = artist;
+    }
 }

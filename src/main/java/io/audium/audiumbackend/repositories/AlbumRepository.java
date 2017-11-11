@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface AlbumRepository extends CrudRepository<Album, String> {
 
-  @Query("SELECT A FROM CustomerAlbum  CA, Album A WHERE CA.accountId = ?1 AND A.albumId = CA.albumId")
-  public List<Album> findCustomerAlbums(long accountId);
+    @Query("SELECT A FROM CustomerAlbum  CA, Album A WHERE CA.accountId = ?1 AND A.albumId = CA.albumId")
+    public List<Album> findCustomerAlbums(long accountId);
 }

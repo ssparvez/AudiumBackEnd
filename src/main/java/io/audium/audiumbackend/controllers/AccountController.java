@@ -19,7 +19,7 @@ public class AccountController {
 
 
     @RequestMapping(method = RequestMethod.POST, value = "/register")
-    public ResponseEntity register( @RequestBody Customer customerAccount) {
+    public ResponseEntity register(@RequestBody Customer customerAccount) {
 
         accountService.registerAccount(customerAccount);
         return ResponseEntity.status(HttpStatus.OK).body(true);
@@ -28,33 +28,30 @@ public class AccountController {
 
     @CrossOrigin
     @DeleteMapping(value = "/register/{id}")
-    public void deleteAccount( @PathVariable Long id ) {
+    public void deleteAccount(@PathVariable Long id) {
         accountService.deleteAccount(id);
     }
 
     @CrossOrigin
     @RequestMapping(method = RequestMethod.PUT, value = "/editcustomer")
-    public ResponseEntity updateAccount(@RequestHeader(value="Authorization") String token,
+    public ResponseEntity updateAccount(@RequestHeader(value = "Authorization") String token,
                                         @RequestBody Customer newAccount) {
 
-        Customer oldAccount = verify.verifyIntegrityCustomerAccount(token,newAccount.getAccountId());
-        if (oldAccount != null ) {
+        Customer oldAccount = verify.verifyIntegrityCustomerAccount(token, newAccount.getAccountId());
+        if (oldAccount != null) {
 
             String tokenToReturn = accountService.updateCustomerAccount(newAccount, oldAccount);
 
-            if ( tokenToReturn != null) {
+            if (tokenToReturn != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(tokenToReturn);
-            }
-            else {
+            } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
             }
-        }
-        else {
+        } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
         }
 
     }
-
 
 
 }

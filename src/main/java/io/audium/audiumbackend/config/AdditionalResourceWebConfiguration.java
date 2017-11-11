@@ -7,9 +7,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 public class AdditionalResourceWebConfiguration extends WebMvcConfigurerAdapter {
 
-  @Override
-  public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-    registry.addResourceHandler("/profile/**")
-      .addResourceLocations("file:media/profiles/");
-  }
+    @Override
+    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/profile/**")
+            .addResourceLocations("file:media/profiles/");
+    }
 }
