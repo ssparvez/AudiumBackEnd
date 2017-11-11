@@ -9,7 +9,7 @@ import javax.persistence.Table;
 public class CustomerAlbum {
   @Id
   private Long accountId;
-  private Long albumid;
+  private Long albumId;
 
   public Long getAccountId() {
     return accountId;
@@ -19,11 +19,11 @@ public class CustomerAlbum {
     this.accountId = accountId;
   }
 
-  public Long getAlbumid() {
-    return albumid;
+  public Long getAlbumId() {
+    return albumId;
   }
 
-  public void setAlbumid(Long albumid) {
-    this.albumid = albumid;
+  public void setAlbumId(Long albumId) {
+    this.albumId = albumId;
   }
 }

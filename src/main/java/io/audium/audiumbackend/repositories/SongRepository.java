@@ -3,7 +3,6 @@ package io.audium.audiumbackend.repositories;
 import io.audium.audiumbackend.entities.Song;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -11,9 +10,8 @@ import java.util.List;
 public interface SongRepository extends CrudRepository<Song, String> {
 
   @Transactional
-  public Song findBySongid(long songid);
+  public Song findBySongId(long songId);
 
-  @Transactional
-  @Query("SELECT S FROM CustomerSong  C, Song S WHERE C.accountId = ?1 AND S.songid = C.songid")
+  @Query("SELECT S FROM CustomerSong  CS, Song S WHERE CS.accountId = ?1 AND S.songId = CS.songId")
   public List<Song> findCustomerSongs(long accountId);
 }

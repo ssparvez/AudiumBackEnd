@@ -6,38 +6,38 @@ import java.util.List;
 @Entity
 public class Playlist {
   @Id
-  private Long playlistid;
+  private Long playlistId;
   private Long accountId;
   private String name;
   private String description;
-  private Long ispublic;
+  private Long isPublic;
 
   @ManyToMany
   @JoinTable(
     name = "playlist_song",
-    joinColumns = @JoinColumn(name = "playlistid", referencedColumnName = "playlistid"),
-    inverseJoinColumns = @JoinColumn(name = "songid", referencedColumnName = "songid"))
+    joinColumns = @JoinColumn(name = "playlistId", referencedColumnName = "playlistId"),
+    inverseJoinColumns = @JoinColumn(name = "songId", referencedColumnName = "songId"))
   private List<Song> songs;
 
 
   public Playlist() {
   }
 
-  public Playlist(Long playlistid, Long accountId, String name, String description, Long ispublic) {
-    this.playlistid = playlistid;
+  public Playlist(Long playlistId, Long accountId, String name, String description, Long isPublic) {
+    this.playlistId = playlistId;
     this.accountId = accountId;
     this.name = name;
     this.description = description;
-    this.ispublic = ispublic;
+    this.isPublic = isPublic;
   }
 
 
-  public Long getPlaylistid() {
-    return playlistid;
+  public Long getPlaylistId() {
+    return playlistId;
   }
 
-  public void setPlaylistid(Long playlistid) {
-    this.playlistid = playlistid;
+  public void setPlaylistId(Long playlistId) {
+    this.playlistId = playlistId;
   }
 
   public Long getAccountId() {
@@ -64,12 +64,12 @@ public class Playlist {
     this.description = description;
   }
 
-  public Long getIspublic() {
-    return ispublic;
+  public Long getIsPublic() {
+    return isPublic;
   }
 
-  public void setIspublic(Long ispublic) {
-    this.ispublic = ispublic;
+  public void setIsPublic(Long isPublic) {
+    this.isPublic = isPublic;
   }
 
   public List<Song> getSongs() {

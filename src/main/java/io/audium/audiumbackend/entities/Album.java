@@ -8,13 +8,13 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Album {
   @Id
-  private Long albumid;
+  private Long albumId;
   private String title;
   private String year;
 
   @ManyToOne
   @JoinColumn(
-    name = "artistid"
+    name = "artistId"
   )
   private Artist artist;
 
@@ -22,18 +22,18 @@ public class Album {
 
   }
 
-  public Album(Long albumid, String title, String year) {
-    this.albumid = albumid;
+  public Album(Long albumId, String title, String year) {
+    this.albumId = albumId;
     this.title = title;
     this.year = year;
   }
 
-  public Long getAlbumid() {
-    return albumid;
+  public Long getAlbumId() {
+    return albumId;
   }
 
-  public void setAlbumid(Long albumid) {
-    this.albumid = albumid;
+  public void setAlbumId(Long albumId) {
+    this.albumId = albumId;
   }
 
   public String getTitle() {

@@ -8,8 +8,8 @@ import java.util.List;
 @Entity
 public class Artist {
   @Id
-  private Long artistid;
-  private Long labelid;
+  private Long artistId;
+  private Long labelId;
   private Long accountId;
   private String name;
   private String bio;
@@ -20,20 +20,20 @@ public class Artist {
   public Artist() {
   }
 
-  public Long getArtistid() {
-    return artistid;
+  public Long getArtistId() {
+    return artistId;
   }
 
-  public void setArtistid(Long artistid) {
-    this.artistid = artistid;
+  public void setArtistId(Long artistId) {
+    this.artistId = artistId;
   }
 
-  public Long getLabelid() {
-    return labelid;
+  public Long getLabelId() {
+    return labelId;
   }
 
-  public void setLabelid(Long labelid) {
-    this.labelid = labelid;
+  public void setLabelId(Long labelId) {
+    this.labelId = labelId;
   }
 
   public String getName() {
