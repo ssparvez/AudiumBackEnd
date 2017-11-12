@@ -1,18 +1,15 @@
 package io.audium.audiumbackend.repositories;
 
 import io.audium.audiumbackend.entities.Account;
+import io.audium.audiumbackend.entities.projections.LoginInfo;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
-import java.util.List;
-
+@RepositoryRestResource(excerptProjection = LoginInfo.class)
 public interface AuthenticationRepository extends CrudRepository<Account, String> {
-
-
-    @Transactional
-    @Query("SELECT A.accountId, A.role FROM Account A WHERE (A.username = ?1 OR A.email = ?1) AND A.passwordHash = ?2")
-    public List<Object[]> verifyLoginInfo(String username, String passwordHash);
-
-
+    @Transactional(readOnly = true)
+    @Query("SELECT A.accountId AS accountId, A.role AS role, A.passwordHash AS passwordHash FROM Account A WHERE (A.username = ?1 OR A.email = ?1)")
+    public LoginInfo findLoginInfoByUsernameOrEmail(String usernameOrEmail);
 }

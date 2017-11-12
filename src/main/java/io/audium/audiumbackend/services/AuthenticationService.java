@@ -4,33 +4,33 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import io.audium.audiumbackend.entities.Customer;
+import io.audium.audiumbackend.entities.projections.LoginInfo;
 import io.audium.audiumbackend.repositories.AuthenticationRepository;
 import io.audium.audiumbackend.repositories.CustomerAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 @Service
 public class AuthenticationService {
     @Autowired
-    private AuthenticationRepository authenticationRepository;
+    private AuthenticationRepository  authenticationRepository;
     @Autowired
-    private CustomerAccountRepository customerAccountRepo;
+    private CustomerAccountRepository customerAccountRepository;
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    public String checkLoginInfo(String usernameOrEmail, String password) {
+        LoginInfo loginInfo = authenticationRepository.findLoginInfoByUsernameOrEmail(usernameOrEmail);
 
-    public String checkLoginInfo(String username, String password) {
-        List<Object[]> lst = authenticationRepository.verifyLoginInfo(username, password);
-
-        if (!lst.isEmpty()) {
-
+        if (!(loginInfo == null) && passwordEncoder.matches(password, loginInfo.getPasswordHash())) {
             try {
                 Algorithm algorithm = Algorithm.HMAC256("cse308");
 
-                switch (lst.get(0)[1].toString()) {
+                switch (loginInfo.getRole()) {
                     default:
-                        Customer account = customerAccountRepo.findOne(new Long(lst.get(0)[0].toString()));
+                        Customer account = customerAccountRepository.findOne(loginInfo.getAccountId());
                         String token = JWT.create()
                             .withClaim("username", account.getUsername())
                             .withClaim("accountId", account.getAccountId())
@@ -44,7 +44,6 @@ public class AuthenticationService {
                             //.withExpiresAt( new Date(1800000))
                             .sign(algorithm);
                         return token;
-
                 }
             } catch (UnsupportedEncodingException exception) {
                 //UTF-8 encoding not supported
@@ -52,8 +51,8 @@ public class AuthenticationService {
                 //Invalid Signing configuration / Couldn't convert Claims.
             }
             return null;
-
-        } else
+        } else {
             return null;
+        }
     }
 }

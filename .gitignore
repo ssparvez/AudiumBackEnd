@@ -10,10 +10,12 @@ target/
 .springBeans
 
 ### IntelliJ IDEA ###
-.idea
+.idea/*
 *.iws
 *.iml
 *.ipr
+!.idea/codeStyleSettings.xml
+!.idea/saveactions_settings.xml
 
 ### NetBeans ###
 nbproject/private/
@@ -22,3 +24,5 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+
