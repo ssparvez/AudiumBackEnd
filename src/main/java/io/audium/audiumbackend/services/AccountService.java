@@ -7,37 +7,35 @@ import io.audium.audiumbackend.entities.Customer;
 import io.audium.audiumbackend.repositories.AccountRepository;
 import io.audium.audiumbackend.repositories.CustomerAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 
 @Service
 public class AccountService {
-
     @Autowired
-    private AccountRepository accountRepo;
-
+    private AccountRepository         accountRepo;
     @Autowired
     private CustomerAccountRepository customerAccountRepo;
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public void registerAccount(Customer customerAccount) {
+
         customerAccount.setRole("BasicUser");
         customerAccount.setIsActive(new Long(1));
+        customerAccount.setPasswordHash(passwordEncoder.encode(customerAccount.getPasswordHash()));
         customerAccountRepo.save(customerAccount);
-        // System.out.println(customerAccount.getAccountId().toString());
-
     }
 
     public void deleteAccount(Long id) {
 
         //Customer ca = customerAccountRepo.findOne(new Long(7));
-        //System.out.println("hello");
         //System.out.println(ca.getSongs().get(0).getTitle());
         accountRepo.deleteById(id);
     }
 
     public String updateCustomerAccount(Customer accountToSave, Customer savedAccount) {
-
 
         savedAccount.setFirstName(accountToSave.getFirstName());
         savedAccount.setLastName(accountToSave.getLastName());
@@ -56,7 +54,6 @@ public class AccountService {
                 .withClaim("dob", savedAccount.getDateOfBirth().toString())
                 .withClaim("gender", savedAccount.getGender())
                 .withIssuer("audium")
-                .withIssuer("audium")
                 //.withExpiresAt( new Date(1800000))
                 .sign(algorithm);
             return token;
@@ -67,6 +64,4 @@ public class AccountService {
         }
         return null;
     }
-
-
 }
