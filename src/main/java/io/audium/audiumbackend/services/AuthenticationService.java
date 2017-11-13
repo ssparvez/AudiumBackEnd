@@ -62,7 +62,7 @@ public class AuthenticationService {
         }
     }
 
-    public byte[] aesEncrypt(long accountId, String sensitiveData) {
+    public String aesEncrypt(long accountId, String sensitiveData) {
         Object[] salt = authenticationRepository.findSaltByAccountId(accountId);
         /* @TODO: Better system for encryption key (currently using username which is awful) */
         if (salt != null) {
@@ -71,7 +71,7 @@ public class AuthenticationService {
             BytesEncryptor bcEncryptor   = new BouncyCastleAesGcmBytesEncryptor(account.getUsername(), salt[0].toString());
             byte[]         encryptedData = bcEncryptor.encrypt(sensitiveData.getBytes());
             System.out.println("    Encrypted: " + new String(Hex.encode(encryptedData)) + "   Decrypted: " + new String(bcEncryptor.decrypt(encryptedData)));
-            return encryptedData;
+            return new String(Hex.encode(encryptedData));
         } else {
             return null;
         }
@@ -83,7 +83,7 @@ public class AuthenticationService {
         if (salt != null) {
             Account        account       = customerAccountRepository.findByAccountId(accountId);
             BytesEncryptor bcEncryptor   = new BouncyCastleAesGcmBytesEncryptor(account.getUsername(), salt[0].toString());
-            String         sensitiveData = new String(bcEncryptor.encrypt(encryptedData));
+            String         sensitiveData = new String(bcEncryptor.decrypt(encryptedData));
             return sensitiveData;
         } else {
             return null;
