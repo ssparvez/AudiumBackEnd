@@ -1,9 +1,9 @@
 package io.audium.audiumbackend.controllers;
 
-import io.audium.audiumbackend.entities.Album;
-import io.audium.audiumbackend.entities.Artist;
-import io.audium.audiumbackend.entities.Playlist;
 import io.audium.audiumbackend.entities.Song;
+import io.audium.audiumbackend.entities.projections.LibraryAlbum;
+import io.audium.audiumbackend.entities.projections.LibraryArtist;
+import io.audium.audiumbackend.entities.projections.LibraryPlaylist;
 import io.audium.audiumbackend.services.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -54,17 +54,17 @@ public class LibraryController {
     }
 
     @GetMapping(value = "/accounts/{accountId}/albums")
-    public List<Album> getLibaryAlbums(@PathVariable long accountId) {
+    public List<LibraryAlbum> getLibaryAlbums(@PathVariable long accountId) {
         return libraryService.getLibraryAlbums(accountId);
     }
 
     @GetMapping(value = "/accounts/{accountId}/artists")
-    public List<Artist> getAllArtists(@PathVariable long accountId) {
+    public List<LibraryArtist> getAllArtists(@PathVariable long accountId) {
         return libraryService.getLibraryArtists(accountId);
     }
 
     @GetMapping(value = "/accounts/{accountId}/playlists")
-    public List<Playlist> getLibaryPlaylists(@PathVariable long accountId) {
+    public List<LibraryPlaylist> getLibaryPlaylists(@PathVariable long accountId) {
         return libraryService.getLibraryPlaylists(accountId);
     }
 

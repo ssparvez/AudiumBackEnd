@@ -1,14 +1,14 @@
 package io.audium.audiumbackend.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Album {
     @Id
-    private Long albumId;
+    private Long   albumId;
     private String title;
     private String year;
 
@@ -18,8 +18,11 @@ public class Album {
     )
     private Artist artist;
 
-    public Album() {
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "albums")
+    @JsonIgnore
+    private List<Customer> followers;
 
+    public Album() {
     }
 
     public Album(Long albumId, String title, String year) {

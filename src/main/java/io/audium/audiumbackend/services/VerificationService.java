@@ -6,7 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import io.audium.audiumbackend.entities.Customer;
-import io.audium.audiumbackend.repositories.CustomerAccountRepository;
+import io.audium.audiumbackend.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +15,12 @@ import java.io.UnsupportedEncodingException;
 @Service
 public class VerificationService {
     @Autowired
-    private CustomerAccountRepository repo;
+    private CustomerRepository customerRepository;
 
     public Customer verifyIntegrityCustomerAccount(String token, long id) {
         try {
             token = token.substring(token.indexOf(" ") + 1);
-            Customer account = repo.findOne(id);
+            Customer account = customerRepository.findOne(id);
 
             Algorithm algorithm = Algorithm.HMAC256("cse308");
             JWTVerifier verifier = JWT.require(algorithm)
@@ -68,7 +68,5 @@ public class VerificationService {
 
     public String returnClaimValueUsingDecodedToken(DecodedJWT decodedToken, String claim) {
         return decodedToken.getClaim(claim).asString();
-
     }
-
 }

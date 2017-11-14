@@ -1,24 +1,29 @@
 package io.audium.audiumbackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 public class Playlist {
     @Id
-    private Long playlistId;
-    private Long accountId;
+    private Long   playlistId;
+    private Long   accountId;
     private String name;
     private String description;
-    private Long isPublic;
+    private Long   isPublic;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "playlist_song",
         joinColumns = @JoinColumn(name = "playlistId", referencedColumnName = "playlistId"),
         inverseJoinColumns = @JoinColumn(name = "songId", referencedColumnName = "songId"))
     private List<Song> songs;
 
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "playlists")
+    @JsonIgnore
+    private List<Customer> followers;
 
     public Playlist() {
     }
@@ -30,7 +35,6 @@ public class Playlist {
         this.description = description;
         this.isPublic = isPublic;
     }
-
 
     public Long getPlaylistId() {
         return playlistId;
@@ -78,5 +82,13 @@ public class Playlist {
 
     public void setSongs(List<Song> songs) {
         this.songs = songs;
+    }
+
+    public List<Customer> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<Customer> followers) {
+        this.followers = followers;
     }
 }

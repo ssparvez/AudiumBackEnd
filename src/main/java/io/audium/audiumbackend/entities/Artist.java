@@ -1,21 +1,25 @@
 package io.audium.audiumbackend.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 public class Artist {
     @Id
-    private Long artistId;
-    private Long labelId;
-    private Long accountId;
+    private Long   artistId;
+    private Long   labelId;
+    private Long   accountId;
     private String name;
     private String bio;
 
     @OneToMany(mappedBy = "artist")
     private List<Album> albums;
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artists")
+    @JsonIgnore
+    private List<Customer> followers;
 
     public Artist() {
     }

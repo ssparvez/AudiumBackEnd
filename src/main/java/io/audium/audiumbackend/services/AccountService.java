@@ -5,7 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import io.audium.audiumbackend.entities.Customer;
 import io.audium.audiumbackend.repositories.AccountRepository;
-import io.audium.audiumbackend.repositories.CustomerAccountRepository;
+import io.audium.audiumbackend.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,9 +15,9 @@ import java.io.UnsupportedEncodingException;
 @Service
 public class AccountService {
     @Autowired
-    private AccountRepository         accountRepo;
+    private AccountRepository  accountRepo;
     @Autowired
-    private CustomerAccountRepository customerAccountRepo;
+    private CustomerRepository customerRepo;
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public void registerAccount(Customer customerAccount) {
@@ -25,12 +25,12 @@ public class AccountService {
         customerAccount.setRole("BasicUser");
         customerAccount.setIsActive(new Long(1));
         customerAccount.setPasswordHash(passwordEncoder.encode(customerAccount.getPasswordHash()));
-        customerAccountRepo.save(customerAccount);
+        customerRepo.save(customerAccount);
     }
 
     public void deleteAccount(Long id) {
 
-        //Customer ca = customerAccountRepo.findOne(new Long(7));
+        //Customer ca = customerRepo.findOne(new Long(7));
         //System.out.println(ca.getSongs().get(0).getTitle());
         accountRepo.deleteById(id);
     }
@@ -41,7 +41,7 @@ public class AccountService {
         savedAccount.setLastName(accountToSave.getLastName());
         savedAccount.setGender(accountToSave.getGender());
         savedAccount.setDateOfBirth(accountToSave.getDateOfBirth());
-        customerAccountRepo.save(savedAccount);
+        customerRepo.save(savedAccount);
         try {
             Algorithm algorithm = Algorithm.HMAC256("cse308");
             String token = JWT.create()
