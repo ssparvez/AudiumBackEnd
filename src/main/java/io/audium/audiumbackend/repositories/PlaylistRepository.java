@@ -11,6 +11,7 @@ import java.util.List;
 
 @RepositoryRestResource(excerptProjection = LibraryPlaylist.class)
 public interface PlaylistRepository extends CrudRepository<Playlist, String> {
+
     @Transactional(readOnly = true)
     public Playlist findByPlaylistId(long playlistId);
 

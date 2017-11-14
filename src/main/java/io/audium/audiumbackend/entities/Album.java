@@ -7,16 +7,21 @@ import java.util.List;
 
 @Entity
 public class Album {
+
     @Id
     private Long   albumId;
     private String title;
     private String year;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "artistId"
     )
     private Artist artist;
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "albums")
+    @JsonIgnore
+    private List<Song> songs;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "albums")
     @JsonIgnore
@@ -34,7 +39,6 @@ public class Album {
     public Long getAlbumId() {
         return albumId;
     }
-
     public void setAlbumId(Long albumId) {
         this.albumId = albumId;
     }
@@ -42,7 +46,6 @@ public class Album {
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
@@ -50,7 +53,6 @@ public class Album {
     public String getYear() {
         return year;
     }
-
     public void setYear(String year) {
         this.year = year;
     }
@@ -58,7 +60,6 @@ public class Album {
     public Artist getArtist() {
         return artist;
     }
-
     public void setArtist(Artist artist) {
         this.artist = artist;
     }

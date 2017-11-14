@@ -7,6 +7,7 @@ import java.util.List;
 
 @Entity
 public class Playlist {
+
     @Id
     private Long   playlistId;
     private Long   accountId;
@@ -39,7 +40,6 @@ public class Playlist {
     public Long getPlaylistId() {
         return playlistId;
     }
-
     public void setPlaylistId(Long playlistId) {
         this.playlistId = playlistId;
     }
@@ -47,7 +47,6 @@ public class Playlist {
     public Long getAccountId() {
         return accountId;
     }
-
     public void setAccountId(Long accountId) {
         this.accountId = accountId;
     }
@@ -55,7 +54,6 @@ public class Playlist {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -63,7 +61,6 @@ public class Playlist {
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
@@ -71,7 +68,6 @@ public class Playlist {
     public Long getIsPublic() {
         return isPublic;
     }
-
     public void setIsPublic(Long isPublic) {
         this.isPublic = isPublic;
     }
@@ -79,7 +75,6 @@ public class Playlist {
     public List<Song> getSongs() {
         return songs;
     }
-
     public void setSongs(List<Song> songs) {
         this.songs = songs;
     }
@@ -87,7 +82,6 @@ public class Playlist {
     public List<Customer> getFollowers() {
         return followers;
     }
-
     public void setFollowers(List<Customer> followers) {
         this.followers = followers;
     }

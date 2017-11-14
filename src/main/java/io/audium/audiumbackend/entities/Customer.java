@@ -1,25 +1,22 @@
 package io.audium.audiumbackend.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.audium.audiumbackend.entities.relationships.CustomerSong;
 
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "customer")
+@Table(name = "Customer")
 @PrimaryKeyJoinColumn(name = "accountId", referencedColumnName = "accountId")
 public class Customer extends Account {
 
-    private java.sql.Date dateOfBirth;
-    private String        gender;
+    private Date   dateOfBirth;
+    private String gender;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "customer_song",
-        joinColumns = @JoinColumn(name = "accountId", referencedColumnName = "accountId"),
-        inverseJoinColumns = @JoinColumn(name = "songId", referencedColumnName = "songId"))
-    private List<Song> songs;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+    private List<CustomerSong> customerSongs;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
@@ -58,10 +55,10 @@ public class Customer extends Account {
         this.gender = gender;
     }
 
-    public java.sql.Date getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
-    public void setDateOfBirth(java.sql.Date dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -72,12 +69,8 @@ public class Customer extends Account {
         this.gender = gender;
     }
 
-    public List<Song> getSongs() {
-        return songs;
-    }
-    public void setSongs(List<Song> songs) {
-        this.songs = songs;
-    }
+    //public List<Song> getSongs() { return songs; }
+    //public void setSongs(List<Song> songs) { this.songs = songs; }
 
     public List<Playlist> getPlaylists() {
         return playlists;
@@ -91,5 +84,12 @@ public class Customer extends Account {
     }
     public void setAlbums(List<Album> albums) {
         this.albums = albums;
+    }
+
+    public List<CustomerSong> getCustomerSongs() {
+        return customerSongs;
+    }
+    public void setCustomerSongs(List<CustomerSong> customerSongs) {
+        this.customerSongs = customerSongs;
     }
 }

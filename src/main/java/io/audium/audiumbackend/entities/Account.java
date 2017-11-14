@@ -5,15 +5,16 @@ import javax.persistence.*;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Account {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long accountId;
+    private Long   accountId;
     private String email;
     private String passwordHash;
     private String firstName;
     private String lastName;
     private String role;
-    private Long isActive;
+    private Long   isActive;
     private String username;
 
     public Account() {
@@ -33,7 +34,6 @@ public class Account {
     public Long getAccountId() {
         return accountId;
     }
-
     public void setAccountId(Long accountId) {
         this.accountId = accountId;
     }
@@ -41,7 +41,6 @@ public class Account {
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -49,7 +48,6 @@ public class Account {
     public String getPasswordHash() {
         return passwordHash;
     }
-
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
     }
@@ -57,7 +55,6 @@ public class Account {
     public String getFirstName() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -65,7 +62,6 @@ public class Account {
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -73,7 +69,6 @@ public class Account {
     public String getRole() {
         return role;
     }
-
     public void setRole(String role) {
         this.role = role;
     }
@@ -81,7 +76,6 @@ public class Account {
     public Long getIsActive() {
         return isActive;
     }
-
     public void setIsActive(Long isActive) {
         this.isActive = isActive;
     }
@@ -89,7 +83,6 @@ public class Account {
     public String getUsername() {
         return username;
     }
-
     public void setUsername(String username) {
         this.username = username;
     }
