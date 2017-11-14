@@ -42,11 +42,6 @@ public class LibraryController {
         libraryService.removeSong(id);
     }
 
-    @PostMapping(value = "songs/changeArtist/")
-    public void changeArtist() {
-        libraryService.changeArtist();
-    }
-
     // ACTUAL LIBRARY OPERATIONS
     @GetMapping(value = "/accounts/{accountId}/songs")
     public List<Song> getLibarySongs(@PathVariable long accountId) {

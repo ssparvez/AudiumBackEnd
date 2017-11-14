@@ -1,6 +1,5 @@
 package io.audium.audiumbackend.services;
 
-import io.audium.audiumbackend.entities.Artist;
 import io.audium.audiumbackend.entities.Playlist;
 import io.audium.audiumbackend.entities.Song;
 import io.audium.audiumbackend.entities.projections.LibraryAlbum;
@@ -33,15 +32,6 @@ public class LibraryService {
             System.out.println(song.getTitle());
         }
         return songs;
-    }
-
-    //TESTING
-    public void changeArtist() {
-        //Song song = songRepository.findBySongId(new Long(1));
-        Artist artist = songRepository.findBySongId(1).getArtist(new Long(2));
-        artist.setName("T.C.");
-        artistRepository.save(artist);
-        //System.out.println(song.getTitle());
     }
 
     //gets song by id from list
