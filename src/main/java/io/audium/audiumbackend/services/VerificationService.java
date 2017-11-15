@@ -9,7 +9,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import io.audium.audiumbackend.entities.Account;
 import io.audium.audiumbackend.entities.Customer;
 import io.audium.audiumbackend.repositories.AuthenticationRepository;
-import io.audium.audiumbackend.repositories.CustomerAccountRepository;
+import io.audium.audiumbackend.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.crypto.encrypt.BouncyCastleAesGcmBytesEncryptor;
@@ -23,7 +23,7 @@ public class VerificationService {
   @Autowired
   private AuthenticationRepository authenticationRepository;
   @Autowired
-  private CustomerAccountRepository customerAccountRepository;
+  private CustomerRepository customerAccountRepository;
 
 
     public Customer verifyIntegrityCustomerAccount(String token, long id) {

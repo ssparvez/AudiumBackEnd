@@ -7,7 +7,7 @@ import io.audium.audiumbackend.entities.Account;
 import io.audium.audiumbackend.entities.Customer;
 import io.audium.audiumbackend.entities.projections.LoginInfo;
 import io.audium.audiumbackend.repositories.AuthenticationRepository;
-import io.audium.audiumbackend.repositories.CustomerAccountRepository;
+import io.audium.audiumbackend.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.codec.Hex;
@@ -22,7 +22,7 @@ public class AuthenticationService {
     @Autowired
     private AuthenticationRepository  authenticationRepository;
     @Autowired
-    private CustomerAccountRepository customerAccountRepository;
+    private CustomerRepository customerAccountRepository;
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public String checkLoginInfo(String usernameOrEmail, String password) {

@@ -9,7 +9,7 @@ import io.audium.audiumbackend.entities.Account;
 import io.audium.audiumbackend.entities.Customer;
 import io.audium.audiumbackend.entities.PaymentInfo;
 import io.audium.audiumbackend.repositories.AccountRepository;
-import io.audium.audiumbackend.repositories.CustomerAccountRepository;
+import io.audium.audiumbackend.repositories.CustomerRepository;
 import io.audium.audiumbackend.repositories.PaymentInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,7 +24,7 @@ public class AccountService {
     @Autowired
     private AccountRepository accountRepo;
     @Autowired
-    private CustomerAccountRepository customerAccountRepo;
+    private CustomerRepository customerAccountRepo;
     @Autowired
     private PaymentInfoRepository paymentRepo;
     @Autowired
