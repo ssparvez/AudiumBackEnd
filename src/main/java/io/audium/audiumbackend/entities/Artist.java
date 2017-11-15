@@ -12,15 +12,16 @@ public class Artist {
     private Long   artistId;
     private Long   labelId;
     private Long   accountId;
-    private String name;
+    @Column(name = "name")
+    private String artistName;
     private String bio;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist")
     private List<Album> albums;
 
-    /*@ManyToMany(fetch = FetchType.LAZY, mappedBy = "artists")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artists")
     @JsonIgnore
-    private List<Song> songs;*/
+    private List<Song> songs;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artists")
     @JsonIgnore
@@ -43,11 +44,12 @@ public class Artist {
         this.labelId = labelId;
     }
 
-    public String getName() {
-        return name;
+    public String getArtistName() {
+        return artistName;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setArtistName(String artistName) {
+        artistName = artistName.replace(", ", " & ");
+        this.artistName = artistName;
     }
 
     public String getBio() {

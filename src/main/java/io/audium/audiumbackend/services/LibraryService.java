@@ -1,10 +1,7 @@
 package io.audium.audiumbackend.services;
 
-import io.audium.audiumbackend.entities.Playlist;
 import io.audium.audiumbackend.entities.Song;
-import io.audium.audiumbackend.entities.projections.LibraryAlbum;
-import io.audium.audiumbackend.entities.projections.LibraryArtist;
-import io.audium.audiumbackend.entities.projections.LibraryPlaylist;
+import io.audium.audiumbackend.entities.projections.*;
 import io.audium.audiumbackend.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,9 +52,8 @@ public class LibraryService {
         return artistRepository.findFollowerByAccountId(id);
     }
 
-    //
-    public List<Song> getLibrarySongs(long id) {
-        return songRepository.findCustomerSongs(id);
+    public List<LibrarySong> getLibrarySongs(long accountId) {
+        return songRepository.findCustomerSongs(accountId);
     }
 
     /*public List<Playlist> getLibraryPlaylists(long id) {
@@ -67,7 +63,7 @@ public class LibraryService {
     public List<LibraryPlaylist> getLibraryPlaylists(long accountId) {
         //Customer       customerAccount = customerAccountRepository.findByAccountId(accountId);
         //List<Playlist> playlists       = customerAccount.getPlaylists();
-        return playlistRepository.findFollowerByAccountId(accountId);
+        return playlistRepository.findByFollowerAccountId(accountId);
     }
 
     // NEEDS WORK
@@ -75,8 +71,14 @@ public class LibraryService {
         return albumRepository.findCustomerAlbums(id);
     }
 
-    public List<Song> getLibraryPlaylistSongs(long accountId, long playlistId) {
-        Playlist playlist = playlistRepository.findByPlaylistId(playlistId);
-        return playlist.getSongs();
+    public LibraryPlaylist getPlaylist(long playlistId) {
+        return playlistRepository.findByPlaylistId(playlistId);
+    }
+    /*public Playlist getPlaylist(long playlistId) {
+        return playlistRepository.findByPlaylistId(playlistId);
+    }*/
+
+    public List<PlaylistTrack> getPlaylistSongs(long playlistId) {
+        return songRepository.findPlaylistSongs(playlistId);
     }
 }

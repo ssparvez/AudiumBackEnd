@@ -1,7 +1,9 @@
 package io.audium.audiumbackend.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.audium.audiumbackend.entities.relationships.AlbumSong;
 import io.audium.audiumbackend.entities.relationships.CustomerSong;
+import io.audium.audiumbackend.entities.relationships.PlaylistSong;
 
 import javax.persistence.*;
 import java.sql.Time;
@@ -21,18 +23,20 @@ public class Song {
     private String lyrics;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinTable(
         name = "artist_song",
         joinColumns = @JoinColumn(name = "songId", referencedColumnName = "songId"),
         inverseJoinColumns = @JoinColumn(name = "artistId", referencedColumnName = "artistId"))
     private List<Artist> artists;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "album_song",
-        joinColumns = @JoinColumn(name = "songId", referencedColumnName = "songId"),
-        inverseJoinColumns = @JoinColumn(name = "albumId", referencedColumnName = "albumId"))
-    private List<Album> albums;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "song")
+    @JsonIgnore
+    private List<AlbumSong> albumSongs;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "song")
+    @JsonIgnore
+    private List<PlaylistSong> playlistSongs;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "song")
     @JsonIgnore
@@ -116,15 +120,15 @@ public class Song {
     }
 
     public Artist getArtist(Long artistId) {
-        System.out.println(this.artists.get(0).getName());
+        System.out.println(this.artists.get(0).getArtistName());
         return this.artists.get(0);
     }
 
-    public List<Album> getAlbums() {
-        return albums;
+    public List<AlbumSong> getAlbumSongs() {
+        return albumSongs;
     }
-    public void setAlbums(List<Album> albums) {
-        this.albums = albums;
+    public void setAlbumSongs(List<AlbumSong> albumSongs) {
+        this.albumSongs = albumSongs;
     }
 
     public List<CustomerSong> getCustomerSongs() {
@@ -132,5 +136,11 @@ public class Song {
     }
     public void setCustomerSongs(List<CustomerSong> customerSongs) {
         this.customerSongs = customerSongs;
+    }
+    public List<PlaylistSong> getPlaylistSongs() {
+        return playlistSongs;
+    }
+    public void setPlaylistSongs(List<PlaylistSong> playlistSongs) {
+        this.playlistSongs = playlistSongs;
     }
 }

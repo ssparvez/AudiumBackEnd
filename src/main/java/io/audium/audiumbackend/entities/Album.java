@@ -1,6 +1,7 @@
 package io.audium.audiumbackend.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.audium.audiumbackend.entities.relationships.AlbumSong;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,7 +11,8 @@ public class Album {
 
     @Id
     private Long   albumId;
-    private String title;
+    @Column(name = "title")
+    private String albumTitle;
     private String year;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -19,9 +21,9 @@ public class Album {
     )
     private Artist artist;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "albums")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "album")
     @JsonIgnore
-    private List<Song> songs;
+    private List<AlbumSong> albumSongs;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "albums")
     @JsonIgnore
@@ -32,7 +34,7 @@ public class Album {
 
     public Album(Long albumId, String title, String year) {
         this.albumId = albumId;
-        this.title = title;
+        this.albumTitle = title;
         this.year = year;
     }
 
@@ -43,11 +45,11 @@ public class Album {
         this.albumId = albumId;
     }
 
-    public String getTitle() {
-        return title;
+    public String getAlbumTitle() {
+        return albumTitle;
     }
-    public void setTitle(String title) {
-        this.title = title;
+    public void setAlbumTitle(String albumTitle) {
+        this.albumTitle = albumTitle;
     }
 
     public String getYear() {
@@ -62,5 +64,12 @@ public class Album {
     }
     public void setArtist(Artist artist) {
         this.artist = artist;
+    }
+
+    public List<AlbumSong> getAlbumSongs() {
+        return albumSongs;
+    }
+    public void setAlbumSongs(List<AlbumSong> albumSongs) {
+        this.albumSongs = albumSongs;
     }
 }

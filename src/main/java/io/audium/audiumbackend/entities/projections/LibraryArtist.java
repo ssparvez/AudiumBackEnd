@@ -6,5 +6,5 @@ import org.springframework.data.rest.core.config.Projection;
 @Projection(name = "LibraryArtist", types = {Artist.class})
 public interface LibraryArtist {
     Long getArtistId();
-    String getName();
+    String getArtistName();
 }

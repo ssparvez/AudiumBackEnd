@@ -1,9 +1,7 @@
 package io.audium.audiumbackend.controllers;
 
 import io.audium.audiumbackend.entities.Song;
-import io.audium.audiumbackend.entities.projections.LibraryAlbum;
-import io.audium.audiumbackend.entities.projections.LibraryArtist;
-import io.audium.audiumbackend.entities.projections.LibraryPlaylist;
+import io.audium.audiumbackend.entities.projections.*;
 import io.audium.audiumbackend.services.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +42,7 @@ public class LibraryController {
 
     // ACTUAL LIBRARY OPERATIONS
     @GetMapping(value = "/accounts/{accountId}/songs")
-    public List<Song> getLibarySongs(@PathVariable long accountId) {
+    public List<LibrarySong> getLibarySongs(@PathVariable long accountId) {
         return libraryService.getLibrarySongs(accountId);
     }
 
@@ -63,8 +61,18 @@ public class LibraryController {
         return libraryService.getLibraryPlaylists(accountId);
     }
 
-    @GetMapping(value = "/accounts/{accountId}/playlists/{playlistId}/songs")
-    public List<Song> getLibaryPlaylistSongs(@PathVariable long accountId, @PathVariable long playlistId) {
-        return libraryService.getLibraryPlaylistSongs(accountId, playlistId);
+    @GetMapping(value = "/playlist/{playlistId}")
+    public LibraryPlaylist getPlaylist(@PathVariable long playlistId) {
+        return libraryService.getPlaylist(playlistId);
+    }
+
+    /*@GetMapping(value = "/playlist/{playlistId}")
+    public Playlist getPlaylist(@PathVariable long playlistId) {
+        return libraryService.getPlaylist(playlistId);
+    }*/
+
+    @GetMapping(value = "/playlist/{playlistId}/songs")
+    public List<PlaylistTrack> getPlaylistSongs(@PathVariable long playlistId) {
+        return libraryService.getPlaylistSongs(playlistId);
     }
 }

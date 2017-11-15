@@ -1,14 +1,15 @@
 package io.audium.audiumbackend.entities.relationships;
 
-import io.audium.audiumbackend.entities.Album;
+import io.audium.audiumbackend.entities.Playlist;
 import io.audium.audiumbackend.entities.Song;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Entity
-@Table(name = "album_song")
-public class AlbumSong implements Serializable {
+@Table(name = "playlist_song")
+public class PlaylistSong implements Serializable {
 
     @Id
     @ManyToOne
@@ -17,28 +18,29 @@ public class AlbumSong implements Serializable {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "albumId")
-    private Album album;
+    @JoinColumn(name = "playlistId")
+    private Playlist playlist;
 
-    private int trackNumber;
+    private Timestamp timeAdded;
 
-    public int getTrackNumber() {
-        return trackNumber;
+    public Timestamp getTimeAdded() {
+        return timeAdded;
     }
-    public void setTrackNumber(int trackNumber) {
-        this.trackNumber = trackNumber;
+    public void setTimeAdded(Timestamp timeAdded) {
+        this.timeAdded = timeAdded;
     }
-    public Album getAlbum() {
-        return album;
-    }
-    public void setAlbum(Album album) {
-        this.album = album;
-    }
+
     public Song getSong() {
         return song;
     }
     public void setSong(Song song) {
         this.song = song;
+    }
+    public Playlist getPlaylist() {
+        return playlist;
+    }
+    public void setPlaylist(Playlist playlist) {
+        this.playlist = playlist;
     }
 
     public boolean equals(Object o) {
@@ -48,31 +50,31 @@ public class AlbumSong implements Serializable {
         if (o == null || this.getClass() != o.getClass()) {
             return false;
         }
-        AlbumSong that = (AlbumSong)o;
+        PlaylistSong that = (PlaylistSong)o;
         if ((this.song == null && that.song == null)
             || (this.song != null && that.song != null && this.song.getSongId() == that.song.getSongId())) {
             return true;
         }
-        if ((this.album == null && that.album == null)
-            || (this.album != null && that.album != null
-            && this.album.getAlbumId() == that.album.getAlbumId())) {
+        if ((this.playlist == null && that.playlist == null)
+            || (this.playlist != null && that.playlist != null
+            && this.playlist.getPlaylistId() == that.playlist.getPlaylistId())) {
             return true;
         }
         return false;
     }
     public int hashCode() {
         int songHash;
-        int albumHash;
+        int playlistHash;
         if (song == null) {
             songHash = 0;
         } else {
             songHash = song.hashCode();
         }
-        if (album == null) {
-            albumHash = 0;
+        if (playlist == null) {
+            playlistHash = 0;
         } else {
-            albumHash = album.hashCode();
+            playlistHash = playlist.hashCode();
         }
-        return (songHash + albumHash);
+        return (songHash + playlistHash);
     }
 }
