@@ -6,6 +6,7 @@ import io.audium.audiumbackend.entities.Song;
 import io.audium.audiumbackend.entities.relationships.PlaylistSong;
 import org.springframework.data.rest.core.config.Projection;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 
 @Projection(name = "PlaylistTrack", types = {Song.class, Artist.class, PlaylistSong.class, Album.class})
@@ -17,5 +18,7 @@ public interface PlaylistTrack {
     //List<Artist> getArtists();
     Long getAlbumId();
     String getAlbumTitle();
+    Time getDuration();
+    boolean getIsExplicit();
     Timestamp getTimeAdded();
 }

@@ -49,24 +49,17 @@ public class LibraryService {
     }
 
     public List<LibraryArtist> getLibraryArtists(long id) {
-        return artistRepository.findFollowerByAccountId(id);
+        return artistRepository.findByFollowerAccountId(id);
     }
 
     public List<LibrarySong> getLibrarySongs(long accountId) {
         return songRepository.findCustomerSongs(accountId);
     }
 
-    /*public List<Playlist> getLibraryPlaylists(long id) {
-        return playlistRepository.findCustomerPlaylists(id);
-    }*/
-
     public List<LibraryPlaylist> getLibraryPlaylists(long accountId) {
-        //Customer       customerAccount = customerAccountRepository.findByAccountId(accountId);
-        //List<Playlist> playlists       = customerAccount.getPlaylists();
         return playlistRepository.findByFollowerAccountId(accountId);
     }
 
-    // NEEDS WORK
     public List<LibraryAlbum> getLibraryAlbums(long id) {
         return albumRepository.findCustomerAlbums(id);
     }
@@ -74,11 +67,28 @@ public class LibraryService {
     public LibraryPlaylist getPlaylist(long playlistId) {
         return playlistRepository.findByPlaylistId(playlistId);
     }
-    /*public Playlist getPlaylist(long playlistId) {
-        return playlistRepository.findByPlaylistId(playlistId);
-    }*/
+
+    public LibraryAlbum getAlbum(long albumId) {
+        return albumRepository.findByAlbumId(albumId);
+    }
 
     public List<PlaylistTrack> getPlaylistSongs(long playlistId) {
         return songRepository.findPlaylistSongs(playlistId);
+    }
+
+    public List<AlbumTrack> getAlbumSongs(long albumId) {
+        return songRepository.findAlbumSongs(albumId);
+    }
+
+    public LibraryArtist getArtist(long artistId) {
+        return artistRepository.findByArtistId(artistId);
+    }
+
+    public List<LibraryAlbum> getArtistAlbums(long artistId) {
+        return albumRepository.findArtistAlbums(artistId);
+    }
+
+    public List<PopularTrack> getArtistSongs(long artistId) {
+        return songRepository.findArtistSongs(artistId);
     }
 }

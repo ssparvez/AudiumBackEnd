@@ -3,14 +3,13 @@ package io.audium.audiumbackend.entities.projections;
 import io.audium.audiumbackend.entities.Album;
 import io.audium.audiumbackend.entities.Artist;
 import io.audium.audiumbackend.entities.Song;
-import io.audium.audiumbackend.entities.relationships.CustomerSong;
+import io.audium.audiumbackend.entities.relationships.SongPlay;
 import org.springframework.data.rest.core.config.Projection;
 
 import java.sql.Time;
-import java.sql.Timestamp;
 
-@Projection(name = "LibrarySong", types = {Song.class, Artist.class, CustomerSong.class, Album.class})
-public interface LibrarySong {
+@Projection(name = "PopularTrack", types = {Song.class, Artist.class, SongPlay.class, Album.class})
+public interface PopularTrack {
     Long getSongId();
     String getTitle();
     Long getArtistId();
@@ -20,5 +19,5 @@ public interface LibrarySong {
     String getAlbumTitle();
     Time getDuration();
     boolean getIsExplicit();
-    Timestamp getTimeAdded();
+    int getPlayCount();
 }
