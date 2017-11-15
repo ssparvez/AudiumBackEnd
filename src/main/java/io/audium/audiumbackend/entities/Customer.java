@@ -2,6 +2,7 @@ package io.audium.audiumbackend.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.audium.audiumbackend.entities.relationships.CustomerSong;
+import io.audium.audiumbackend.entities.relationships.SongPlay;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -51,6 +52,10 @@ public class Customer extends Account {
         joinColumns = @JoinColumn(name = "accountId", referencedColumnName = "accountId"),
         inverseJoinColumns = @JoinColumn(name = "friendId", referencedColumnName = "accountId"))
     private List<Customer> friends;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+    @JsonIgnore
+    private List<SongPlay> songPlays;
 
     public Customer() {
     }
@@ -102,5 +107,11 @@ public class Customer extends Account {
     }
     public void setCreatedPlaylists(List<Playlist> createdPlaylists) {
         this.createdPlaylists = createdPlaylists;
+    }
+    public List<SongPlay> getSongPlays() {
+        return songPlays;
+    }
+    public void setSongPlays(List<SongPlay> songPlays) {
+        this.songPlays = songPlays;
     }
 }

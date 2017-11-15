@@ -7,4 +7,5 @@ import org.springframework.data.rest.core.config.Projection;
 public interface LibraryArtist {
     Long getArtistId();
     String getArtistName();
+    String getBio();
 }

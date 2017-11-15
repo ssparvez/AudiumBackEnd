@@ -4,10 +4,13 @@ import io.audium.audiumbackend.entities.Album;
 import io.audium.audiumbackend.entities.Artist;
 import org.springframework.data.rest.core.config.Projection;
 
-@Projection(name = "LibraryAlbum", types = {Album.class})
+import java.sql.Date;
+
+@Projection(name = "LibraryAlbum", types = {Album.class, Artist.class})
 public interface LibraryAlbum {
     Long getAlbumId();
-    String getTitle();
-    String getYear();
-    Artist getArtist();
+    String getAlbumTitle();
+    Date getYear();
+    Long getArtistId();
+    String getArtistName();
 }

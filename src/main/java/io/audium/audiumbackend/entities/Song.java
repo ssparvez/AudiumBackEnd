@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.audium.audiumbackend.entities.relationships.AlbumSong;
 import io.audium.audiumbackend.entities.relationships.CustomerSong;
 import io.audium.audiumbackend.entities.relationships.PlaylistSong;
+import io.audium.audiumbackend.entities.relationships.SongPlay;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.sql.Time;
@@ -13,14 +15,14 @@ import java.util.List;
 public class Song {
 
     @Id
-    private Long   songId;
-    private String title;
-    private Time   duration;
-    private String file;
-    private String year;
-    private Long   genreId;
-    private Long   isExplicit;
-    private String lyrics;
+    private Long    songId;
+    private String  title;
+    private Time    duration;
+    private String  file;
+    private String  year;
+    private Long    genreId;
+    private boolean isExplicit;
+    private String  lyrics;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore
@@ -42,10 +44,18 @@ public class Song {
     @JsonIgnore
     private List<CustomerSong> customerSongs;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "song")
+    @JsonIgnore
+    private List<SongPlay> songPlays;
+
+    @Formula("(SELECT COUNT(SP.songId) FROM Song AS S JOIN song_play AS SP ON S.songId = SP.songId WHERE SP.songId = songId)")
+    @JsonIgnore
+    private int playCount;
+
     public Song() {
     }
 
-    public Song(Long songId, String title, Time duration, Long playsthismonth, Long totalplays, String file, String year, Long genreId, Long isExplicit, String lyrics) {
+    public Song(Long songId, String title, Time duration, Long playsthismonth, Long totalplays, String file, String year, Long genreId, boolean isExplicit, String lyrics) {
         this.songId = songId;
         this.title = title;
         this.duration = duration;
@@ -98,10 +108,10 @@ public class Song {
         this.genreId = genreId;
     }
 
-    public Long getIsExplicit() {
+    public boolean getIsExplicit() {
         return isExplicit;
     }
-    public void setIsExplicit(Long isExplicit) {
+    public void setIsExplicit(boolean isExplicit) {
         this.isExplicit = isExplicit;
     }
 
@@ -142,5 +152,17 @@ public class Song {
     }
     public void setPlaylistSongs(List<PlaylistSong> playlistSongs) {
         this.playlistSongs = playlistSongs;
+    }
+    public List<SongPlay> getSongPlays() {
+        return songPlays;
+    }
+    public void setSongPlays(List<SongPlay> songPlays) {
+        this.songPlays = songPlays;
+    }
+    public int getPlayCount() {
+        return playCount;
+    }
+    public void setPlayCount(int playCount) {
+        this.playCount = playCount;
     }
 }

@@ -14,7 +14,7 @@ public interface PlaylistRepository extends CrudRepository<Playlist, Long> {
     //public Playlist findByPlaylistId(long playlistId);
 
     @Transactional(readOnly = true)
-    @Query("SELECT LibP.playlistId AS playlistId, LibP.name AS name, LibP.description AS description, LibP.isPublic AS isPublic, LibP.creator.accountId AS accountId, LibP.creator.username AS username FROM Customer C JOIN C.playlists LibP WHERE C.accountId = ?1")
+    @Query("SELECT LibP.playlistId AS playlistId, LibP.name AS name, LibP.description AS description, LibP.isPublic AS isPublic, LibP.creator.accountId AS accountId, LibP.creator.username AS username FROM Customer C JOIN C.playlists LibP WHERE C.accountId = ?1 ORDER BY name ASC")
     public List<LibraryPlaylist> findByFollowerAccountId(long accountId);
 
     @Transactional(readOnly = true)

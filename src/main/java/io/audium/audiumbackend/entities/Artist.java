@@ -59,17 +59,23 @@ public class Artist {
         this.bio = bio;
     }
 
-    /*public List<Song> getSongs() {
+    public List<Song> getSongs() {
         return this.songs;
     }
     public void setSongs(List<Song> songs) {
         this.songs = songs;
-    }*/
+    }
 
     public Long getAccountId() {
         return accountId;
     }
     public void setAccountId(Long accountId) {
         this.accountId = accountId;
+    }
+    public List<Album> getAlbums() {
+        return albums;
+    }
+    public void setAlbums(List<Album> albums) {
+        this.albums = albums;
     }
 }

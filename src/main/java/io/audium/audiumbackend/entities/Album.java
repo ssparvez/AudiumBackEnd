@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.audium.audiumbackend.entities.relationships.AlbumSong;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.List;
 
 @Entity
@@ -13,7 +14,7 @@ public class Album {
     private Long   albumId;
     @Column(name = "title")
     private String albumTitle;
-    private String year;
+    private Date   year;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
@@ -32,7 +33,7 @@ public class Album {
     public Album() {
     }
 
-    public Album(Long albumId, String title, String year) {
+    public Album(Long albumId, String title, Date year) {
         this.albumId = albumId;
         this.albumTitle = title;
         this.year = year;
@@ -52,10 +53,10 @@ public class Album {
         this.albumTitle = albumTitle;
     }
 
-    public String getYear() {
+    public Date getYear() {
         return year;
     }
-    public void setYear(String year) {
+    public void setYear(Date year) {
         this.year = year;
     }
 
