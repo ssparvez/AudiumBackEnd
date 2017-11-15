@@ -7,7 +7,7 @@ import io.audium.audiumbackend.entities.Account;
 import io.audium.audiumbackend.entities.Customer;
 import io.audium.audiumbackend.entities.projections.LoginInfo;
 import io.audium.audiumbackend.repositories.AuthenticationRepository;
-import io.audium.audiumbackend.repositories.CustomerAccountRepository;
+import io.audium.audiumbackend.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.codec.Hex;
@@ -20,9 +20,9 @@ import java.io.UnsupportedEncodingException;
 @Service
 public class AuthenticationService {
     @Autowired
-    private AuthenticationRepository  authenticationRepository;
+    private AuthenticationRepository authenticationRepository;
     @Autowired
-    private CustomerAccountRepository customerAccountRepository;
+    private CustomerRepository       customerRepository;
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public String checkLoginInfo(String usernameOrEmail, String password) {
@@ -34,7 +34,7 @@ public class AuthenticationService {
 
                 switch (loginInfo.getRole()) {
                     default:
-                        Customer account = customerAccountRepository.findOne(loginInfo.getAccountId());
+                        Customer account = customerRepository.findOne(loginInfo.getAccountId());
 
                         aesEncrypt(account.getAccountId(), "2345678901234567"); // @TODO: Delete this test statement
                         String token = JWT.create()
@@ -66,7 +66,7 @@ public class AuthenticationService {
         Object[] salt = authenticationRepository.findSaltByAccountId(accountId);
         /* @TODO: Better system for encryption key (currently using username which is awful) */
         if (salt != null) {
-            Account account = customerAccountRepository.findByAccountId(accountId);
+            Account account = customerRepository.findByAccountId(accountId);
             System.out.print("Salt: " + salt[0].toString() + "   CC: " + sensitiveData);
             BytesEncryptor bcEncryptor   = new BouncyCastleAesGcmBytesEncryptor(account.getUsername(), salt[0].toString());
             byte[]         encryptedData = bcEncryptor.encrypt(sensitiveData.getBytes());
@@ -81,7 +81,7 @@ public class AuthenticationService {
         Object[] salt = authenticationRepository.findSaltByAccountId(accountId);
         /* @TODO: Better system for encryption key (currently using username which is awful) */
         if (salt != null) {
-            Account        account       = customerAccountRepository.findByAccountId(accountId);
+            Account        account       = customerRepository.findByAccountId(accountId);
             BytesEncryptor bcEncryptor   = new BouncyCastleAesGcmBytesEncryptor(account.getUsername(), salt[0].toString());
             String         sensitiveData = new String(bcEncryptor.decrypt(encryptedData));
             return sensitiveData;
