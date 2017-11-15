@@ -80,6 +80,6 @@ public class LibraryService {
 
     public List<Song> getLibraryPlaylistSongs(long accountId, long playlistId) {
         Playlist playlist = playlistRepository.findByPlaylistId(playlistId);
-        return playlist.getSongs();
+        return playlist.obtainSongsFromPlaylist();
     }
 }

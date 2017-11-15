@@ -36,11 +36,10 @@ public class AuthenticationService {
                     default:
                         Customer account = customerAccountRepository.findOne(loginInfo.getAccountId());
 
-                        aesEncrypt(account.getAccountId(), "2345678901234567"); // @TODO: Delete this test statement
                         String token = JWT.create()
                             .withClaim("username", account.getUsername())
                             .withClaim("accountId", account.getAccountId())
-                            .withClaim("firstName", account.getUsername())
+                            .withClaim("firstName", account.getFirstName())
                             .withClaim("lastName", account.getLastName())
                             .withClaim("email", account.getEmail())
                             .withClaim("role", account.getRole())
@@ -57,34 +56,6 @@ public class AuthenticationService {
                 //Invalid Signing configuration / Couldn't convert Claims.
             }
             return null;
-        } else {
-            return null;
-        }
-    }
-
-    public byte[] aesEncrypt(long accountId, String sensitiveData) {
-        Object[] salt = authenticationRepository.findSaltByAccountId(accountId);
-        /* @TODO: Better system for encryption key (currently using username which is awful) */
-        if (salt != null) {
-            Account account = customerAccountRepository.findByAccountId(accountId);
-            System.out.print("Salt: " + salt[0].toString() + "   CC: " + sensitiveData);
-            BytesEncryptor bcEncryptor   = new BouncyCastleAesGcmBytesEncryptor(account.getUsername(), salt[0].toString());
-            byte[]         encryptedData = bcEncryptor.encrypt(sensitiveData.getBytes());
-            System.out.println("    Encrypted: " + new String(Hex.encode(encryptedData)) + "   Decrypted: " + new String(bcEncryptor.decrypt(encryptedData)));
-            return encryptedData;
-        } else {
-            return null;
-        }
-    }
-
-    public String aesDecrypt(long accountId, byte[] encryptedData) {
-        Object[] salt = authenticationRepository.findSaltByAccountId(accountId);
-        /* @TODO: Better system for encryption key (currently using username which is awful) */
-        if (salt != null) {
-            Account        account       = customerAccountRepository.findByAccountId(accountId);
-            BytesEncryptor bcEncryptor   = new BouncyCastleAesGcmBytesEncryptor(account.getUsername(), salt[0].toString());
-            String         sensitiveData = new String(bcEncryptor.encrypt(encryptedData));
-            return sensitiveData;
         } else {
             return null;
         }

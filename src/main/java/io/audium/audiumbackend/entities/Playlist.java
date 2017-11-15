@@ -12,7 +12,7 @@ public class Playlist {
     private String description;
     private Long isPublic;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "playlist_song",
         joinColumns = @JoinColumn(name = "playlistId", referencedColumnName = "playlistId"),
@@ -72,10 +72,13 @@ public class Playlist {
         this.isPublic = isPublic;
     }
 
-    public List<Song> getSongs() {
-        return songs;
-    }
+//    public List<Song> getSongs() {
+//        return songs;
+//    }
 
+  public List<Song> obtainSongsFromPlaylist() {
+      return songs;
+  }
     public void setSongs(List<Song> songs) {
         this.songs = songs;
     }

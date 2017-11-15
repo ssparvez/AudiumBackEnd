@@ -69,7 +69,7 @@ public class LibraryController {
     }
 
     @GetMapping(value = "/accounts/{accountId}/playlists/{playlistId}/songs")
-    public List<Song> getLibaryPlaylistSongs(@PathVariable long accountId, @PathVariable long playlistId) {
+    public List<Song> getLibraryPlaylistSongs(@PathVariable long accountId, @PathVariable long playlistId) {
         return libraryService.getLibraryPlaylistSongs(accountId, playlistId);
     }
 }

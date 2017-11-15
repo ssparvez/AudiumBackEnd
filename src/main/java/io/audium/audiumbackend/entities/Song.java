@@ -16,14 +16,14 @@ public class Song {
     private Long isExplicit;
     private String lyrics;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "artist_song",
         joinColumns = @JoinColumn(name = "songId", referencedColumnName = "songId"),
         inverseJoinColumns = @JoinColumn(name = "artistId", referencedColumnName = "artistId"))
     private List<Artist> artists;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "album_song",
         joinColumns = @JoinColumn(name = "songId", referencedColumnName = "songId"),
