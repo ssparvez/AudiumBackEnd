@@ -114,13 +114,13 @@ public class VerificationService {
     }
   }
 
-  public String aesDecrypt(long accountId, byte[] encryptedData) {
+  public String aesDecrypt(long accountId, String encryptedData) {
     Object[] salt = authenticationRepository.findSaltByAccountId(accountId);
         /* @TODO: Better system for encryption key (currently using username which is awful) */
     if (salt != null) {
       Account        account     = customerAccountRepository.findByAccountId(accountId);
       BytesEncryptor bcEncryptor = new BouncyCastleAesGcmBytesEncryptor(account.getUsername(), salt[0].toString());
-      return new String(bcEncryptor.decrypt(encryptedData));
+      return new String(bcEncryptor.decrypt(Hex.decode(encryptedData)));
     } else {
       return null;
     }

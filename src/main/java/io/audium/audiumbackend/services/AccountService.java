@@ -79,7 +79,7 @@ public class AccountService {
       JsonObject obj = new JsonObject();
       Calendar cal = Calendar.getInstance();
       cal.setTime(info.getCreditCardExpiration());
-      obj.addProperty("ccNumber", verify.aesDecrypt(id,Hex.decode(info.getCreditCardHash())));
+      obj.addProperty("ccNumber", verify.aesDecrypt(id,info.getCreditCardHash()));
       obj.addProperty("ccMonth",cal.get(Calendar.MONTH)+1);
       obj.addProperty("ccYear",cal.get(Calendar.YEAR));
       obj.addProperty("zipCode", info.getZipCode());
