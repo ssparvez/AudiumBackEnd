@@ -8,9 +8,9 @@ import java.sql.Date;
 
 @Projection(name = "LibraryAlbum", types = {Album.class, Artist.class})
 public interface LibraryAlbum {
-    Long getAlbumId();
-    String getAlbumTitle();
-    Date getYear();
-    Long getArtistId();
-    String getArtistName();
+  Long getAlbumId();
+  String getAlbumTitle();
+  Date getReleaseYear();
+  Long getArtistId();
+  String getArtistName();
 }

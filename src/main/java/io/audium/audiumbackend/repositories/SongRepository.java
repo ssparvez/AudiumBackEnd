@@ -28,6 +28,15 @@ public interface SongRepository extends CrudRepository<Song, Long> {
   @Query("SELECT AlbS.song.songId AS songId, AlbS.song.title AS title, Art.artistId AS artistId, Art.artistName AS artistName, AlbS.album.albumId AS albumId, AlbS.album.albumTitle AS albumTitle, AlbS.song.duration AS duration, AlbS.song.isExplicit AS isExplicit, AlbS.trackNumber AS trackNumber FROM AlbumSong AlbS INNER JOIN AlbS.song.artists Art WHERE AlbS.album.albumId = ?1 GROUP BY AlbS.song ORDER BY trackNumber ASC")
   public List<AlbumTrack> findAlbumSongs(long albumId);
 
-  @Query("SELECT ArtS.songId AS songId, ArtS.title AS title, A.artistId AS artistId, A.artistName AS artistName, ArtAlbS.album.albumId AS albumId, ArtAlbS.album.albumTitle AS albumTitle, ArtS.duration AS duration, ArtS.isExplicit AS isExplicit, ArtS.playCount AS playCount FROM Artist A INNER JOIN A.songs ArtS INNER JOIN ArtS.albumSongs ArtAlbS WHERE A.artistId = ?1 GROUP BY ArtS ORDER BY playCount DESC")
+  @Query("SELECT S.songId AS songId, S.title AS title, AlbS.album.artist.artistId AS artistId, AlbS.album.artist.artistName AS artistName, AlbS.album.albumId AS albumId, AlbS.album.albumTitle AS albumTitle, S.duration AS duration, S.isExplicit AS isExplicit, S.year AS year, S.genre.genreId AS genreId, S.genre.genreName AS genreName, S.playCount AS playCount FROM SongPlay SP INNER JOIN SP.song S INNER JOIN S.albumSongs AlbS WHERE SP.customer.accountId = ?1 GROUP BY AlbS.album ORDER BY SP.timePlayed DESC")
+  public List<PopularTrack> findCustomerAlbumSongPlays(long accountId);
+
+  @Query("SELECT S.songId AS songId, S.title AS title, Art.artistId AS artistId, Art.artistName AS artistName, AlbS.album.albumId AS albumId, AlbS.album.albumTitle AS albumTitle, S.duration AS duration, S.isExplicit AS isExplicit, S.year AS year, S.genre.genreId AS genreId, S.genre.genreName AS genreName, S.playCount AS playCount FROM SongPlay SP INNER JOIN SP.song S INNER JOIN S.artists Art INNER JOIN S.albumSongs AlbS WHERE SP.customer.accountId = ?1 GROUP BY S ORDER BY SP.timePlayed DESC")
+  public List<PopularTrack> findCustomerSongPlays(long accountId);
+
+  @Query("SELECT ArtS.songId AS songId, ArtS.title AS title, A.artistId AS artistId, A.artistName AS artistName, ArtAlbS.album.albumId AS albumId, ArtAlbS.album.albumTitle AS albumTitle, ArtS.duration AS duration, ArtS.isExplicit AS isExplicit, ArtS.year AS year, ArtS.genre.genreId AS genreId, ArtS.genre.genreName AS genreName, ArtS.playCount AS playCount FROM Artist A INNER JOIN A.songs ArtS INNER JOIN ArtS.albumSongs ArtAlbS WHERE A.artistId = ?1 GROUP BY ArtS ORDER BY playCount DESC")
   public List<PopularTrack> findArtistSongs(long artistId);
+
+  @Query("SELECT S.songId AS songId, S.title AS title, Art.artistId AS artistId, Art.artistName AS artistName, AlbS.album.albumId AS albumId, AlbS.album.albumTitle AS albumTitle, S.duration AS duration, S.isExplicit AS isExplicit, S.year AS year, S.genre.genreId AS genreId, S.genre.genreName AS genreName, S.playCount AS playCount FROM Song S INNER JOIN S.artists Art INNER JOIN S.albumSongs AlbS GROUP BY S ORDER BY playCount DESC, S.year DESC, S.title ASC")
+  public List<PopularTrack> findTopSongs();
 }

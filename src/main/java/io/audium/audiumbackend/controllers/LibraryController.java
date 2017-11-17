@@ -4,6 +4,8 @@ import io.audium.audiumbackend.entities.Song;
 import io.audium.audiumbackend.entities.projections.*;
 import io.audium.audiumbackend.services.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,6 +48,30 @@ public class LibraryController {
     return libraryService.getLibrarySongs(accountId);
   }
 
+  @GetMapping(value = "/accounts/{accountId}/songs/recent/{pageIndex}/{pageSize}")
+  public ResponseEntity<List<PopularTrack>> getCustomerSongPlays(@PathVariable long accountId, @PathVariable int pageIndex, @PathVariable int pageSize) {
+    if (pageIndex < 0 || pageSize <= 0) {
+      return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+    List<PopularTrack> results = libraryService.getCustomerSongPlays(accountId, pageIndex, pageSize);
+    if (results.size() == 0) {
+      return new ResponseEntity(results, HttpStatus.NO_CONTENT);
+    }
+    return new ResponseEntity(results, HttpStatus.OK);
+  }
+
+  @GetMapping(value = "/accounts/{accountId}/albums/recent/{pageIndex}/{pageSize}")
+  public ResponseEntity<List<PopularTrack>> getCustomerAlbumSongPlays(@PathVariable long accountId, @PathVariable int pageIndex, @PathVariable int pageSize) {
+    if (pageIndex < 0 || pageSize <= 0) {
+      return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+    List<PopularTrack> results = libraryService.getCustomerAlbumSongPlays(accountId, pageIndex, pageSize);
+    if (results.size() == 0) {
+      return new ResponseEntity(results, HttpStatus.NO_CONTENT);
+    }
+    return new ResponseEntity(results, HttpStatus.OK);
+  }
+
   @GetMapping(value = "/accounts/{accountId}/albums")
   public List<LibraryAlbum> getLibaryAlbums(@PathVariable long accountId) {
     return libraryService.getLibraryAlbums(accountId);
@@ -65,11 +91,6 @@ public class LibraryController {
   public LibraryPlaylist getPlaylist(@PathVariable long playlistId) {
     return libraryService.getPlaylist(playlistId);
   }
-
-    /*@GetMapping(value = "/playlists/{playlistId}")
-    public Playlist getPlaylist(@PathVariable long playlistId) {
-        return libraryService.getPlaylist(playlistId);
-    }*/
 
   @GetMapping(value = "/playlist/{playlistId}/songs")
   public List<PlaylistTrack> getPlaylistSongs(@PathVariable long playlistId) {
@@ -99,5 +120,18 @@ public class LibraryController {
   @GetMapping(value = "/artist/{artistId}/songs")
   public List<PopularTrack> getArtistSongs(@PathVariable long artistId) {
     return libraryService.getArtistSongs(artistId);
+  }
+
+  @GetMapping(value = "/songs/top/{pageIndex}/{pageSize}")
+  @ResponseBody
+  public ResponseEntity<List<PopularTrack>> getTopSongs(@PathVariable int pageIndex, @PathVariable int pageSize) {
+    if (pageIndex < 0 || pageSize <= 0) {
+      return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+    List<PopularTrack> results = libraryService.getTopSongs(pageIndex, pageSize);
+    if (results.size() == 0) {
+      return new ResponseEntity(results, HttpStatus.NO_CONTENT);
+    }
+    return new ResponseEntity(results, HttpStatus.OK);
   }
 }

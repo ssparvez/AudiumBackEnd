@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 public class LibraryService {
-  
+
   @Autowired
   private SongRepository     songRepository;
   @Autowired
@@ -57,6 +57,32 @@ public class LibraryService {
     return songRepository.findCustomerSongs(accountId);
   }
 
+  public List<PopularTrack> getCustomerSongPlays(long accountId, int pageIndex, int pageSize) {
+    List<PopularTrack> results    = songRepository.findCustomerSongPlays(accountId);
+    int                startIndex = (pageIndex * pageSize);
+    int                endIndex   = startIndex + pageSize;
+
+    if (startIndex >= results.size()) {
+      return new ArrayList<>();
+    } else if (endIndex >= results.size()) {
+      return results.subList(startIndex, (results.size() - startIndex));
+    }
+    return results.subList(startIndex, endIndex);
+  }
+
+  public List<PopularTrack> getCustomerAlbumSongPlays(long accountId, int pageIndex, int pageSize) {
+    List<PopularTrack> results    = songRepository.findCustomerAlbumSongPlays(accountId);
+    int                startIndex = (pageIndex * pageSize);
+    int                endIndex   = startIndex + pageSize;
+
+    if (startIndex >= results.size()) {
+      return new ArrayList<>();
+    } else if (endIndex >= results.size()) {
+      return results.subList(startIndex, (results.size() - startIndex));
+    }
+    return results.subList(startIndex, endIndex);
+  }
+
   public List<LibraryPlaylist> getLibraryPlaylists(long accountId) {
     return playlistRepository.findByFollowerAccountId(accountId);
   }
@@ -91,5 +117,18 @@ public class LibraryService {
 
   public List<PopularTrack> getArtistSongs(long artistId) {
     return songRepository.findArtistSongs(artistId);
+  }
+
+  public List<PopularTrack> getTopSongs(int pageIndex, int pageSize) {
+    List<PopularTrack> results    = songRepository.findTopSongs();
+    int                startIndex = (pageIndex * pageSize);
+    int                endIndex   = startIndex + pageSize;
+
+    if (startIndex >= results.size()) {
+      return new ArrayList<>();
+    } else if (endIndex >= results.size()) {
+      return results.subList(startIndex, (results.size() - startIndex));
+    }
+    return results.subList(startIndex, endIndex);
   }
 }
