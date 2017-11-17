@@ -48,11 +48,6 @@ public class LibraryController {
     public List<LibrarySong> getLibrarySongs(@PathVariable long accountId) {
         return libraryService.getLibrarySongs(accountId);
     }
-  // ACTUAL LIBRARY OPERATIONS
-  @GetMapping(value = "/accounts/{accountId}/songs")
-  public List<LibrarySong> getLibarySongs(@PathVariable long accountId) {
-    return libraryService.getLibrarySongs(accountId);
-  }
 
     @GetMapping(value = "/accounts/{accountId}/albums")
     public List<LibraryAlbum> getLibraryAlbums(@PathVariable long accountId) {
@@ -80,11 +75,6 @@ public class LibraryController {
       return new ResponseEntity(results, HttpStatus.NO_CONTENT);
     }
     return new ResponseEntity(results, HttpStatus.OK);
-  }
-
-  @GetMapping(value = "/accounts/{accountId}/albums")
-  public List<LibraryAlbum> getLibaryAlbums(@PathVariable long accountId) {
-    return libraryService.getLibraryAlbums(accountId);
   }
 
   @GetMapping(value = "/accounts/{accountId}/artists")

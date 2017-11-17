@@ -42,7 +42,7 @@ public class LibraryService {
     songRepository.save(song);
   }
 
-  public void updateSong(Song song) {
+  public void updateSong(Long id, Song song) {
     songRepository.save(song);
   }
 
@@ -84,10 +84,6 @@ public class LibraryService {
     return results.subList(startIndex, endIndex);
   }
 
-  public List<LibraryPlaylist> getLibraryPlaylists(long accountId) {
-    return playlistRepository.findByFollowerAccountId(accountId);
-  }
-
   public List<LibraryAlbum> getLibraryAlbums(long accountId) {
     return albumRepository.findCustomerAlbums(accountId);
   }
@@ -115,9 +111,21 @@ public class LibraryService {
   public List<LibraryAlbum> getArtistAlbums(long artistId) {
     return albumRepository.findArtistAlbums(artistId);
   }
-
-  public List<PopularTrack> getArtistSongs(long artistId) {
+  public List<PopularTrack> getArtistSongs ( long artistId) {
     return songRepository.findArtistSongs(artistId);
+  }
+
+  public List<PopularTrack> getTopSongs(int pageIndex, int pageSize) {
+    List<PopularTrack> results    = songRepository.findTopSongs();
+    int                startIndex = (pageIndex * pageSize);
+    int                endIndex   = startIndex + pageSize;
+
+    if (startIndex >= results.size()) {
+      return new ArrayList<>();
+    } else if (endIndex >= results.size()) {
+      return results.subList(startIndex, (results.size() - startIndex));
+    }
+    return results.subList(startIndex, endIndex);
   }
 
   //** PLAYLIST **//
@@ -129,23 +137,9 @@ public class LibraryService {
     } catch (Exception e) {
       System.out.println("EXCEPTION: " + e);
       return null;
-      public List<PopularTrack> getArtistSongs ( long artistId){
-        return songRepository.findArtistSongs(artistId);
-      }
-
-      public List<PopularTrack> getTopSongs ( int pageIndex, int pageSize){
-        List<PopularTrack> results    = songRepository.findTopSongs();
-        int                startIndex = (pageIndex * pageSize);
-        int                endIndex   = startIndex + pageSize;
-
-        if (startIndex >= results.size()) {
-          return new ArrayList<>();
-        } else if (endIndex >= results.size()) {
-          return results.subList(startIndex, (results.size() - startIndex));
-        }
-        return results.subList(startIndex, endIndex);
-      }
     }
+  }
+
 
     public List<LibraryPlaylist> getPlaylistsFollowedAndCreated(long accountId) {
       List<LibraryPlaylist> followed = playlistRepository.findFollowedPlaylists(accountId);

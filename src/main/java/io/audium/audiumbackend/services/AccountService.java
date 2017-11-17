@@ -33,7 +33,7 @@ public class AccountService {
   public void registerAccount(Customer customerAccount) {
 
     customerAccount.setRole("BasicUser");
-    customerAccount.setIsActive(new Long(1));
+    customerAccount.setIsActive(true);
     customerAccount.setPasswordHash(passwordEncoder.encode(customerAccount.getPasswordHash()));
     customerAccountRepo.save(customerAccount);
   }
@@ -75,22 +75,21 @@ public class AccountService {
 
   public JsonObject getPaymentInfo(Long id) {
     PaymentInfo info = paymentRepo.findOne(id);
-    if (info != null) {
+    if ( info != null) {
       JsonObject obj = new JsonObject();
-      Calendar   cal = Calendar.getInstance();
-      cal.setTime(info.getCreditcardexpire());
-      obj.addProperty("ccNumber", verify.aesDecrypt(id, Hex.decode(info.getCreditcardhash())));
-      obj.addProperty("ccMonth", cal.get(Calendar.MONTH) + 1);
-      obj.addProperty("ccYear", cal.get(Calendar.YEAR));
-      obj.addProperty("zipCode", info.getZipcode());
+      Calendar cal = Calendar.getInstance();
+      cal.setTime(info.getCreditCardExpiration());
+      obj.addProperty("ccNumber", verify.aesDecrypt(id,Hex.decode(info.getCreditCardHash())));
+      obj.addProperty("ccMonth",cal.get(Calendar.MONTH)+1);
+      obj.addProperty("ccYear",cal.get(Calendar.YEAR));
+      obj.addProperty("zipCode", info.getZipCode());
       return obj;
-    } else {
-      return null;
     }
+    else return null;
   }
 
   public JsonObject upgradeAccount(PaymentInfo info) {
-    info.setCreditcardhash(verify.aesEncrypt(info.getAccountId(), info.getCreditcardhash()));
+    info.setCreditCardHash(verify.aesEncrypt(info.getAccountId(), info.getCreditCardHash()));
     if (paymentRepo.save(info) != null) {
       Customer account = customerAccountRepo.findOne(info.getAccountId());
       account.setRole(PREMIUM);
@@ -114,7 +113,7 @@ public class AccountService {
   }
 
   public boolean editPaymentInfo(PaymentInfo info) {
-    info.setCreditcardhash(verify.aesEncrypt(info.getAccountId(), info.getCreditcardhash()));
+    info.setCreditCardHash(verify.aesEncrypt(info.getAccountId(), info.getCreditCardHash()));
     if (paymentRepo.save(info) != null) {
       return true;
     } else {

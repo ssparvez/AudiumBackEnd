@@ -24,31 +24,31 @@ public class AdminController {
     return ResponseEntity.status(HttpStatus.OK).body(adminService.testBcrypt(rawData).toString());
   }
 
-  /* AES encrypting test function */
-  @GetMapping(value = "/aes/encrypt/{accountId}/{rawData}")
-  public ResponseEntity testAesEncrypt(@PathVariable long accountId, @PathVariable String rawData) {
-    String salt          = adminService.getAccountSalt(accountId);
-    String encryptedData = verificationService.aesEncrypt(accountId, rawData).toString();
-    System.out.println("AES encryption test:\n\taccountId=" + accountId + "\n\tRaw data=\"" + rawData + "\"\n\tSalt=\"" + salt + "\"\n\tEncrypted data=\"" + encryptedData + "\"");
-    JsonObject response = new JsonObject();
-    response.addProperty("accountId", accountId);
-    response.addProperty("rawData", rawData);
-    response.addProperty("salt", salt);
-    response.addProperty("encryptedData", encryptedData);
-    return ResponseEntity.status(HttpStatus.OK).body(response.toString());
-  }
-
-  /* AES decrypting test function */
-  @GetMapping(value = "/aes/decrypt/{accountId}/{encryptedData}")
-  public ResponseEntity testAesDecrypt(@PathVariable long accountId, @PathVariable String encryptedData) {
-    String salt          = adminService.getAccountSalt(accountId);
-    String decryptedData = verificationService.aesDecrypt(accountId, encryptedData).toString();
-    System.out.println("AES decryption test:\n\taccountId=" + accountId + "\n\tRaw data=\"" + decryptedData + "\"\n\tSalt=\"" + salt + "\"\n\tEncrypted data=\"" + encryptedData + "\"");
-    JsonObject response = new JsonObject();
-    response.addProperty("accountId", accountId);
-    response.addProperty("salt", salt);
-    response.addProperty("encryptedData", encryptedData);
-    response.addProperty("decryptedData", decryptedData);
-    return ResponseEntity.status(HttpStatus.OK).body(response.toString());
-  }
+//  /* AES encrypting test function */
+//  @GetMapping(value = "/aes/encrypt/{accountId}/{rawData}")
+//  public ResponseEntity testAesEncrypt(@PathVariable long accountId, @PathVariable String rawData) {
+//    String salt          = adminService.getAccountSalt(accountId);
+//    String encryptedData = verificationService.aesEncrypt(accountId, rawData).toString();
+//    System.out.println("AES encryption test:\n\taccountId=" + accountId + "\n\tRaw data=\"" + rawData + "\"\n\tSalt=\"" + salt + "\"\n\tEncrypted data=\"" + encryptedData + "\"");
+//    JsonObject response = new JsonObject();
+//    response.addProperty("accountId", accountId);
+//    response.addProperty("rawData", rawData);
+//    response.addProperty("salt", salt);
+//    response.addProperty("encryptedData", encryptedData);
+//    return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+//  }
+//
+//  /* AES decrypting test function */
+//  @GetMapping(value = "/aes/decrypt/{accountId}/{encryptedData}")
+//  public ResponseEntity testAesDecrypt(@PathVariable long accountId, @PathVariable String encryptedData) {
+//    String salt          = adminService.getAccountSalt(accountId);
+//    String decryptedData = verificationService.aesDecrypt(accountId, encryptedData).toString();
+//    System.out.println("AES decryption test:\n\taccountId=" + accountId + "\n\tRaw data=\"" + decryptedData + "\"\n\tSalt=\"" + salt + "\"\n\tEncrypted data=\"" + encryptedData + "\"");
+//    JsonObject response = new JsonObject();
+//    response.addProperty("accountId", accountId);
+//    response.addProperty("salt", salt);
+//    response.addProperty("encryptedData", encryptedData);
+//    response.addProperty("decryptedData", decryptedData);
+//    return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+//  }
 }
