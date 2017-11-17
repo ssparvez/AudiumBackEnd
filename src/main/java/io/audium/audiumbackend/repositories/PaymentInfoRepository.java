@@ -16,6 +16,6 @@ public interface PaymentInfoRepository extends CrudRepository<PaymentInfo, Long>
   @Transactional
   @Modifying
   @Query("DELETE FROM PaymentInfo P WHERE P.accountId = ?1")
-  public PaymentInfo deletePaymentInfo(Long accountId);
+  public int deletePaymentInfo(Long accountId);
 
 }

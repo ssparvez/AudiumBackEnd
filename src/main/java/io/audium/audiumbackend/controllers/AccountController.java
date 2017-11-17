@@ -18,57 +18,64 @@ import java.util.LinkedHashMap;
 @RestController
 public class AccountController {
 
-    @Autowired
-    private AccountService accountService;
+  @Autowired
+  private AccountService accountService;
 
-    @Autowired
-    private VerificationService verify;
+  @Autowired
+  private VerificationService verify;
 
+  @RequestMapping(method = RequestMethod.POST, value = "/register")
+  public ResponseEntity register(@RequestBody Customer customerAccount) {
 
-    @RequestMapping(method = RequestMethod.POST, value = "/register")
-    public ResponseEntity register(@RequestBody Customer customerAccount) {
+    accountService.registerAccount(customerAccount);
+    return ResponseEntity.status(HttpStatus.OK).body(true);
+  }
 
-        accountService.registerAccount(customerAccount);
-        return ResponseEntity.status(HttpStatus.OK).body(true);
+  @GetMapping(value = "/paymentinfo/{id}", produces = ("application/json"))
+  public ResponseEntity getPaymentInfo(@PathVariable Long id) {
+
+    JsonObject info = accountService.getPaymentInfo(id);
+    if (info == null) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    } else {
+      return ResponseEntity.status(HttpStatus.OK).body(info.toString());
     }
+  }
 
-    @GetMapping(value="/paymentinfo/{id}", produces = ("application/json"))
-    public ResponseEntity getPaymentInfo(@PathVariable Long id) {
-
-        JsonObject info = accountService.getPaymentInfo(id);
-        if (info == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.OK).body(info.toString());
-        }
-    }
-
-    @PostMapping(value="/upgrade")
-    public ResponseEntity upgrade(@RequestBody PaymentInfo paymentInfo) {
-      JsonObject token = accountService.upgradeAccount(paymentInfo);
-      if(token != null) {
-        return ResponseEntity.status(HttpStatus.OK).body(token.toString());
-      }
-      else {
+  @PostMapping(value = "/upgrade")
+  public ResponseEntity upgrade(@RequestHeader(value = "Authorization") String token,
+                                @RequestBody PaymentInfo paymentInfo) {
+    if (verify.verifyIntegrityCustomerAccount(token, paymentInfo.getAccountId()) != null) {
+      JsonObject tokenToReturn = accountService.upgradeAccount(paymentInfo);
+      if (token != null) {
+        return ResponseEntity.status(HttpStatus.OK).body(tokenToReturn.toString());
+      } else {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
-
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
+  }
 
-    @DeleteMapping(value="/downgradeaccount/{id}")
-    public ResponseEntity downgrade(@PathVariable Long id) {
-      JsonObject token = accountService.downgradeAccount(id);
-      if(token != null) {
-        return ResponseEntity.status(HttpStatus.OK).body(token.toString());
-      }
-      else {
+  @CrossOrigin
+  @DeleteMapping(value = "/downgradeaccount/{id}")
+  public ResponseEntity downgrade(@RequestHeader(value = "Authorization") String token,
+                                  @PathVariable Long id) {
+
+    if (verify.verifyIntegrityCustomerAccount(token, id) != null) {
+
+      JsonObject tokenToReturn = accountService.downgradeAccount(id);
+      if (token != null) {
+        return ResponseEntity.status(HttpStatus.OK).body(tokenToReturn.toString());
+      } else {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
+  }
 
-
-  @PostMapping(value="/editpaymentinfo")
+  @PostMapping(value = "/editpaymentinfo")
   public ResponseEntity editPaymentInfo(@RequestHeader(value = "Authorization") String token,
                                         @RequestBody PaymentInfo paymentInfo) {
     if (verify.verifyIntegrityCustomerAccount(token, paymentInfo.getAccountId()) != null) {
@@ -81,51 +88,46 @@ public class AccountController {
     } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
-
   }
-
-  @PutMapping(value="/changepassword/{id}")
+  @CrossOrigin
+  @PutMapping(value = "/changepassword/{id}")
   public ResponseEntity changePassword(@RequestHeader(value = "Authorization") String token,
-                                        @RequestBody LinkedHashMap<String, String> credentials,
-                                        @PathVariable Long id) {
+                                       @RequestBody LinkedHashMap<String, String> credentials,
+                                       @PathVariable Long id) {
     ArrayList<String> creds = new ArrayList<>(credentials.values());
-    if (verify.verifyIntegrityCustomerAccount(token,id) != null) {
-      if (accountService.changePassword(creds.get(0),creds.get(1), id)) {
+
+    if (verify.verifyIntegrityCustomerAccount(token, id) != null) {
+      if (accountService.changePassword(creds.get(0), creds.get(1), id)) {
         return ResponseEntity.status(HttpStatus.OK).body(true);
-      }
-      else {
+      } else {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
-    }
-    else {
+    } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
-
   }
-    @CrossOrigin
-    @DeleteMapping(value = "/register/{id}")
-    public void deleteAccount(@PathVariable Long id) {
-        accountService.deleteAccount(id);
+  @CrossOrigin
+  @DeleteMapping(value = "/register/{id}")
+  public void deleteAccount(@PathVariable Long id) {
+    accountService.deleteAccount(id);
+  }
+
+  @CrossOrigin
+  @PutMapping(value = "/editcustomer")
+  public ResponseEntity updateAccount(@RequestHeader(value = "Authorization") String token,
+                                      @RequestBody Customer newAccount) {
+    Customer oldAccount = verify.verifyIntegrityCustomerAccount(token, newAccount.getAccountId());
+    if (oldAccount != null) {
+
+      JsonObject tokenToReturn = accountService.updateCustomerAccount(newAccount, oldAccount);
+
+      if (tokenToReturn != null) {
+        return ResponseEntity.status(HttpStatus.OK).body(tokenToReturn.toString());
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+      }
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
-
-    @CrossOrigin
-    @PutMapping(value = "/editcustomer")
-    public ResponseEntity updateAccount(@RequestHeader(value = "Authorization") String token,
-                                        @RequestBody Customer newAccount) {
-        Customer oldAccount = verify.verifyIntegrityCustomerAccount(token, newAccount.getAccountId());
-        if (oldAccount != null) {
-
-            JsonObject tokenToReturn = accountService.updateCustomerAccount(newAccount, oldAccount);
-
-            if (tokenToReturn != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(tokenToReturn.toString());
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
-        }
-    }
-
-
+  }
 }

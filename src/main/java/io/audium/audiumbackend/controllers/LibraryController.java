@@ -1,9 +1,12 @@
 package io.audium.audiumbackend.controllers;
 
+import io.audium.audiumbackend.entities.Playlist;
 import io.audium.audiumbackend.entities.Song;
 import io.audium.audiumbackend.entities.projections.*;
 import io.audium.audiumbackend.services.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,12 +45,12 @@ public class LibraryController {
 
     // ACTUAL LIBRARY OPERATIONS
     @GetMapping(value = "/accounts/{accountId}/songs")
-    public List<LibrarySong> getLibarySongs(@PathVariable long accountId) {
+    public List<LibrarySong> getLibrarySongs(@PathVariable long accountId) {
         return libraryService.getLibrarySongs(accountId);
     }
 
     @GetMapping(value = "/accounts/{accountId}/albums")
-    public List<LibraryAlbum> getLibaryAlbums(@PathVariable long accountId) {
+    public List<LibraryAlbum> getLibraryAlbums(@PathVariable long accountId) {
         return libraryService.getLibraryAlbums(accountId);
     }
 
@@ -57,9 +60,16 @@ public class LibraryController {
     }
 
     @GetMapping(value = "/accounts/{accountId}/playlists")
-    public List<LibraryPlaylist> getLibaryPlaylists(@PathVariable long accountId) {
-        return libraryService.getLibraryPlaylists(accountId);
+    public List<LibraryPlaylist> getLibraryPlaylists(@PathVariable long accountId) {
+      List<LibraryPlaylist> playlistsToReturn;
+      if ((playlistsToReturn = libraryService.getPlaylistsFollowedAndCreated(accountId)) != null ) {
+        return playlistsToReturn;
+      }
+      else return null;
     }
+
+
+    //** PLAYLIST **//
 
     @GetMapping(value = "/playlist/{playlistId}")
     public LibraryPlaylist getPlaylist(@PathVariable long playlistId) {
@@ -76,6 +86,22 @@ public class LibraryController {
         return libraryService.getPlaylistSongs(playlistId);
     }
 
+    @PostMapping(value="/playlist/newplaylist")
+    public ResponseEntity createNewPlaylist(@RequestBody Playlist playlist) {
+      Playlist playlistToReturn;
+      if(( playlistToReturn = libraryService.createNewPlaylist(playlist)) != null) {
+        return ResponseEntity.status(HttpStatus.OK).body(playlistToReturn);
+      }
+      else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+      }
+
+    }
+
+
+
+    //** ALBUM **//
+
     @GetMapping(value = "/album/{albumId}")
     public LibraryAlbum getAlbum(@PathVariable long albumId) {
         return libraryService.getAlbum(albumId);
@@ -85,6 +111,9 @@ public class LibraryController {
     public List<AlbumTrack> getAlbumSongs(@PathVariable long albumId) {
         return libraryService.getAlbumSongs(albumId);
     }
+
+
+    //** ARTIST **//
 
     @GetMapping(value = "/artist/{artistId}")
     public LibraryArtist getArtist(@PathVariable long artistId) {

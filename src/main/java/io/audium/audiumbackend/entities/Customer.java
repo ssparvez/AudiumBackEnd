@@ -13,7 +13,7 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name = "accountId", referencedColumnName = "accountId")
 public class Customer extends Account {
 
-    private Date   dateOfBirth;
+    private Date dateOfBirth;
     private String gender;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
@@ -68,6 +68,7 @@ public class Customer extends Account {
     public Date getDateOfBirth() {
         return dateOfBirth;
     }
+
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
@@ -75,6 +76,7 @@ public class Customer extends Account {
     public String getGender() {
         return gender;
     }
+
     public void setGender(String gender) {
         this.gender = gender;
     }
@@ -85,6 +87,7 @@ public class Customer extends Account {
     public List<Playlist> getPlaylists() {
         return playlists;
     }
+
     public void setPlaylists(List<Playlist> playlists) {
         this.playlists = playlists;
     }
@@ -92,6 +95,7 @@ public class Customer extends Account {
     public List<Album> getAlbums() {
         return albums;
     }
+
     public void setAlbums(List<Album> albums) {
         this.albums = albums;
     }
@@ -99,18 +103,23 @@ public class Customer extends Account {
     public List<CustomerSong> getCustomerSongs() {
         return customerSongs;
     }
+
     public void setCustomerSongs(List<CustomerSong> customerSongs) {
         this.customerSongs = customerSongs;
     }
+
     public List<Playlist> getCreatedPlaylists() {
         return createdPlaylists;
     }
+
     public void setCreatedPlaylists(List<Playlist> createdPlaylists) {
         this.createdPlaylists = createdPlaylists;
     }
+
     public List<SongPlay> getSongPlays() {
         return songPlays;
     }
+
     public void setSongPlays(List<SongPlay> songPlays) {
         this.songPlays = songPlays;
     }

@@ -10,9 +10,10 @@ import java.util.List;
 public class Playlist {
 
     @Id
-    private Long    playlistId;
-    private String  name;
-    private String  description;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long playlistId;
+    private String name;
+    private String description;
     private boolean isPublic;
 
     @ManyToOne(fetch = FetchType.LAZY)

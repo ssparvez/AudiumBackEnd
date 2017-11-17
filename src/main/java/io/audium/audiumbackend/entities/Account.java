@@ -8,13 +8,13 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long   accountId;
+    private Long accountId;
     private String email;
     private String passwordHash;
     private String firstName;
     private String lastName;
     private String role;
-    private Long   isActive;
+    private Long isActive;
     private String username;
 
     public Account() {
