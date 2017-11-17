@@ -8,161 +8,164 @@ import io.audium.audiumbackend.entities.relationships.SongPlay;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 
 @Entity
 public class Song {
 
-    @Id
-    private Long    songId;
-    private String  title;
-    private Time    duration;
-    private String  file;
-    private String  year;
-    private Long    genreId;
-    private boolean isExplicit;
-    private String  lyrics;
+  @Id
+  private Long    songId;
+  private String  title;
+  private Time    duration;
+  private String  file;
+  private Date    year;
+  private boolean isExplicit;
+  private String  lyrics;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JoinTable(
-        name = "artist_song",
-        joinColumns = @JoinColumn(name = "songId", referencedColumnName = "songId"),
-        inverseJoinColumns = @JoinColumn(name = "artistId", referencedColumnName = "artistId"))
-    private List<Artist> artists;
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "genreId")
+  private Genre genre;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "song")
-    @JsonIgnore
-    private List<AlbumSong> albumSongs;
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JsonIgnore
+  @JoinTable(
+    name = "artist_song",
+    joinColumns = @JoinColumn(name = "songId", referencedColumnName = "songId"),
+    inverseJoinColumns = @JoinColumn(name = "artistId", referencedColumnName = "artistId"))
+  private List<Artist> artists;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "song")
-    @JsonIgnore
-    private List<PlaylistSong> playlistSongs;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "song")
+  @JsonIgnore
+  private List<AlbumSong> albumSongs;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "song")
-    @JsonIgnore
-    private List<CustomerSong> customerSongs;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "song")
+  @JsonIgnore
+  private List<PlaylistSong> playlistSongs;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "song")
-    @JsonIgnore
-    private List<SongPlay> songPlays;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "song")
+  @JsonIgnore
+  private List<CustomerSong> customerSongs;
 
-    @Formula("(SELECT COUNT(SP.songId) FROM Song AS S JOIN song_play AS SP ON S.songId = SP.songId WHERE SP.songId = songId)")
-    @JsonIgnore
-    private int playCount;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "song")
+  @JsonIgnore
+  private List<SongPlay> songPlays;
 
-    public Song() {
-    }
+  @Formula("(SELECT COUNT(SP.songId) FROM Song AS S JOIN song_play AS SP ON S.songId = SP.songId WHERE SP.songId = songId)")
+  @JsonIgnore
+  private int playCount;
 
-    public Song(Long songId, String title, Time duration, Long playsthismonth, Long totalplays, String file, String year, Long genreId, boolean isExplicit, String lyrics) {
-        this.songId = songId;
-        this.title = title;
-        this.duration = duration;
-        this.file = file;
-        this.year = year;
-        this.genreId = genreId;
-        this.isExplicit = isExplicit;
-        this.lyrics = lyrics;
-    }
+  public Song() {
+  }
 
-    public Long getSongId() {
-        return songId;
-    }
-    public void setSongId(Long songId) {
-        this.songId = songId;
-    }
+  public Song(Long songId, String title, Time duration, Long playsthismonth, Long totalplays, String file, Date year, Genre genre, boolean isExplicit, String lyrics) {
+    this.songId = songId;
+    this.title = title;
+    this.duration = duration;
+    this.file = file;
+    this.year = year;
+    this.genre = genre;
+    this.isExplicit = isExplicit;
+    this.lyrics = lyrics;
+  }
 
-    public String getTitle() {
-        return title;
-    }
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public Long getSongId() {
+    return songId;
+  }
+  public void setSongId(Long songId) {
+    this.songId = songId;
+  }
 
-    public Time getDuration() {
-        return duration;
-    }
-    public void setDuration(Time duration) {
-        this.duration = duration;
-    }
+  public String getTitle() {
+    return title;
+  }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public String getFile() {
-        return file;
-    }
-    public void setFile(String file) {
-        this.file = file;
-    }
+  public Time getDuration() {
+    return duration;
+  }
+  public void setDuration(Time duration) {
+    this.duration = duration;
+  }
 
-    public String getYear() {
-        return year;
-    }
-    public void setYear(String year) {
-        this.year = year;
-    }
+  public String getFile() {
+    return file;
+  }
+  public void setFile(String file) {
+    this.file = file;
+  }
 
-    public Long getGenreId() {
-        return genreId;
-    }
-    public void setGenreId(Long genreId) {
-        this.genreId = genreId;
-    }
+  public Date getYear() {
+    return year;
+  }
+  public void setYear(Date year) {
+    this.year = year;
+  }
 
-    public boolean getIsExplicit() {
-        return isExplicit;
-    }
-    public void setIsExplicit(boolean isExplicit) {
-        this.isExplicit = isExplicit;
-    }
+  public boolean getIsExplicit() {
+    return isExplicit;
+  }
+  public void setIsExplicit(boolean isExplicit) {
+    this.isExplicit = isExplicit;
+  }
 
-    public String getLyrics() {
-        return lyrics;
-    }
-    public void setLyrics(String lyrics) {
-        this.lyrics = lyrics;
-    }
+  public String getLyrics() {
+    return lyrics;
+  }
+  public void setLyrics(String lyrics) {
+    this.lyrics = lyrics;
+  }
 
-    public List<Artist> getArtists() {
-        return artists;
-    }
-    public void setArtists(List<Artist> artists) {
-        this.artists = artists;
-    }
+  public List<Artist> getArtists() {
+    return artists;
+  }
+  public void setArtists(List<Artist> artists) {
+    this.artists = artists;
+  }
 
-    public Artist getArtist(Long artistId) {
-        System.out.println(this.artists.get(0).getArtistName());
-        return this.artists.get(0);
-    }
+  public Artist getArtist(Long artistId) {
+    System.out.println(this.artists.get(0).getArtistName());
+    return this.artists.get(0);
+  }
 
-    public List<AlbumSong> getAlbumSongs() {
-        return albumSongs;
-    }
-    public void setAlbumSongs(List<AlbumSong> albumSongs) {
-        this.albumSongs = albumSongs;
-    }
+  public List<AlbumSong> getAlbumSongs() {
+    return albumSongs;
+  }
+  public void setAlbumSongs(List<AlbumSong> albumSongs) {
+    this.albumSongs = albumSongs;
+  }
 
-    public List<CustomerSong> getCustomerSongs() {
-        return customerSongs;
-    }
-    public void setCustomerSongs(List<CustomerSong> customerSongs) {
-        this.customerSongs = customerSongs;
-    }
-    public List<PlaylistSong> getPlaylistSongs() {
-        return playlistSongs;
-    }
-    public void setPlaylistSongs(List<PlaylistSong> playlistSongs) {
-        this.playlistSongs = playlistSongs;
-    }
-    public List<SongPlay> getSongPlays() {
-        return songPlays;
-    }
-    public void setSongPlays(List<SongPlay> songPlays) {
-        this.songPlays = songPlays;
-    }
-    public int getPlayCount() {
-        return playCount;
-    }
-    public void setPlayCount(int playCount) {
-        this.playCount = playCount;
-    }
+  public List<CustomerSong> getCustomerSongs() {
+    return customerSongs;
+  }
+  public void setCustomerSongs(List<CustomerSong> customerSongs) {
+    this.customerSongs = customerSongs;
+  }
+  public List<PlaylistSong> getPlaylistSongs() {
+    return playlistSongs;
+  }
+  public void setPlaylistSongs(List<PlaylistSong> playlistSongs) {
+    this.playlistSongs = playlistSongs;
+  }
+  public List<SongPlay> getSongPlays() {
+    return songPlays;
+  }
+  public void setSongPlays(List<SongPlay> songPlays) {
+    this.songPlays = songPlays;
+  }
+  public int getPlayCount() {
+    return playCount;
+  }
+  public void setPlayCount(int playCount) {
+    this.playCount = playCount;
+  }
+  public Genre getGenre() {
+    return genre;
+  }
+  public void setGenre(Genre genre) {
+    this.genre = genre;
+  }
 }

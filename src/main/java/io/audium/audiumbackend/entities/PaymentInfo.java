@@ -1,58 +1,53 @@
 package io.audium.audiumbackend.entities;
 
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Date;
 
 @Entity
-@Table(name="paymentinfo")
+@Table(name = "PaymentInfo")
 public class PaymentInfo {
 
-    @Id
-  private Long accountId;
-  private java.sql.Date creditcardexpire;
-  private String creditcardhash;
-  private Long zipCode;
+  @Id
+  private Long   accountId;
+  private Date   creditCardExpiration;
+  private String creditCardHash;
+  private Long   zipCode;
 
-    public PaymentInfo() {
-    }
-    public PaymentInfo(Long accountId, Date creditcardexpire, String creditcardhash, Long zipCode) {
-        this.accountId = accountId;
-        this.creditcardexpire = creditcardexpire;
-        this.creditcardhash = creditcardhash;
-        this.zipCode = zipCode;
-    }
-
-    public Long getAccountId() {
-    return accountId;
+  public PaymentInfo() {
+  }
+  public PaymentInfo(Long accountId, Date creditCardExpiration, String creditCardHash, Long zipCode) {
+    this.accountId = accountId;
+    this.creditCardExpiration = creditCardExpiration;
+    this.creditCardHash = creditCardHash;
+    this.zipCode = zipCode;
   }
 
-    public void setAccounId(Long accountId) {
+  public Long getAccountId() {
+    return accountId;
+  }
+  public void setAccounId(Long accountId) {
     this.accountId = accountId;
   }
 
-  public java.sql.Date getCreditcardexpire() {
-    return creditcardexpire;
+  public Date getCreditCardExpiration() {
+    return creditCardExpiration;
+  }
+  public void setCreditCardExpiration(Date creditCardExpiration) {
+    this.creditCardExpiration = creditCardExpiration;
   }
 
-  public void setCreditcardexpire(java.sql.Date creditcardexpire) {
-    this.creditcardexpire = creditcardexpire;
+  public String getCreditCardHash() {
+    return creditCardHash;
+  }
+  public void setCreditCardHash(String creditCardHash) {
+    this.creditCardHash = creditCardHash;
   }
 
-  public String getCreditcardhash() {
-    return creditcardhash;
-  }
-
-  public void setCreditcardhash(String creditcardhash) {
-    this.creditcardhash = creditcardhash;
-  }
-
-  public Long getZipcode() {
+  public Long getZipCode() {
     return zipCode;
   }
-
   public void setZipCode(Long zipCode) {
     this.zipCode = zipCode;
   }

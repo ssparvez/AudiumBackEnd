@@ -27,40 +27,69 @@ public class LibraryService {
 
   public List<Song> getAllSongs() {
     List<Song> songs = new ArrayList<>();
-    songRepository.findAll().forEach(songs::add); // this line gets from the db and converts data into objects
+    songRepository.findAll().forEach(songs::add);
     for (Song song : songs) {
       System.out.println(song.getTitle());
     }
     return songs;
   }
 
-  //gets song by id from list
-  public Song getSong(long id) {
-    return songRepository.findBySongId(id); // id has to be string?
+  public Song getSong(long songId) {
+    return songRepository.findBySongId(songId);
   }
 
   public void addSong(Song song) {
     songRepository.save(song);
   }
 
-  public void updateSong(long id, Song song) {
-    songRepository.save(song); // this method finds the object in the db then saves
+  public void updateSong(Song song) {
+    songRepository.save(song);
   }
 
-  public void removeSong(String id) {
-    songRepository.delete(id);
+  public void removeSong(long songId) {
+    songRepository.delete(songId);
   }
 
-  public List<LibraryArtist> getLibraryArtists(long id) {
-    return artistRepository.findByFollowerAccountId(id);
+  public List<LibraryArtist> getLibraryArtists(long accountId) {
+    return artistRepository.findByFollowerAccountId(accountId);
   }
 
   public List<LibrarySong> getLibrarySongs(long accountId) {
     return songRepository.findCustomerSongs(accountId);
   }
 
-  public List<LibraryAlbum> getLibraryAlbums(long id) {
-    return albumRepository.findCustomerAlbums(id);
+  public List<PopularTrack> getCustomerSongPlays(long accountId, int pageIndex, int pageSize) {
+    List<PopularTrack> results    = songRepository.findCustomerSongPlays(accountId);
+    int                startIndex = (pageIndex * pageSize);
+    int                endIndex   = startIndex + pageSize;
+
+    if (startIndex >= results.size()) {
+      return new ArrayList<>();
+    } else if (endIndex >= results.size()) {
+      return results.subList(startIndex, (results.size() - startIndex));
+    }
+    return results.subList(startIndex, endIndex);
+  }
+
+  public List<PopularTrack> getCustomerAlbumSongPlays(long accountId, int pageIndex, int pageSize) {
+    List<PopularTrack> results    = songRepository.findCustomerAlbumSongPlays(accountId);
+    int                startIndex = (pageIndex * pageSize);
+    int                endIndex   = startIndex + pageSize;
+
+    if (startIndex >= results.size()) {
+      return new ArrayList<>();
+    } else if (endIndex >= results.size()) {
+      return results.subList(startIndex, (results.size() - startIndex));
+    }
+    return results.subList(startIndex, endIndex);
+  }
+
+  public List<LibraryPlaylist> getLibraryPlaylists(long accountId) {
+    return playlistRepository.findByFollowerAccountId(accountId);
+  }
+
+  public List<LibraryAlbum> getLibraryAlbums(long accountId) {
+    return albumRepository.findCustomerAlbums(accountId);
   }
 
   public LibraryPlaylist getPlaylist(long playlistId) {
@@ -100,22 +129,35 @@ public class LibraryService {
     } catch (Exception e) {
       System.out.println("EXCEPTION: " + e);
       return null;
+      public List<PopularTrack> getArtistSongs ( long artistId){
+        return songRepository.findArtistSongs(artistId);
+      }
+
+      public List<PopularTrack> getTopSongs ( int pageIndex, int pageSize){
+        List<PopularTrack> results    = songRepository.findTopSongs();
+        int                startIndex = (pageIndex * pageSize);
+        int                endIndex   = startIndex + pageSize;
+
+        if (startIndex >= results.size()) {
+          return new ArrayList<>();
+        } else if (endIndex >= results.size()) {
+          return results.subList(startIndex, (results.size() - startIndex));
+        }
+        return results.subList(startIndex, endIndex);
+      }
     }
-  }
 
-  public List<LibraryPlaylist> getPlaylistsFollowedAndCreated(long accountId) {
-    List<LibraryPlaylist> followed = playlistRepository.findFollowedPlaylists(accountId);
-    List<LibraryPlaylist> created  = playlistRepository.findCreatedPlaylists(accountId);
+    public List<LibraryPlaylist> getPlaylistsFollowedAndCreated(long accountId) {
+      List<LibraryPlaylist> followed = playlistRepository.findFollowedPlaylists(accountId);
+      List<LibraryPlaylist> created  = playlistRepository.findCreatedPlaylists(accountId);
 
-    if (followed != null && created != null) {
-      List<LibraryPlaylist> allPlaylists = new ArrayList<>();
-      Stream.of(followed, created).forEach(allPlaylists::addAll);
-      allPlaylists.sort((Comparator.comparing(LibraryPlaylist::getName)));
-      return allPlaylists;
-    } else {
-      return null;
+      if (followed != null && created != null) {
+        List<LibraryPlaylist> allPlaylists = new ArrayList<>();
+        Stream.of(followed, created).forEach(allPlaylists::addAll);
+        allPlaylists.sort((Comparator.comparing(LibraryPlaylist::getName)));
+        return allPlaylists;
+      } else {
+        return null;
+      }
     }
-  }
-
-
 }
