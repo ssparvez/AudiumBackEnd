@@ -18,6 +18,8 @@ public class UserPreferences {
   private boolean publicProfile;
   @Column(name = "defaultPublicSession")
   private boolean defaultPublicSession;
+  @Column(name = "showExplicitContent")
+  private boolean showExplicitContent;
 
   //@Formula("(SELECT A.accountId, A.email, A.passwordHash, A.firstName, A.lastName, A.role, A.isActive, A.username FROM Account AS A WHERE A.accountId = accountId)")
   //private Account account;
@@ -29,11 +31,12 @@ public class UserPreferences {
   public UserPreferences() {
   }
 
-  public UserPreferences(Long accountId, String language, boolean publicProfile, boolean defaultPublicSession) {
+  public UserPreferences(Long accountId, String language, boolean publicProfile, boolean defaultPublicSession, boolean showExplicitContent) {
     this.accountId = accountId;
     this.language = language;
     this.publicProfile = publicProfile;
     this.defaultPublicSession = defaultPublicSession;
+    this.showExplicitContent = showExplicitContent;
   }
   public String getLanguage() {
     return language;
@@ -58,6 +61,12 @@ public class UserPreferences {
   }
   public void setAccountId(Long accountId) {
     this.accountId = accountId;
+  }
+  public boolean isShowExplicitContent() {
+    return showExplicitContent;
+  }
+  public void setShowExplicitContent(boolean showExplicitContent) {
+    this.showExplicitContent = showExplicitContent;
   }
 
   /*public Account getAccount() {
