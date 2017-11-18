@@ -17,6 +17,10 @@ public class Account {
   private boolean isActive;
   private String  username;
 
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "accountId")
+  private UserPreferences userPreferences;
+
   public Account() {
   }
 
@@ -85,5 +89,11 @@ public class Account {
   }
   public void setUsername(String username) {
     this.username = username;
+  }
+  public UserPreferences getUserPreferences() {
+    return userPreferences;
+  }
+  public void setUserPreferences(UserPreferences userPreferences) {
+    this.userPreferences = userPreferences;
   }
 }

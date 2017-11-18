@@ -17,6 +17,7 @@ public class Customer extends Account {
   private String gender;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+  @JsonIgnore
   private List<CustomerSong> customerSongs;
 
   @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -18,9 +18,7 @@ public class Album {
   private Date   releaseYear;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(
-    name = "artistId"
-  )
+  @JoinColumn(name = "artistId")
   private Artist artist;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "album")

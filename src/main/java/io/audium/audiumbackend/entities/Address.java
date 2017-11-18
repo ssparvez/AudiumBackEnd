@@ -32,6 +32,10 @@ public class Address {
   @JsonIgnore
   private List<Event> events;
 
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "address")
+  @JsonIgnore
+  private List<Partner> partners;
+
   public Address() {
   }
 

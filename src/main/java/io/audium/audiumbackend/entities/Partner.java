@@ -8,7 +8,7 @@ import javax.persistence.*;
 public class Partner extends Account {
 
   private String  company;
-  @OneToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "addressId")
   private Address address;
   private boolean approved;

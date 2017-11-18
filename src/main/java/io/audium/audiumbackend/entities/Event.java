@@ -11,15 +11,16 @@ import java.util.List;
 public class Event {
 
   @Id
-  private Long         eventId;
+  private Long    eventId;
   @Column(name = "title")
-  private String       eventTitle;
-  private Date         eventDate;
+  private String  eventTitle;
+  private Date    eventDate;
   @ManyToOne(targetEntity = Address.class)
   @JoinColumn(name = "addressId")
-  private Address      address;
-  private String       description;
-  private boolean      isCancelled;
+  private Address address;
+  private String  description;
+  private boolean isCancelled;
+
   @ManyToMany(fetch = FetchType.LAZY)
   @JsonIgnore
   @JoinTable(

@@ -16,6 +16,7 @@ public class Artist {
   private String bio;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @JsonIgnore
   @JoinColumn(name = "labelId", referencedColumnName = "accountId")
   private Label label;
 
@@ -31,7 +32,6 @@ public class Artist {
   private List<Customer> followers;
 
   @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artists")
-  @JsonIgnore
   private List<Event> events;
 
   public Artist() {
@@ -89,6 +89,9 @@ public class Artist {
 
   public List<Event> getEvents() {
     return events;
+  }
+  public void setEvents(List<Event> events) {
+    this.events = events;
   }
   public List<Customer> getFollowers() {
     return followers;
