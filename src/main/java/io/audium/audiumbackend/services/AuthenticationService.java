@@ -3,16 +3,12 @@ package io.audium.audiumbackend.services;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
-import io.audium.audiumbackend.entities.Account;
 import io.audium.audiumbackend.entities.Customer;
 import io.audium.audiumbackend.entities.projections.LoginInfo;
 import io.audium.audiumbackend.repositories.AuthenticationRepository;
 import io.audium.audiumbackend.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.codec.Hex;
-import org.springframework.security.crypto.encrypt.BouncyCastleAesGcmBytesEncryptor;
-import org.springframework.security.crypto.encrypt.BytesEncryptor;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -22,7 +18,7 @@ public class AuthenticationService {
   @Autowired
   private AuthenticationRepository authenticationRepository;
   @Autowired
-  private CustomerRepository       customerAccountRepository;
+  private CustomerRepository       customerRepository;
   private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
   public String checkLoginInfo(String usernameOrEmail, String password) {
@@ -34,7 +30,7 @@ public class AuthenticationService {
 
         switch (loginInfo.getRole()) {
           default:
-            Customer account = customerAccountRepository.findOne(loginInfo.getAccountId());
+            Customer account = customerRepository.findOne(loginInfo.getAccountId());
 
             String token = JWT.create()
               .withClaim("username", account.getUsername())

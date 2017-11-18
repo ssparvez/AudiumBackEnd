@@ -8,14 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface PaymentInfoRepository extends CrudRepository<PaymentInfo, Long> {
 
-
-    @Transactional(readOnly = true)
-    @Query( "SELECT P FROM PaymentInfo P WHERE P.accountId = ?1")
-    public PaymentInfo findPaymentInfoByAccountId(Long id);
+  @Transactional(readOnly = true)
+  @Query("SELECT P FROM PaymentInfo P WHERE P.accountId = ?1")
+  public PaymentInfo findPaymentInfoByAccountId(Long accountId);
 
   @Transactional
   @Modifying
   @Query("DELETE FROM PaymentInfo P WHERE P.accountId = ?1")
   public int deletePaymentInfo(Long accountId);
-
 }

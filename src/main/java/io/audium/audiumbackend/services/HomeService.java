@@ -15,10 +15,7 @@ public class HomeService {
 
   public List<Genre> getAllGenres() {
     List<Genre> genres = new ArrayList<>();
-    genreRepository.findAll().forEach(genres::add); // this line gets from the db and converts data into objects
-    for (Genre genre : genres) {
-      System.out.println(genre.getGenreName());
-    }
+    genreRepository.findAll().forEach(genres::add);
     return genres;
   }
 }

@@ -59,7 +59,7 @@ public class Song {
   public Song() {
   }
 
-  public Song(Long songId, String title, Time duration, Long playsthismonth, Long totalplays, String file, Date year, Genre genre, boolean isExplicit, String lyrics) {
+  public Song(Long songId, String title, Time duration, String file, Date year, Genre genre, boolean isExplicit, String lyrics) {
     this.songId = songId;
     this.title = title;
     this.duration = duration;

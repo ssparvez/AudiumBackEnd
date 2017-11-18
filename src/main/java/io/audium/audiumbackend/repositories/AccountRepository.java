@@ -11,10 +11,9 @@ public interface AccountRepository extends CrudRepository<Account, Long> {
   @Transactional
   @Modifying
   @Query("DELETE FROM Account A WHERE A.accountId = ?1")
-  public void deleteById(Long id);
+  public void deleteById(Long accountId);
 
   @Transactional(readOnly = true)
   @Query("SELECT A FROM Account A WHERE A.accountId = ?1 ")
   public Account findPassHashByAccountId(Long accountId);
-
 }

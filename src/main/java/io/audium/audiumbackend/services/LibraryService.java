@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 public class LibraryService {
@@ -42,7 +40,7 @@ public class LibraryService {
     songRepository.save(song);
   }
 
-  public void updateSong(Long id, Song song) {
+  public void updateSong(Long songId, Song song) {
     songRepository.save(song);
   }
 
@@ -111,7 +109,7 @@ public class LibraryService {
   public List<LibraryAlbum> getArtistAlbums(long artistId) {
     return albumRepository.findArtistAlbums(artistId);
   }
-  public List<PopularTrack> getArtistSongs ( long artistId) {
+  public List<PopularTrack> getArtistSongs(long artistId) {
     return songRepository.findArtistSongs(artistId);
   }
 
@@ -140,18 +138,7 @@ public class LibraryService {
     }
   }
 
-
-    public List<LibraryPlaylist> getPlaylistsFollowedAndCreated(long accountId) {
-      List<LibraryPlaylist> followed = playlistRepository.findFollowedPlaylists(accountId);
-      List<LibraryPlaylist> created  = playlistRepository.findCreatedPlaylists(accountId);
-
-      if (followed != null && created != null) {
-        List<LibraryPlaylist> allPlaylists = new ArrayList<>();
-        Stream.of(followed, created).forEach(allPlaylists::addAll);
-        allPlaylists.sort((Comparator.comparing(LibraryPlaylist::getName)));
-        return allPlaylists;
-      } else {
-        return null;
-      }
-    }
+  public List<LibraryPlaylist> getCreatedAndFollowedPlaylists(long accountId) {
+    return playlistRepository.findCreatedAndFollowedPlaylists(accountId);
+  }
 }

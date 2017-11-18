@@ -9,37 +9,33 @@ import io.audium.audiumbackend.repositories.CustomerRepository;
 import io.audium.audiumbackend.repositories.PaymentInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.codec.Hex;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 
 @Service
 public class AccountService {
-  @Autowired
-  private AccountRepository     accountRepo;
-  @Autowired
-  private CustomerRepository    customerAccountRepo;
-  @Autowired
-  private PaymentInfoRepository paymentRepo;
-  @Autowired
-  private VerificationService   verify;
-
-  private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
   static final String PREMIUM = "PremiumUser";
   static final String BASIC   = "BasicUser";
-
+  @Autowired
+  private AccountRepository     accountRepository;
+  @Autowired
+  private CustomerRepository    customerAccountRepository;
+  @Autowired
+  private PaymentInfoRepository paymentRepository;
+  @Autowired
+  private VerificationService   verificationService;
+  private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
   public void registerAccount(Customer customerAccount) {
 
     customerAccount.setRole("BasicUser");
     customerAccount.setIsActive(true);
     customerAccount.setPasswordHash(passwordEncoder.encode(customerAccount.getPasswordHash()));
-    customerAccountRepo.save(customerAccount);
+    customerAccountRepository.save(customerAccount);
   }
 
-  public void deleteAccount(Long id) {
-    accountRepo.deleteById(id);
+  public void deleteAccount(Long accountId) {
+    accountRepository.deleteById(accountId);
   }
 
   public JsonObject updateCustomerAccount(Customer accountToSave, Customer savedAccount) {
@@ -49,11 +45,11 @@ public class AccountService {
     savedAccount.setGender(accountToSave.getGender());
     savedAccount.setDateOfBirth(accountToSave.getDateOfBirth());
 
-    if (customerAccountRepo.save(savedAccount) != null) {
-      String token = verify.createCustomerToken(savedAccount);
+    if (customerAccountRepository.save(savedAccount) != null) {
+      String token = verificationService.createCustomerToken(savedAccount);
       if (token != null) {
         JsonObject obj = new JsonObject();
-        obj.addProperty("token", verify.createCustomerToken(savedAccount));
+        obj.addProperty("token", verificationService.createCustomerToken(savedAccount));
         return obj;
       } else {
         return null;
@@ -62,38 +58,39 @@ public class AccountService {
       return null;
     }
   }
-  public boolean changePassword(String oldPassword, String newPassword, Long id) {
-    Account account = accountRepo.findPassHashByAccountId(id);
+  public boolean changePassword(String oldPassword, String newPassword, Long accountId) {
+    Account account = accountRepository.findPassHashByAccountId(accountId);
     if (passwordEncoder.matches(oldPassword, account.getPasswordHash())) {
       account.setPasswordHash(passwordEncoder.encode(newPassword));
-      accountRepo.save(account);
+      accountRepository.save(account);
       return true;
     } else {
       return false;
     }
   }
 
-  public JsonObject getPaymentInfo(Long id) {
-    PaymentInfo info = paymentRepo.findOne(id);
-    if ( info != null) {
+  public JsonObject getPaymentInfo(Long accountId) {
+    PaymentInfo info = paymentRepository.findOne(accountId);
+    if (info != null) {
       JsonObject obj = new JsonObject();
-      Calendar cal = Calendar.getInstance();
+      Calendar   cal = Calendar.getInstance();
       cal.setTime(info.getCreditCardExpiration());
-      obj.addProperty("ccNumber", verify.aesDecrypt(id,info.getCreditCardHash()));
-      obj.addProperty("ccMonth",cal.get(Calendar.MONTH)+1);
-      obj.addProperty("ccYear",cal.get(Calendar.YEAR));
+      obj.addProperty("ccNumber", verificationService.aesDecrypt(accountId, info.getCreditCardHash()));
+      obj.addProperty("ccMonth", cal.get(Calendar.MONTH) + 1);
+      obj.addProperty("ccYear", cal.get(Calendar.YEAR));
       obj.addProperty("zipCode", info.getZipCode());
       return obj;
+    } else {
+      return null;
     }
-    else return null;
   }
 
-  public JsonObject upgradeAccount(PaymentInfo info) {
-    info.setCreditCardHash(verify.aesEncrypt(info.getAccountId(), info.getCreditCardHash()));
-    if (paymentRepo.save(info) != null) {
-      Customer account = customerAccountRepo.findOne(info.getAccountId());
+  public JsonObject upgradeAccount(PaymentInfo paymentInfo) {
+    paymentInfo.setCreditCardHash(verificationService.aesEncrypt(paymentInfo.getAccountId(), paymentInfo.getCreditCardHash()));
+    if (paymentRepository.save(paymentInfo) != null) {
+      Customer account = customerAccountRepository.findOne(paymentInfo.getAccountId());
       account.setRole(PREMIUM);
-      customerAccountRepo.save(account);
+      customerAccountRepository.save(account);
       return createJsonToken(account);
     } else {
       return null;
@@ -101,20 +98,20 @@ public class AccountService {
   }
 
   public JsonObject downgradeAccount(Long accountId) {
-    Customer account = customerAccountRepo.findOne(accountId);
+    Customer account = customerAccountRepository.findOne(accountId);
 
-    if (paymentRepo.deletePaymentInfo(accountId) != 0) {
+    if (paymentRepository.deletePaymentInfo(accountId) != 0) {
       account.setRole(BASIC);
-      customerAccountRepo.save(account);
+      customerAccountRepository.save(account);
       return createJsonToken(account);
     } else {
       return null;
     }
   }
 
-  public boolean editPaymentInfo(PaymentInfo info) {
-    info.setCreditCardHash(verify.aesEncrypt(info.getAccountId(), info.getCreditCardHash()));
-    if (paymentRepo.save(info) != null) {
+  public boolean editPaymentInfo(PaymentInfo paymentInfo) {
+    paymentInfo.setCreditCardHash(verificationService.aesEncrypt(paymentInfo.getAccountId(), paymentInfo.getCreditCardHash()));
+    if (paymentRepository.save(paymentInfo) != null) {
       return true;
     } else {
       return false;
@@ -122,7 +119,7 @@ public class AccountService {
   }
 
   private JsonObject createJsonToken(Customer account) {
-    String token = verify.createCustomerToken(account);
+    String token = verificationService.createCustomerToken(account);
     if (token != null) {
       JsonObject obj = new JsonObject();
       obj.addProperty("token", token);

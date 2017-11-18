@@ -23,12 +23,12 @@ public class VerificationService {
   @Autowired
   private AuthenticationRepository authenticationRepository;
   @Autowired
-  private CustomerRepository       customerAccountRepository;
+  private CustomerRepository       customerRepository;
 
-  public Customer verifyIntegrityCustomerAccount(String token, long id) {
+  public Customer verifyIntegrityCustomerAccount(String token, long accountId) {
     try {
       token = token.substring(token.indexOf(" ") + 1);
-      Customer  account   = customerAccountRepository.findOne(id);
+      Customer  account   = customerRepository.findOne(accountId);
       Algorithm algorithm = Algorithm.HMAC256("cse308");
       JWTVerifier verifier = JWT.require(algorithm)
         .withClaim("username", account.getUsername())
@@ -52,7 +52,7 @@ public class VerificationService {
     return null;
   }
 
-  public DecodedJWT returnDecodedToken(String token) {
+  public DecodedJWT decodeToken(String token) {
     try {
       Algorithm algorithm = Algorithm.HMAC256("cse308");
       JWTVerifier verifier = JWT.require(algorithm)
@@ -68,12 +68,12 @@ public class VerificationService {
     return null;
   }
 
-  public String returnTokenClaimValue(String token, String claim) {
+  public String getTokenClaimValue(String token, String claim) {
 
-    return returnDecodedToken(token).getClaim(claim).asString();
+    return decodeToken(token).getClaim(claim).asString();
   }
 
-  public String returnClaimValueUsingDecodedToken(DecodedJWT decodedToken, String claim) {
+  public String getClaimValueUsingDecodedToken(DecodedJWT decodedToken, String claim) {
     return decodedToken.getClaim(claim).asString();
   }
 
@@ -103,9 +103,9 @@ public class VerificationService {
 
   public String aesEncrypt(long accountId, String sensitiveData) {
     Object[] salt = authenticationRepository.findSaltByAccountId(accountId);
-        /* @TODO: Better system for encryption key (currently using username which is awful) */
+    /* @TODO: Better system for obtaining or generating encryption key (currently using username which is awful) */
     if (salt != null) {
-      Account        account       = customerAccountRepository.findByAccountId(accountId);
+      Account        account       = customerRepository.findByAccountId(accountId);
       BytesEncryptor bcEncryptor   = new BouncyCastleAesGcmBytesEncryptor(account.getUsername(), salt[0].toString());
       byte[]         encryptedData = bcEncryptor.encrypt(sensitiveData.getBytes());
       return new String(Hex.encode(encryptedData));
@@ -116,9 +116,9 @@ public class VerificationService {
 
   public String aesDecrypt(long accountId, String encryptedData) {
     Object[] salt = authenticationRepository.findSaltByAccountId(accountId);
-        /* @TODO: Better system for encryption key (currently using username which is awful) */
+    /* @TODO: Better system for obtaining or generating encryption key (currently using username which is awful) */
     if (salt != null) {
-      Account        account     = customerAccountRepository.findByAccountId(accountId);
+      Account        account     = customerRepository.findByAccountId(accountId);
       BytesEncryptor bcEncryptor = new BouncyCastleAesGcmBytesEncryptor(account.getUsername(), salt[0].toString());
       return new String(bcEncryptor.decrypt(Hex.decode(encryptedData)));
     } else {
