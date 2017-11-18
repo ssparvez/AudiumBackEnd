@@ -62,7 +62,7 @@ public class UserPreferences {
   public void setAccountId(Long accountId) {
     this.accountId = accountId;
   }
-  public boolean isShowExplicitContent() {
+  public boolean getShowExplicitContent() {
     return showExplicitContent;
   }
   public void setShowExplicitContent(boolean showExplicitContent) {
