@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import io.audium.audiumbackend.entities.Account;
 import io.audium.audiumbackend.entities.Customer;
 import io.audium.audiumbackend.entities.PaymentInfo;
+import io.audium.audiumbackend.entities.projections.CustomerFollower;
 import io.audium.audiumbackend.repositories.AccountRepository;
 import io.audium.audiumbackend.repositories.CustomerRepository;
 import io.audium.audiumbackend.repositories.PaymentInfoRepository;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.List;
 
 @Service
 public class AccountService {
@@ -116,6 +118,14 @@ public class AccountService {
     } else {
       return false;
     }
+  }
+
+  public List<CustomerFollower> getCustomerFollowers(long accountId) {
+    return customerAccountRepository.findCustomerFollowers(accountId);
+  }
+
+  public List<CustomerFollower> getCustomerFollowing(long accountId) {
+    return customerAccountRepository.findCustomerFollowing(accountId);
   }
 
   private JsonObject createJsonToken(Customer account) {

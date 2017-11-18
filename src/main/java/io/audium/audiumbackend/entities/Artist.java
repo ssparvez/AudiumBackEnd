@@ -8,74 +8,89 @@ import java.util.List;
 @Entity
 public class Artist {
 
-    @Id
-    private Long   artistId;
-    private Long   labelId;
-    private Long   accountId;
-    @Column(name = "name")
-    private String artistName;
-    private String bio;
+  @Id
+  private Long   artistId;
+  private Long   accountId;
+  @Column(name = "name")
+  private String artistName;
+  private String bio;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist")
-    private List<Album> albums;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "labelId", referencedColumnName = "accountId")
+  private Label label;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artists")
-    @JsonIgnore
-    private List<Song> songs;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist")
+  private List<Album> albums;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artists")
-    @JsonIgnore
-    private List<Customer> followers;
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artists")
+  @JsonIgnore
+  private List<Song> songs;
 
-    public Artist() {
-    }
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artists")
+  @JsonIgnore
+  private List<Customer> followers;
 
-    public Long getArtistId() {
-        return artistId;
-    }
-    public void setArtistId(Long artistId) {
-        this.artistId = artistId;
-    }
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artists")
+  @JsonIgnore
+  private List<Event> events;
 
-    public Long getLabelId() {
-        return labelId;
-    }
-    public void setLabelId(Long labelId) {
-        this.labelId = labelId;
-    }
+  public Artist() {
+  }
 
-    public String getArtistName() {
-        return artistName;
-    }
-    public void setArtistName(String artistName) {
-        artistName = artistName.replace(", ", " & ");
-        this.artistName = artistName;
-    }
+  public Long getArtistId() {
+    return artistId;
+  }
+  public void setArtistId(Long artistId) {
+    this.artistId = artistId;
+  }
 
-    public String getBio() {
-        return bio;
-    }
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
+  public Label getLabel() {
+    return label;
+  }
+  public void setLabel(Label label) {
+    this.label = label;
+  }
 
-    public List<Song> getSongs() {
-        return this.songs;
-    }
-    public void setSongs(List<Song> songs) {
-        this.songs = songs;
-    }
+  public String getArtistName() {
+    return artistName;
+  }
+  public void setArtistName(String artistName) {
+    artistName = artistName.replace(", ", " & ");
+    this.artistName = artistName;
+  }
 
-    public Long getAccountId() {
-        return accountId;
-    }
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
-    }
-    public List<Album> getAlbums() {
-        return albums;
-    }
-    public void setAlbums(List<Album> albums) {
-        this.albums = albums;
-    }
+  public String getBio() {
+    return bio;
+  }
+  public void setBio(String bio) {
+    this.bio = bio;
+  }
+
+  public List<Song> getSongs() {
+    return this.songs;
+  }
+  public void setSongs(List<Song> songs) {
+    this.songs = songs;
+  }
+
+  public Long getAccountId() {
+    return accountId;
+  }
+  public void setAccountId(Long accountId) {
+    this.accountId = accountId;
+  }
+
+  public List<Album> getAlbums() {
+    return albums;
+  }
+  public void setAlbums(List<Album> albums) {
+    this.albums = albums;
+  }
+
+  public List<Event> getEvents() {
+    return events;
+  }
+  public List<Customer> getFollowers() {
+    return followers;
+  }
 }

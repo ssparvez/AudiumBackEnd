@@ -1,5 +1,6 @@
 package io.audium.audiumbackend.controllers;
 
+import io.audium.audiumbackend.entities.Event;
 import io.audium.audiumbackend.entities.Playlist;
 import io.audium.audiumbackend.entities.Song;
 import io.audium.audiumbackend.entities.projections.*;
@@ -139,6 +140,11 @@ public class LibraryController {
     return libraryService.getArtistSongs(artistId);
   }
 
+  @GetMapping(value = "/artist/{artistId}/events")
+  public List<Event> getArtistEvents(@PathVariable long artistId) {
+    return libraryService.getArtistEvents(artistId);
+  }
+
   @GetMapping(value = "/songs/top/{pageIndex}/{pageSize}")
   @ResponseBody
   public ResponseEntity<List<PopularTrack>> getTopSongs(@PathVariable int pageIndex, @PathVariable int pageSize) {
@@ -150,5 +156,12 @@ public class LibraryController {
       return new ResponseEntity(results, HttpStatus.NO_CONTENT);
     }
     return new ResponseEntity(results, HttpStatus.OK);
+  }
+
+  //** EVENT **//
+
+  @GetMapping(value = "/events/{eventId}")
+  public Event getEvent(@PathVariable long eventId) {
+    return libraryService.getEvent(eventId);
   }
 }

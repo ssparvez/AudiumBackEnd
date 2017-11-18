@@ -45,13 +45,17 @@ public class Customer extends Account {
     inverseJoinColumns = @JoinColumn(name = "artistId", referencedColumnName = "artistId"))
   private List<Artist> artists;
 
-  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToMany(fetch = FetchType.LAZY)
   @JsonIgnore
   @JoinTable(
-    name = "customer_friend",
+    name = "customer_follower",
     joinColumns = @JoinColumn(name = "accountId", referencedColumnName = "accountId"),
-    inverseJoinColumns = @JoinColumn(name = "friendId", referencedColumnName = "accountId"))
-  private List<Customer> friends;
+    inverseJoinColumns = @JoinColumn(name = "followerId", referencedColumnName = "accountId"))
+  private List<Customer> followers;
+
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "followers")
+  @JsonIgnore
+  private List<Customer> following;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
   @JsonIgnore
@@ -122,5 +126,11 @@ public class Customer extends Account {
 
   public void setSongPlays(List<SongPlay> songPlays) {
     this.songPlays = songPlays;
+  }
+  public List<Customer> getFollowers() {
+    return followers;
+  }
+  public List<Customer> getFollowing() {
+    return following;
   }
 }
