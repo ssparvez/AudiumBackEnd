@@ -32,6 +32,7 @@ public class AccountService {
 
     customerAccount.setRole("BasicUser");
     customerAccount.setIsActive(true);
+//    customerAccount.setBio("");
     customerAccount.setPasswordHash(passwordEncoder.encode(customerAccount.getPasswordHash()));
     customerAccountRepository.save(customerAccount);
   }

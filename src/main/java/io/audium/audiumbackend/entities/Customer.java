@@ -25,7 +25,7 @@ public class Customer extends Account {
 
   private Date   dateOfBirth;
   private String gender;
-  private String bio;
+  private String bio = "";
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
   @JsonIgnore

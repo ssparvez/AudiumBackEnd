@@ -97,6 +97,17 @@ public class LibraryController {
     return libraryService.getCreatedAndFollowedPlaylists(accountId);
   }
 
+  @GetMapping(value="/accounts/{accountId}/playlists/owned")
+  public ResponseEntity getPlaylistsCreated(@RequestHeader(value = "Authorization") String token,
+                                            @PathVariable long accountId ) {
+    if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
+      return ResponseEntity.status(HttpStatus.OK).body(libraryService.getCreatedPlaylists(accountId));
+    }
+    else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    }
+  }
+
   @GetMapping(value = "/playlist/{playlistId}/{accountId}",  produces = ("application/json"))
   public ResponseEntity getPlaylist(@PathVariable long playlistId,
                                     @PathVariable long accountId) {
@@ -167,8 +178,24 @@ public class LibraryController {
     }
   }
 
+  @PostMapping(value="/accounts/{accountId}/playlist/{playlistId}/add/song/{songId}")
+  public ResponseEntity addSongToPlaylist(@RequestHeader(value = "Authorization") String token,
+                                               @PathVariable long accountId,
+                                               @PathVariable long playlistId,
+                                               @PathVariable long songId) {
+    if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
+
+      if ( libraryService.addSongToPlaylist(playlistId, songId)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      }
+      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    }
+    else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    }
+  }
   @CrossOrigin
-  @DeleteMapping(value="/account/{accountId}/playlist/{playlistId}/remove/song/{songId}")
+  @DeleteMapping(value="/accounts/{accountId}/playlist/{playlistId}/remove/song/{songId}")
   public ResponseEntity removeSongFromPlaylist(@RequestHeader(value = "Authorization") String token,
                                                @PathVariable long accountId,
                                                @PathVariable long playlistId,

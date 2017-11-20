@@ -161,6 +161,14 @@ public class LibraryService {
     }
   }
 
+  public List<LibraryPlaylist> getCreatedPlaylists(long accountId) {
+    try {
+      return playlistRepository.findCreatedPlaylists(accountId);
+    } catch ( Exception e) {
+      return null;
+    }
+  }
+
   public boolean deletePlaylist(long playlistId) {
 
     return (playlistRepository.deletePlaylistById(playlistId) == 1);
@@ -195,6 +203,11 @@ public class LibraryService {
   public boolean deleteSongFromPlaylist(long playlistId, long songId) {
 
     return (playlistRepository.deleteSongFromPlaylist(playlistId, songId) == 1);
+  }
+
+  public boolean addSongToPlaylist(long playlistId, long songId) {
+
+    return (playlistRepository.addSongToPlaylist(playlistId, songId) == 1);
   }
 
   //** EVENT **//

@@ -52,4 +52,9 @@ public interface PlaylistRepository extends CrudRepository<Playlist, Long>, Play
   @Query(value="DELETE FROM Playlist_Song WHERE playlistId = ?1 AND songId = ?2", nativeQuery = true)
   public int deleteSongFromPlaylist(long playlistId, long songId);
 
+  @Transactional
+  @Modifying
+  @Query(value="INSERT INTO Playlist_Song VALUES(?1,?2,0)", nativeQuery = true)
+  public int addSongToPlaylist(long playlistId, long accountId);
+
 }
