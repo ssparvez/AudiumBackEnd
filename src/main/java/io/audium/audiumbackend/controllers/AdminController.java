@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminController {
 
   @Autowired
-  public  VerificationService verificationService;
+  private VerificationService verificationService;
   @Autowired
   private AdminService        adminService;
 

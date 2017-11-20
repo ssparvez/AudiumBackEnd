@@ -15,8 +15,8 @@ import java.util.Calendar;
 
 @Service
 public class AccountService {
-  static final String PREMIUM = "PremiumUser";
-  static final String BASIC   = "BasicUser";
+  static final private String PREMIUM = "PremiumUser";
+  static final private String BASIC   = "BasicUser";
   @Autowired
   private AccountRepository     accountRepository;
   @Autowired
@@ -100,7 +100,7 @@ public class AccountService {
   public JsonObject downgradeAccount(Long accountId) {
     Customer account = customerAccountRepository.findOne(accountId);
 
-    if (paymentRepository.deletePaymentInfo(accountId) != 0) {
+    if (paymentRepository.deletePaymentInfo(accountId) == 1) {
       account.setRole(BASIC);
       customerAccountRepository.save(account);
       return createJsonToken(account);

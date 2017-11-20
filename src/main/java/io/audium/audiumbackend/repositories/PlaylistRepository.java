@@ -2,6 +2,7 @@ package io.audium.audiumbackend.repositories;
 
 import io.audium.audiumbackend.entities.Playlist;
 import io.audium.audiumbackend.entities.projections.LibraryPlaylist;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,4 +26,29 @@ public interface PlaylistRepository extends CrudRepository<Playlist, Long> {
   @Transactional(readOnly = true)
   @Query("SELECT P.playlistId AS playlistId, P.name AS name, P.description AS description, P.isPublic AS isPublic, P.creator.accountId AS accountId, P.creator.username AS username FROM Playlist P WHERE P.playlistId = ?1")
   public LibraryPlaylist findByPlaylistId(long playlistId);
+
+  @Transactional
+  @Modifying
+  @Query("DELETE FROM Playlist P WHERE P.playlistId = ?1")
+  public int deletePlaylistById(long playlistId);
+
+  @Transactional
+  @Query(value = "SELECT PF.playlistId FROM Playlist_Follower PF WHERE PF.accountId = ?1", nativeQuery = true)
+  public Object checkIfPlaylistIsFollowed(long accountId);
+
+  @Transactional
+  @Modifying
+  @Query(value="INSERT INTO Playlist_Follower VALUES(?1,?2)", nativeQuery = true)
+  public int followPlaylist(long playlistId, long accountId);
+
+  @Transactional
+  @Modifying
+  @Query(value="DELETE FROM Playlist_Follower WHERE PF.playlistId = ?1 AND accountId = ?2", nativeQuery = true)
+  public int unfollowPlaylist(long playlistId, long accountId);
+
+  @Transactional
+  @Modifying
+  @Query(value="DELETE FROM Playlist_Song WHERE playlistId = ?1 AND songId = ?2", nativeQuery = true)
+  public int deleteSongFromPlaylist(long playlistId, long songId);
+
 }

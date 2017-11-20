@@ -1,9 +1,12 @@
 package io.audium.audiumbackend.controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import io.audium.audiumbackend.entities.Playlist;
 import io.audium.audiumbackend.entities.Song;
 import io.audium.audiumbackend.entities.projections.*;
 import io.audium.audiumbackend.services.LibraryService;
+import io.audium.audiumbackend.services.VerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +19,9 @@ import java.util.List;
 public class LibraryController {
 
   @Autowired
-  private LibraryService libraryService;
+  private LibraryService      libraryService;
+  @Autowired
+  private VerificationService verificationService;
 
   @GetMapping(value = "/songs")
   public List<Song> getAllSongs() {
@@ -83,16 +88,23 @@ public class LibraryController {
     return libraryService.getLibraryArtists(accountId);
   }
 
+  //** PLAYLIST **//
+
   @GetMapping(value = "/accounts/{accountId}/playlists")
   public List<LibraryPlaylist> getLibraryPlaylists(@PathVariable long accountId) {
     return libraryService.getCreatedAndFollowedPlaylists(accountId);
   }
 
-  //** PLAYLIST **//
+  @GetMapping(value = "/playlist/{playlistId}/{accountId}",  produces = ("application/json"))
+  public ResponseEntity getPlaylist(@PathVariable long playlistId,
+                                    @PathVariable long accountId) {
 
-  @GetMapping(value = "/playlist/{playlistId}")
-  public LibraryPlaylist getPlaylist(@PathVariable long playlistId) {
-    return libraryService.getPlaylist(playlistId);
+    JsonObject playlistToReturn;
+    if ((playlistToReturn = libraryService.getPlaylist(accountId, playlistId)) != null) {
+      return ResponseEntity.status(HttpStatus.OK).body(playlistToReturn.toString());
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    }
   }
 
   @GetMapping(value = "/playlist/{playlistId}/songs")
@@ -102,13 +114,75 @@ public class LibraryController {
 
   @PostMapping(value = "/playlist/newplaylist")
   public ResponseEntity createNewPlaylist(@RequestBody Playlist playlist) {
-    Playlist playlistToReturn;
+    JsonObject playlistToReturn;
     if ((playlistToReturn = libraryService.createNewPlaylist(playlist)) != null) {
       return ResponseEntity.status(HttpStatus.OK).body(playlistToReturn);
     } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
     }
   }
+
+  @CrossOrigin
+  @DeleteMapping(value = "/playlist/delete/{accountId}/{playlistId}")
+  public ResponseEntity deletePlaylist(@RequestHeader(value = "Authorization") String token,
+                                       @PathVariable long accountId,
+                                       @PathVariable long playlistId) {
+    if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
+       if (libraryService.deletePlaylist(playlistId) ) {
+         return ResponseEntity.status(HttpStatus.OK).body(true);
+       } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    }
+  }
+
+  @PutMapping(value="/playlist/visibility")
+  public ResponseEntity changePlaylistVisiblity(@RequestHeader(value = "Authorization") String token,
+                                                @RequestBody Playlist playlist) {
+    if (verificationService.verifyIntegrityCustomerAccount(token, playlist.getCreator().getAccountId()) != null) {
+      if ( libraryService.changePlaylistVisibility(playlist.getPlaylistId(),playlist.getIsPublic()) ) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      }
+      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    }
+    else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    }
+  }
+
+  @PutMapping(value="/account/followstatus/{accountId}/playlist/{playlistId}/{status}")
+  public ResponseEntity changePlaylistFollowStatus(@RequestHeader(value = "Authorization") String token,
+                                                   @PathVariable long accountId,
+                                                   @PathVariable long playlistId,
+                                                   @PathVariable boolean status) {
+    if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
+      if (libraryService.changeFollowStatus(accountId,playlistId,status)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      }
+      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    }else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    }
+  }
+
+  @CrossOrigin
+  @DeleteMapping(value="/account/{accountId}/playlist/{playlistId}/remove/song/{songId}")
+  public ResponseEntity removeSongFromPlaylist(@RequestHeader(value = "Authorization") String token,
+                                               @PathVariable long accountId,
+                                               @PathVariable long playlistId,
+                                               @PathVariable long songId) {
+    if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
+
+      if ( libraryService.deleteSongFromPlaylist(playlistId, songId)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      }
+      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    }
+    else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    }
+  }
+
 
   //** ALBUM **//
 

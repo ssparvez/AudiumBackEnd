@@ -11,4 +11,5 @@ public interface LibraryPlaylist {
     boolean getIsPublic();
     Long getAccountId();
     String getUsername();
+
 }

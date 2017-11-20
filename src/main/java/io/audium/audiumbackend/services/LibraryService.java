@@ -1,5 +1,9 @@
 package io.audium.audiumbackend.services;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import io.audium.audiumbackend.entities.Playlist;
 import io.audium.audiumbackend.entities.Song;
 import io.audium.audiumbackend.entities.projections.*;
@@ -85,11 +89,6 @@ public class LibraryService {
   public List<LibraryAlbum> getLibraryAlbums(long accountId) {
     return albumRepository.findCustomerAlbums(accountId);
   }
-
-  public LibraryPlaylist getPlaylist(long playlistId) {
-    return playlistRepository.findByPlaylistId(playlistId);
-  }
-
   public LibraryAlbum getAlbum(long albumId) {
     return albumRepository.findByAlbumId(albumId);
   }
@@ -127,18 +126,86 @@ public class LibraryService {
   }
 
   //** PLAYLIST **//
+  public JsonObject getPlaylist(long accountId, long playlistId) {
+    Playlist playlistToReturn = playlistRepository.findOne(playlistId);
+    JsonObject obj= buildPlaylistJSON(playlistToReturn);
+    if ( playlistToReturn != null) {
+      if ( playlistRepository.checkIfPlaylistIsFollowed(accountId) != null) {
+        obj.addProperty("followed", true);
+        return obj;
+      }
+      else {
+        obj.addProperty("followed", false);
+        return obj;
+      }
+    }
+    else return null;
+  }
 
-  public Playlist createNewPlaylist(Playlist playlist) {
+  private JsonObject buildPlaylistJSON(Playlist playlist) {
+    JsonObject obj = new JsonObject();
+    obj.addProperty("playlistId",playlist.getPlaylistId());
+    obj.addProperty("name",playlist.getName());
+    obj.addProperty("description", playlist.getDescription());
+    obj.addProperty("isPublic",playlist.getIsPublic());
+    obj.addProperty("accountId",playlist.getCreator().getAccountId());
+    obj.addProperty("username", playlist.getCreator().getUsername());
+    return obj;
+  }
+
+  public JsonObject createNewPlaylist(Playlist playlist) {
     try {
       playlistRepository.save(playlist);
-      return playlist;
+      return buildPlaylistJSON(playlist);
     } catch (Exception e) {
-      System.out.println("EXCEPTION: " + e);
       return null;
     }
   }
 
   public List<LibraryPlaylist> getCreatedAndFollowedPlaylists(long accountId) {
-    return playlistRepository.findCreatedAndFollowedPlaylists(accountId);
+    try {
+      return playlistRepository.findCreatedAndFollowedPlaylists(accountId);
+    }
+    catch( Exception e) {
+      return null;
+    }
   }
+
+  public boolean deletePlaylist(long playlistId) {
+
+    return (playlistRepository.deletePlaylistById(playlistId) == 1);
+  }
+
+  public boolean changePlaylistVisibility(long playlistId, boolean condition) {
+
+    Playlist playlistToSave = playlistRepository.findOne(playlistId);
+
+    if ( playlistToSave != null) {
+      playlistToSave.setIsPublic(condition);
+      try {
+        playlistRepository.save(playlistToSave);
+        return true;
+      }
+      catch (Exception e){
+        return  false;
+      }
+    }
+    else return false;
+  }
+
+  public boolean changeFollowStatus(long accountId, long playlistId, boolean status) {
+
+    if ( status) {
+      return ( playlistRepository.followPlaylist(playlistId,accountId) == 1);
+    }
+    else {
+     return ( playlistRepository.unfollowPlaylist(playlistId,accountId) == 1);
+    }
+  }
+
+  public boolean deleteSongFromPlaylist(long playlistId, long songId) {
+
+    return ( playlistRepository.deleteSongFromPlaylist(playlistId,songId) == 1);
+  }
+
 }
