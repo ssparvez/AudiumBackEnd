@@ -7,6 +7,17 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
 
+@SqlResultSetMapping(
+  name = "SearchAlbumMapping",
+  classes = {@ConstructorResult(targetClass = Album.class, columns = {
+    @ColumnResult(name = "albumId"),
+    @ColumnResult(name = "albumTitle"),
+    @ColumnResult(name = "year"),
+    @ColumnResult(name = "artistId"),
+    @ColumnResult(name = "artistName")
+  })
+  }
+)
 @Entity
 public class Album {
 
@@ -36,6 +47,13 @@ public class Album {
     this.albumId = albumId;
     this.albumTitle = title;
     this.releaseYear = releaseYear;
+  }
+
+  public Album(Integer albumId, String albumTitle, java.util.Date releaseYear, Integer artistId, String artistName) {
+    this.albumId = albumId.longValue();
+    this.albumTitle = albumTitle;
+    this.releaseYear = new Date(releaseYear.getTime());
+    this.artist = new Artist(artistId.longValue(), artistName);
   }
 
   public Long getAlbumId() {

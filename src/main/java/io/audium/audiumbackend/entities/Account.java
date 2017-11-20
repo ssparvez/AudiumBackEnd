@@ -24,6 +24,12 @@ public class Account {
   public Account() {
   }
 
+  public Account(Long accountId, String username, String role) {
+    this.accountId = accountId;
+    this.username = username;
+    this.role = role;
+  }
+
   public Account(Long accountId, String email, String passwordHash, String firstName, String lastName, String role, boolean isActive, String username) {
     this.accountId = accountId;
     this.email = email;

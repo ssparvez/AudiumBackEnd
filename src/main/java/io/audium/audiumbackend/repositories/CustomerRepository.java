@@ -2,13 +2,14 @@ package io.audium.audiumbackend.repositories;
 
 import io.audium.audiumbackend.entities.Customer;
 import io.audium.audiumbackend.entities.projections.CustomerFollower;
+import io.audium.audiumbackend.repositories.custom.CustomerRepositoryCustom;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface CustomerRepository extends CrudRepository<Customer, Long> {
+public interface CustomerRepository extends CrudRepository<Customer, Long>, CustomerRepositoryCustom {
 
   @Transactional
   public Customer deleteByAccountId(long accountId);

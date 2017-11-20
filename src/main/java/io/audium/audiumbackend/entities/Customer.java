@@ -8,6 +8,16 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
 
+@SqlResultSetMapping(
+  name = "SearchCustomerMapping",
+  classes = {@ConstructorResult(targetClass = Customer.class, columns = {
+    @ColumnResult(name = "accountId"),
+    @ColumnResult(name = "username"),
+    @ColumnResult(name = "role"),
+    @ColumnResult(name = "bio")
+  })
+  }
+)
 @Entity
 @Table(name = "Customer")
 @PrimaryKeyJoinColumn(name = "accountId", referencedColumnName = "accountId")
@@ -15,6 +25,7 @@ public class Customer extends Account {
 
   private Date   dateOfBirth;
   private String gender;
+  private String bio;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
   @JsonIgnore
@@ -63,6 +74,19 @@ public class Customer extends Account {
   private List<SongPlay> songPlays;
 
   public Customer() {
+  }
+
+  public Customer(Integer accountId, String username, String role, String bio) {
+    this.setAccountId(accountId.longValue());
+    this.setUsername(username);
+    this.setRole(role);
+    this.bio = bio;
+  }
+
+  public Customer(Long accountId, String username, String role) {
+    this.setAccountId(accountId);
+    this.setUsername(username);
+    this.setRole(role);
   }
 
   public Customer(Date dateOfBirth, String gender) {
@@ -133,5 +157,11 @@ public class Customer extends Account {
   }
   public List<Customer> getFollowing() {
     return following;
+  }
+  public String getBio() {
+    return bio;
+  }
+  public void setBio(String bio) {
+    this.bio = bio;
   }
 }

@@ -5,6 +5,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.util.List;
 
+@SqlResultSetMapping(
+  name = "SearchArtistMapping",
+  classes = {@ConstructorResult(targetClass = Artist.class, columns = {
+    @ColumnResult(name = "artistId"),
+    @ColumnResult(name = "artistName"),
+    @ColumnResult(name = "bio")
+  })
+  }
+)
 @Entity
 public class Artist {
 
@@ -35,6 +44,24 @@ public class Artist {
   private List<Event> events;
 
   public Artist() {
+  }
+
+  public Artist(Integer artistId, String artistName, String bio) {
+    this.artistId = artistId.longValue();
+    this.artistName = artistName;
+    this.bio = bio;
+  }
+
+  public Artist(Long artistId, String artistName) {
+    this.artistId = artistId;
+    this.artistName = artistName;
+  }
+
+  public Artist(Long artistId, Long accountId, String artistName, String bio) {
+    this.artistId = artistId;
+    this.accountId = accountId;
+    this.artistName = artistName;
+    this.bio = bio;
   }
 
   public Long getArtistId() {

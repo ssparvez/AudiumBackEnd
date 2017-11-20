@@ -1,10 +1,9 @@
 package io.audium.audiumbackend.controllers;
 
-import io.audium.audiumbackend.entities.Event;
-import io.audium.audiumbackend.entities.Playlist;
-import io.audium.audiumbackend.entities.Song;
+import io.audium.audiumbackend.entities.*;
 import io.audium.audiumbackend.entities.projections.*;
 import io.audium.audiumbackend.services.LibraryService;
+import io.audium.audiumbackend.services.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +17,9 @@ public class LibraryController {
 
   @Autowired
   private LibraryService libraryService;
+
+  @Autowired
+  private SearchService searchService;
 
   @GetMapping(value = "/songs")
   public List<Song> getAllSongs() {
@@ -163,5 +165,35 @@ public class LibraryController {
   @GetMapping(value = "/events/{eventId}")
   public Event getEvent(@PathVariable long eventId) {
     return libraryService.getEvent(eventId);
+  }
+
+  @GetMapping(value = "/search/song/{searchQuery}")
+  public List<Song> searchSongs(@PathVariable String searchQuery) {
+    return searchService.searchSongs(searchQuery);
+  }
+
+  @GetMapping(value = "/search/album/{searchQuery}")
+  public List<Album> searchAlbums(@PathVariable String searchQuery) {
+    return searchService.searchAlbums(searchQuery);
+  }
+
+  @GetMapping(value = "/search/artist/{searchQuery}")
+  public List<Artist> searchArtists(@PathVariable String searchQuery) {
+    return searchService.searchArtists(searchQuery);
+  }
+
+  @GetMapping(value = "/search/playlist/{searchQuery}")
+  public List<Playlist> searchPlaylists(@PathVariable String searchQuery) {
+    return searchService.searchPlaylists(searchQuery);
+  }
+
+  @GetMapping(value = "/search/event/{searchQuery}")
+  public List<Event> searchEvents(@PathVariable String searchQuery) {
+    return searchService.searchEvents(searchQuery);
+  }
+
+  @GetMapping(value = "/search/profile/{searchQuery}")
+  public List<Customer> searchCustomers(@PathVariable String searchQuery) {
+    return searchService.searchCustomers(searchQuery);
   }
 }

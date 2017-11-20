@@ -6,6 +6,17 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
 
+@SqlResultSetMapping(
+  name = "SearchEventMapping",
+  classes = {@ConstructorResult(targetClass = Event.class, columns = {
+    @ColumnResult(name = "eventId"),
+    @ColumnResult(name = "eventTitle"),
+    @ColumnResult(name = "eventDate"),
+    @ColumnResult(name = "isCancelled"),
+    @ColumnResult(name = "description")
+  })
+  }
+)
 @Entity
 @Table(name = "Event")
 public class Event {
@@ -31,6 +42,15 @@ public class Event {
 
   public Event() {
   }
+
+  public Event(Integer eventId, String eventTitle, java.util.Date eventDate, Boolean isCancelled, String description) {
+    this.eventId = eventId.longValue();
+    this.eventTitle = eventTitle;
+    this.eventDate = new Date(eventDate.getTime());
+    this.isCancelled = isCancelled;
+    this.description = description;
+  }
+
   public Event(Long eventId, String eventTitle, Date eventDate, Address address, String description, boolean isCancelled) {
     this.eventId = eventId;
     this.eventTitle = eventTitle;

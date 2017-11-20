@@ -3,13 +3,14 @@ package io.audium.audiumbackend.repositories;
 import io.audium.audiumbackend.entities.Artist;
 import io.audium.audiumbackend.entities.Event;
 import io.audium.audiumbackend.entities.projections.LibraryArtist;
+import io.audium.audiumbackend.repositories.custom.ArtistRepositoryCustom;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface ArtistRepository extends CrudRepository<Artist, Long> {
+public interface ArtistRepository extends CrudRepository<Artist, Long>, ArtistRepositoryCustom {
 
   @Transactional(readOnly = true)
   @Query("SELECT LibA.artistId AS artistId, LibA.artistName AS artistName, LibA.bio AS bio FROM Customer C JOIN C.artists LibA WHERE C.accountId = ?1 ORDER BY artistName ASC")

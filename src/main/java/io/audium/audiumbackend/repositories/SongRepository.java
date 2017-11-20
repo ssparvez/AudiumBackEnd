@@ -5,13 +5,14 @@ import io.audium.audiumbackend.entities.projections.AlbumTrack;
 import io.audium.audiumbackend.entities.projections.LibrarySong;
 import io.audium.audiumbackend.entities.projections.PlaylistTrack;
 import io.audium.audiumbackend.entities.projections.PopularTrack;
+import io.audium.audiumbackend.repositories.custom.SongRepositoryCustom;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface SongRepository extends CrudRepository<Song, Long> {
+public interface SongRepository extends CrudRepository<Song, Long>, SongRepositoryCustom {
 
   @Transactional(readOnly = true)
   public Song findBySongId(long songId);
