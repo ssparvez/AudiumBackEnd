@@ -34,8 +34,8 @@ public interface PlaylistRepository extends CrudRepository<Playlist, Long>, Play
   public int deletePlaylistById(long playlistId);
 
   @Transactional
-  @Query(value = "SELECT PF.playlistId FROM Playlist_Follower PF WHERE PF.accountId = ?1", nativeQuery = true)
-  public Object checkIfPlaylistIsFollowed(long accountId);
+  @Query(value = "SELECT PF.playlistId FROM Playlist_Follower PF WHERE PF.accountId = ?1 AND PF.playlistId = ?2", nativeQuery = true)
+  public Object checkIfPlaylistIsFollowed(long accountId, long playlistId);
 
   @Transactional
   @Modifying

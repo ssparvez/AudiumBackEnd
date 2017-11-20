@@ -29,13 +29,12 @@ public class Playlist {
   private String  description;
   private boolean isPublic;
 
-    @Transient
-    private boolean followed;
+  @Transient
+  private boolean followed;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "accountId")
-    @JsonIgnore
-    private Account creator;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "accountId")
+  private Account creator;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "playlist")
   private List<PlaylistSong> playlistSongs;
@@ -117,12 +116,12 @@ public class Playlist {
     this.playlistSongs = playlistSongs;
   }
 
-    public Account getCreator() {
-        return creator;
-    }
-    public void setCreator(Account creator) {
-        this.creator = creator;
-    }
+  public Account getCreator() {
+    return creator;
+  }
+  public void setCreator(Account creator) {
+    this.creator = creator;
+  }
 
   public boolean isFollowed() {
     return followed;

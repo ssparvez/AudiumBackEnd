@@ -112,28 +112,34 @@ public class LibraryService {
 
   //** PLAYLIST **//
   public JsonObject getPlaylist(long accountId, long playlistId) {
-    Playlist playlistToReturn = playlistRepository.findOne(playlistId);
-    JsonObject obj= buildPlaylistJSON(playlistToReturn);
-    if ( playlistToReturn != null) {
-      if ( playlistRepository.checkIfPlaylistIsFollowed(accountId) != null) {
+    LibraryPlaylist playlistToReturn = playlistRepository.findByPlaylistId(playlistId);
+    if (playlistToReturn != null) {
+      JsonObject obj = new JsonObject();
+      obj.addProperty("playlistId", playlistToReturn.getPlaylistId());
+      obj.addProperty("name", playlistToReturn.getName());
+      obj.addProperty("description", playlistToReturn.getDescription());
+      obj.addProperty("isPublic", playlistToReturn.getIsPublic());
+      obj.addProperty("accountId", playlistToReturn.getAccountId());
+      obj.addProperty("username", playlistToReturn.getUsername());
+      if (playlistRepository.checkIfPlaylistIsFollowed(accountId, playlistId) != null) {
         obj.addProperty("followed", true);
         return obj;
-      }
-      else {
+      } else {
         obj.addProperty("followed", false);
         return obj;
       }
+    } else {
+      return null;
     }
-    else return null;
   }
 
   private JsonObject buildPlaylistJSON(Playlist playlist) {
     JsonObject obj = new JsonObject();
-    obj.addProperty("playlistId",playlist.getPlaylistId());
-    obj.addProperty("name",playlist.getName());
+    obj.addProperty("playlistId", playlist.getPlaylistId());
+    obj.addProperty("name", playlist.getName());
     obj.addProperty("description", playlist.getDescription());
-    obj.addProperty("isPublic",playlist.getIsPublic());
-    obj.addProperty("accountId",playlist.getCreator().getAccountId());
+    obj.addProperty("isPublic", playlist.getIsPublic());
+    obj.addProperty("accountId", playlist.getCreator().getAccountId());
     obj.addProperty("username", playlist.getCreator().getUsername());
     return obj;
   }
@@ -150,8 +156,7 @@ public class LibraryService {
   public List<LibraryPlaylist> getCreatedAndFollowedPlaylists(long accountId) {
     try {
       return playlistRepository.findCreatedAndFollowedPlaylists(accountId);
-    }
-    catch( Exception e) {
+    } catch (Exception e) {
       return null;
     }
   }
@@ -165,37 +170,35 @@ public class LibraryService {
 
     Playlist playlistToSave = playlistRepository.findOne(playlistId);
 
-    if ( playlistToSave != null) {
+    if (playlistToSave != null) {
       playlistToSave.setIsPublic(condition);
       try {
         playlistRepository.save(playlistToSave);
         return true;
+      } catch (Exception e) {
+        return false;
       }
-      catch (Exception e){
-        return  false;
-      }
+    } else {
+      return false;
     }
-    else return false;
   }
 
   public boolean changeFollowStatus(long accountId, long playlistId, boolean status) {
 
-    if ( status) {
-      return ( playlistRepository.followPlaylist(playlistId,accountId) == 1);
-    }
-    else {
-     return ( playlistRepository.unfollowPlaylist(playlistId,accountId) == 1);
+    if (status) {
+      return (playlistRepository.followPlaylist(playlistId, accountId) == 1);
+    } else {
+      return (playlistRepository.unfollowPlaylist(playlistId, accountId) == 1);
     }
   }
 
   public boolean deleteSongFromPlaylist(long playlistId, long songId) {
 
-    return ( playlistRepository.deleteSongFromPlaylist(playlistId,songId) == 1);
+    return (playlistRepository.deleteSongFromPlaylist(playlistId, songId) == 1);
   }
 
   //** EVENT **//
   public Event getEvent(long eventId) {
     return eventRepository.findOne(eventId);
   }
-
 }

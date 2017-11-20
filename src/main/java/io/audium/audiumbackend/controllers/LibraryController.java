@@ -1,9 +1,7 @@
 package io.audium.audiumbackend.controllers;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import io.audium.audiumbackend.entities.Playlist;
-import io.audium.audiumbackend.entities.Song;
+import io.audium.audiumbackend.entities.*;
 import io.audium.audiumbackend.entities.projections.*;
 import io.audium.audiumbackend.services.LibraryService;
 import io.audium.audiumbackend.services.VerificationService;
@@ -120,7 +118,7 @@ public class LibraryController {
   public ResponseEntity createNewPlaylist(@RequestBody Playlist playlist) {
     JsonObject playlistToReturn;
     if ((playlistToReturn = libraryService.createNewPlaylist(playlist)) != null) {
-      return ResponseEntity.status(HttpStatus.OK).body(playlistToReturn);
+      return ResponseEntity.status(HttpStatus.OK).body(playlistToReturn.toString());
     } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
     }
