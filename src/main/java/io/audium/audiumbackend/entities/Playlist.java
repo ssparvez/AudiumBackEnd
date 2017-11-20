@@ -6,15 +6,28 @@ import io.audium.audiumbackend.entities.relationships.PlaylistSong;
 import javax.persistence.*;
 import java.util.List;
 
+@SqlResultSetMapping(
+  name = "SearchPlaylistMapping",
+  classes = {@ConstructorResult(targetClass = Playlist.class, columns = {
+    @ColumnResult(name = "playlistId"),
+    @ColumnResult(name = "name"),
+    @ColumnResult(name = "description"),
+    @ColumnResult(name = "isPublic"),
+    @ColumnResult(name = "accountId"),
+    @ColumnResult(name = "username"),
+    @ColumnResult(name = "role")
+  })
+  }
+)
 @Entity
 public class Playlist {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long playlistId;
-    private String name;
-    private String description;
-    private boolean isPublic;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long    playlistId;
+  private String  name;
+  private String  description;
+  private boolean isPublic;
 
     @Transient
     private boolean followed;
@@ -24,12 +37,12 @@ public class Playlist {
     @JsonIgnore
     private Account creator;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "playlist")
-    private List<PlaylistSong> playlistSongs;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "playlist")
+  private List<PlaylistSong> playlistSongs;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "playlists")
-    @JsonIgnore
-    private List<Customer> followers;
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "playlists")
+  @JsonIgnore
+  private List<Customer> followers;
 
     /*@ManyToMany(targetEntity = Song.class, fetch = FetchType.LAZY)
     @JoinColumnsOrFormulas({
@@ -37,64 +50,72 @@ public class Playlist {
         @JoinColumnOrFormula(column = @JoinColumn(table = "PlaylistSong", name = "playlistId", referencedColumnName = "playlistId"))})
     private List<Song> songs;*/
 
-    public Playlist() {
-    }
+  public Playlist() {
+  }
 
-    public Playlist(Long playlistId, Account creator, String name, String description, boolean isPublic) {
-        this.playlistId = playlistId;
-        this.creator = creator;
-        this.name = name;
-        this.description = description;
-        this.isPublic = isPublic;
-    }
+  public Playlist(Integer playlistId, String name, String description, Boolean isPublic, Integer accountId, String username, String role) {
+    this.playlistId = playlistId.longValue();
+    this.name = name;
+    this.description = description;
+    this.isPublic = isPublic;
+    this.creator = new Customer(accountId.longValue(), username, role);
+  }
 
-    public Long getPlaylistId() {
-        return playlistId;
-    }
-    public void setPlaylistId(Long playlistId) {
-        this.playlistId = playlistId;
-    }
+  public Playlist(Long playlistId, Account creator, String name, String description, boolean isPublic) {
+    this.playlistId = playlistId;
+    this.creator = creator;
+    this.name = name;
+    this.description = description;
+    this.isPublic = isPublic;
+  }
 
-    //public Long getAccountId() { return accountId; }
-    //public void setAccountId(Long accountId) { this.accountId = accountId; }
+  public Long getPlaylistId() {
+    return playlistId;
+  }
+  public void setPlaylistId(Long playlistId) {
+    this.playlistId = playlistId;
+  }
 
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
+  //public Long getAccountId() { return accountId; }
+  //public void setAccountId(Long accountId) { this.accountId = accountId; }
 
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public String getName() {
+    return name;
+  }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public boolean getIsPublic() {
-        return isPublic;
-    }
-    public void setIsPublic(boolean isPublic) {
-        this.isPublic = isPublic;
-    }
+  public String getDescription() {
+    return description;
+  }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    //public List<Song> getSongs() { return songs; }
-    //public void setSongs(List<Song> songs) { this.songs = songs; }
+  public boolean getIsPublic() {
+    return isPublic;
+  }
+  public void setIsPublic(boolean isPublic) {
+    this.isPublic = isPublic;
+  }
 
-    public List<Customer> getFollowers() {
-        return followers;
-    }
-    public void setFollowers(List<Customer> followers) {
-        this.followers = followers;
-    }
+  //public List<Song> getSongs() { return songs; }
+  //public void setSongs(List<Song> songs) { this.songs = songs; }
 
-    public List<PlaylistSong> getPlaylistSongs() {
-        return playlistSongs;
-    }
-    public void setPlaylistSongs(List<PlaylistSong> playlistSongs) {
-        this.playlistSongs = playlistSongs;
-    }
+  public List<Customer> getFollowers() {
+    return followers;
+  }
+  public void setFollowers(List<Customer> followers) {
+    this.followers = followers;
+  }
+
+  public List<PlaylistSong> getPlaylistSongs() {
+    return playlistSongs;
+  }
+  public void setPlaylistSongs(List<PlaylistSong> playlistSongs) {
+    this.playlistSongs = playlistSongs;
+  }
 
     public Account getCreator() {
         return creator;

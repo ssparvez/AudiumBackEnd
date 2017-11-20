@@ -12,6 +12,19 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 
+@SqlResultSetMapping(
+  name = "SearchSongMapping",
+  classes = {@ConstructorResult(targetClass = Song.class, columns = {
+    @ColumnResult(name = "songId"),
+    @ColumnResult(name = "title"),
+    @ColumnResult(name = "duration"),
+    @ColumnResult(name = "year"),
+    @ColumnResult(name = "isExplicit"),
+    @ColumnResult(name = "genreId"),
+    @ColumnResult(name = "genreName")
+  })
+  }
+)
 @Entity
 public class Song {
 
@@ -19,13 +32,14 @@ public class Song {
   private Long    songId;
   private String  title;
   private Time    duration;
+  @JsonIgnore
   private String  file;
   private Date    year;
   private boolean isExplicit;
   private String  lyrics;
 
   @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "genreId")
+  @JoinColumn(name = "genreId", referencedColumnName = "genreId")
   private Genre genre;
 
   @ManyToMany(fetch = FetchType.LAZY)
@@ -52,16 +66,26 @@ public class Song {
   @JsonIgnore
   private List<SongPlay> songPlays;
 
-  @Formula("(SELECT COUNT(SP.songId) FROM Song AS S JOIN song_play AS SP ON S.songId = SP.songId WHERE SP.songId = songId)")
   @JsonIgnore
+  @Formula("(SELECT COUNT(SP.songId) FROM Song AS S JOIN song_play AS SP ON S.songId = SP.songId WHERE SP.songId = songId)")
   private int playCount;
 
   public Song() {
   }
 
+  public Song(Integer songId, String title, java.util.Date duration, java.util.Date year, Boolean isExplicit, Integer genreId, String genreName) {
+    this.songId = songId.longValue();
+    this.title = title;
+    this.duration = new Time(duration.getTime());
+    this.year = new Date(year.getTime());
+    this.isExplicit = isExplicit;
+    this.genre = new Genre(genreId.longValue(), genreName);
+  }
+
   public Song(Long songId, String title, Time duration, String file, Date year, Genre genre, boolean isExplicit, String lyrics) {
     this.songId = songId;
     this.title = title;
+    System.out.println("Java.sql:\n  Duration: " + duration.toString() + "\n  Year: " + year.toString());
     this.duration = duration;
     this.file = file;
     this.year = year;

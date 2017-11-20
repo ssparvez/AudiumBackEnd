@@ -8,6 +8,16 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
 
+@SqlResultSetMapping(
+  name = "SearchCustomerMapping",
+  classes = {@ConstructorResult(targetClass = Customer.class, columns = {
+    @ColumnResult(name = "accountId"),
+    @ColumnResult(name = "username"),
+    @ColumnResult(name = "role"),
+    @ColumnResult(name = "bio")
+  })
+  }
+)
 @Entity
 @Table(name = "Customer")
 @PrimaryKeyJoinColumn(name = "accountId", referencedColumnName = "accountId")
@@ -15,8 +25,10 @@ public class Customer extends Account {
 
   private Date   dateOfBirth;
   private String gender;
+  private String bio;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+  @JsonIgnore
   private List<CustomerSong> customerSongs;
 
   @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -45,19 +57,36 @@ public class Customer extends Account {
     inverseJoinColumns = @JoinColumn(name = "artistId", referencedColumnName = "artistId"))
   private List<Artist> artists;
 
-  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToMany(fetch = FetchType.LAZY)
   @JsonIgnore
   @JoinTable(
-    name = "customer_friend",
+    name = "customer_follower",
     joinColumns = @JoinColumn(name = "accountId", referencedColumnName = "accountId"),
-    inverseJoinColumns = @JoinColumn(name = "friendId", referencedColumnName = "accountId"))
-  private List<Customer> friends;
+    inverseJoinColumns = @JoinColumn(name = "followerId", referencedColumnName = "accountId"))
+  private List<Customer> followers;
+
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "followers")
+  @JsonIgnore
+  private List<Customer> following;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
   @JsonIgnore
   private List<SongPlay> songPlays;
 
   public Customer() {
+  }
+
+  public Customer(Integer accountId, String username, String role, String bio) {
+    this.setAccountId(accountId.longValue());
+    this.setUsername(username);
+    this.setRole(role);
+    this.bio = bio;
+  }
+
+  public Customer(Long accountId, String username, String role) {
+    this.setAccountId(accountId);
+    this.setUsername(username);
+    this.setRole(role);
   }
 
   public Customer(Date dateOfBirth, String gender) {
@@ -122,5 +151,17 @@ public class Customer extends Account {
 
   public void setSongPlays(List<SongPlay> songPlays) {
     this.songPlays = songPlays;
+  }
+  public List<Customer> getFollowers() {
+    return followers;
+  }
+  public List<Customer> getFollowing() {
+    return following;
+  }
+  public String getBio() {
+    return bio;
+  }
+  public void setBio(String bio) {
+    this.bio = bio;
   }
 }

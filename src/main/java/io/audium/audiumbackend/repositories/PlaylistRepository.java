@@ -2,6 +2,7 @@ package io.audium.audiumbackend.repositories;
 
 import io.audium.audiumbackend.entities.Playlist;
 import io.audium.audiumbackend.entities.projections.LibraryPlaylist;
+import io.audium.audiumbackend.repositories.custom.PlaylistRepositoryCustom;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -9,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface PlaylistRepository extends CrudRepository<Playlist, Long> {
+public interface PlaylistRepository extends CrudRepository<Playlist, Long>, PlaylistRepositoryCustom {
 
   @Transactional(readOnly = true)
   @Query("SELECT P.playlistId AS playlistId, P.name AS name, P.description AS description, P.isPublic AS isPublic, P.creator.accountId AS accountId, P.creator.username AS username FROM Customer C JOIN C.playlists P WHERE C.accountId = ?1 ORDER BY name ASC")

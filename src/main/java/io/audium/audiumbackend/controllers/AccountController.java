@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.audium.audiumbackend.entities.Customer;
 import io.audium.audiumbackend.entities.PaymentInfo;
+import io.audium.audiumbackend.entities.projections.CustomerFollower;
 import io.audium.audiumbackend.services.AccountService;
 import io.audium.audiumbackend.services.VerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 @RestController
 public class AccountController {
@@ -128,5 +130,15 @@ public class AccountController {
     } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
+  }
+
+  @GetMapping(value = "/accounts/{accountId}/followers")
+  public List<CustomerFollower> getCustomerFollowers(@PathVariable long accountId) {
+    return accountService.getCustomerFollowers(accountId);
+  }
+
+  @GetMapping(value = "/accounts/{accountId}/following")
+  public List<CustomerFollower> getCustomerFollowing(@PathVariable long accountId) {
+    return accountService.getCustomerFollowing(accountId);
   }
 }
