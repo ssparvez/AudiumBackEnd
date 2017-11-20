@@ -93,17 +93,17 @@ public class LibraryController {
 
   //** PLAYLIST **//
 
-  @GetMapping(value = "/playlist/{playlistId}")
+  @GetMapping(value = "/playlists/{playlistId}")
   public LibraryPlaylist getPlaylist(@PathVariable long playlistId) {
     return libraryService.getPlaylist(playlistId);
   }
 
-  @GetMapping(value = "/playlist/{playlistId}/songs")
+  @GetMapping(value = "/playlists/{playlistId}/songs")
   public List<PlaylistTrack> getPlaylistSongs(@PathVariable long playlistId) {
     return libraryService.getPlaylistSongs(playlistId);
   }
 
-  @PostMapping(value = "/playlist/newplaylist")
+  @PostMapping(value = "/playlists/newplaylist")
   public ResponseEntity createNewPlaylist(@RequestBody Playlist playlist) {
     Playlist playlistToReturn;
     if ((playlistToReturn = libraryService.createNewPlaylist(playlist)) != null) {
@@ -115,34 +115,34 @@ public class LibraryController {
 
   //** ALBUM **//
 
-  @GetMapping(value = "/album/{albumId}")
+  @GetMapping(value = "/albums/{albumId}")
   public LibraryAlbum getAlbum(@PathVariable long albumId) {
     return libraryService.getAlbum(albumId);
   }
 
-  @GetMapping(value = "/album/{albumId}/songs")
+  @GetMapping(value = "/albums/{albumId}/songs")
   public List<AlbumTrack> getAlbumSongs(@PathVariable long albumId) {
     return libraryService.getAlbumSongs(albumId);
   }
 
   //** ARTIST **//
 
-  @GetMapping(value = "/artist/{artistId}")
+  @GetMapping(value = "/artists/{artistId}")
   public LibraryArtist getArtist(@PathVariable long artistId) {
     return libraryService.getArtist(artistId);
   }
 
-  @GetMapping(value = "/artist/{artistId}/albums")
+  @GetMapping(value = "/artists/{artistId}/albums")
   public List<LibraryAlbum> getArtistAlbums(@PathVariable long artistId) {
     return libraryService.getArtistAlbums(artistId);
   }
 
-  @GetMapping(value = "/artist/{artistId}/songs")
+  @GetMapping(value = "/artists/{artistId}/songs")
   public List<PopularTrack> getArtistSongs(@PathVariable long artistId) {
     return libraryService.getArtistSongs(artistId);
   }
 
-  @GetMapping(value = "/artist/{artistId}/events")
+  @GetMapping(value = "/artists/{artistId}/events")
   public List<Event> getArtistEvents(@PathVariable long artistId) {
     return libraryService.getArtistEvents(artistId);
   }
@@ -167,32 +167,32 @@ public class LibraryController {
     return libraryService.getEvent(eventId);
   }
 
-  @GetMapping(value = "/search/song/{searchQuery}")
+  @GetMapping(value = "/search/songs/{searchQuery}")
   public List<Song> searchSongs(@PathVariable String searchQuery) {
     return searchService.searchSongs(searchQuery);
   }
 
-  @GetMapping(value = "/search/album/{searchQuery}")
+  @GetMapping(value = "/search/albums/{searchQuery}")
   public List<Album> searchAlbums(@PathVariable String searchQuery) {
     return searchService.searchAlbums(searchQuery);
   }
 
-  @GetMapping(value = "/search/artist/{searchQuery}")
+  @GetMapping(value = "/search/artists/{searchQuery}")
   public List<Artist> searchArtists(@PathVariable String searchQuery) {
     return searchService.searchArtists(searchQuery);
   }
 
-  @GetMapping(value = "/search/playlist/{searchQuery}")
+  @GetMapping(value = "/search/playlists/{searchQuery}")
   public List<Playlist> searchPlaylists(@PathVariable String searchQuery) {
     return searchService.searchPlaylists(searchQuery);
   }
 
-  @GetMapping(value = "/search/event/{searchQuery}")
+  @GetMapping(value = "/search/events/{searchQuery}")
   public List<Event> searchEvents(@PathVariable String searchQuery) {
     return searchService.searchEvents(searchQuery);
   }
 
-  @GetMapping(value = "/search/profile/{searchQuery}")
+  @GetMapping(value = "/search/profiles/{searchQuery}")
   public List<Customer> searchCustomers(@PathVariable String searchQuery) {
     return searchService.searchCustomers(searchQuery);
   }
