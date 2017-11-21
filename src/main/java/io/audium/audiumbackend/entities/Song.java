@@ -29,8 +29,8 @@ import java.util.List;
 public class Song {
 
   @Id
-  private Long    songId;
-  private String  title;
+  private Long songId;
+  private String title = "Untitled";
   private Time    duration;
   @JsonIgnore
   private String  file;

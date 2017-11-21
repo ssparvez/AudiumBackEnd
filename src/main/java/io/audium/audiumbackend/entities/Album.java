@@ -22,11 +22,11 @@ import java.util.List;
 public class Album {
 
   @Id
-  private Long   albumId;
+  private Long albumId;
   @Column(name = "title")
-  private String albumTitle;
+  private String albumTitle = "Untitled";
   @Column(name = "year")
-  private Date   releaseYear;
+  private Date releaseYear;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "artistId")

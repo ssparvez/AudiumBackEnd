@@ -117,9 +117,10 @@ public class SearchService {
 
     /* Build full query */
     String query = "SELECT Se.accountId AS accountId, Se.username AS username, Se.role AS role, Se.bio AS bio "
-      + " FROM (SELECT C.*, Cust.bio, " + relevanceLevelStatement + " FROM Account C, Customer Cust WHERE C.accountId = Cust.accountId AND (C.role = \"BasicUser\" OR C.role = \"PremiumUser\")) AS Se "
+      + " FROM (SELECT C.*, Cust.bio, " + relevanceLevelStatement + " FROM Account C, Customer Cust, UserPreferences P "
+      + " WHERE C.accountId = Cust.accountId AND C.accountId = P.accountId AND P.publicProfile = TRUE AND (C.role = \"BasicUser\" OR C.role = \"PremiumUser\")) AS Se "
       + " WHERE Se.Relevance > 0 ORDER BY Se.Relevance DESC";
-    
+
     return customerRepository.searchCustomers(query);
   }
 }

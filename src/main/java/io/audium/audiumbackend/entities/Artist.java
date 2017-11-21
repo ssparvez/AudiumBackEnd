@@ -22,7 +22,7 @@ public class Artist {
   private Long   accountId;
   @Column(name = "name")
   private String artistName;
-  private String bio;
+  private String bio = "";
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JsonIgnore

@@ -11,7 +11,7 @@ public class Partner extends Account {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "addressId")
   private Address address;
-  private boolean approved;
+  private boolean approved = true;
 
   public Partner() {
   }
@@ -34,10 +34,10 @@ public class Partner extends Account {
   public void setAddress(Address address) {
     this.address = address;
   }
-  public boolean isApproved() {
+  public boolean getIsApproved() {
     return approved;
   }
-  public void setApproved(boolean approved) {
+  public void setIsApproved(boolean approved) {
     this.approved = approved;
   }
 }

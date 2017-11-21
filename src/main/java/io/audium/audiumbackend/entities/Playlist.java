@@ -24,10 +24,10 @@ public class Playlist {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long    playlistId;
-  private String  name;
-  private String  description;
-  private boolean isPublic;
+  private Long playlistId;
+  private String  name        = "New Playlist";
+  private String  description = "";
+  private boolean isPublic    = false;
 
   @Transient
   private boolean followed;

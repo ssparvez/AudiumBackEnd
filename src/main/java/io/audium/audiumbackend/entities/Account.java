@@ -8,14 +8,14 @@ public class Account {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long    accountId;
-  private String  email;
-  private String  passwordHash;
-  private String  firstName;
-  private String  lastName;
-  private String  role;
-  private boolean isActive;
-  private String  username;
+  private Long   accountId;
+  private String email;
+  private String passwordHash;
+  private String firstName;
+  private String lastName;
+  private String  role     = "BasicUser";
+  private boolean isActive = true;
+  private String username;
 
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "accountId")
