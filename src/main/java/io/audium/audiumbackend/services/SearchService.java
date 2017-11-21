@@ -61,9 +61,11 @@ public class SearchService {
     String relevanceLevelStatement = buildRelevanceLevelStatement(searchQuery, "S", "title");
 
     /* Build full query */
-    String query = "SELECT Se.songId AS songId, Se.title AS title, Se.duration AS duration, Se.year AS year, Se.isExplicit AS isExplicit,"
-      + " Se.lyrics AS lyrics, G.genreId AS genreId, G.name AS genreName FROM (SELECT S.*, " + relevanceLevelStatement
-      + " FROM Song S) AS Se, Genre AS G WHERE Se.Relevance > 0 AND G.genreId = Se.genreId ORDER BY Se.Relevance DESC";
+    String query = "SELECT Se.songId AS songId, Se.title AS title, Se.duration AS duration, Se.year AS year, Se.isExplicit AS isExplicit, "
+      + " Art.artistId AS artistId, Art.name AS artistName, Alb.albumId AS albumId, Alb.title AS albumTitle, G.genreId AS genreId, G.name AS genreName FROM "
+      + " (SELECT S.*, " + relevanceLevelStatement + " FROM Song AS S) AS Se, Artist AS Art, artist_song AS ArtS, Album AS Alb, album_song AS AlbS, Genre AS G "
+      + " WHERE Se.Relevance > 0 AND G.genreId = Se.genreId AND ArtS.songId = Se.songId AND ArtS.artistId = Art.artistId AND ArtS.isPrimaryArtist = TRUE AND AlbS.songId = Se.songId AND AlbS.albumId = Alb.albumId "
+      + " GROUP BY Se.songId ORDER BY Se.Relevance DESC";
 
     return songRepository.searchSongs(query);
   }
@@ -116,9 +118,9 @@ public class SearchService {
     String relevanceLevelStatement = buildRelevanceLevelStatement(searchQuery, "C", "username");
 
     /* Build full query */
-    String query = "SELECT Se.accountId AS accountId, Se.username AS username, Se.role AS role, Se.bio AS bio "
-      + " FROM (SELECT C.*, Cust.bio, " + relevanceLevelStatement + " FROM Account C, Customer Cust, UserPreferences P "
-      + " WHERE C.accountId = Cust.accountId AND C.accountId = P.accountId AND P.publicProfile = TRUE AND (C.role = \"BasicUser\" OR C.role = \"PremiumUser\")) AS Se "
+    String query = "SELECT Se.accountId AS accountId, Se.username AS username, Se.role AS role, Se.bio AS bio, Se.followerCount AS followerCount "
+      + " FROM (SELECT C.*, Cust.bio, COUNT(CF.accountId) AS followerCount, " + relevanceLevelStatement + " FROM Account C, Customer Cust, UserPreferences P, customer_follower CF "
+      + " WHERE C.accountId = Cust.accountId AND C.accountId = P.accountId AND P.publicProfile = TRUE AND CF.accountId = Cust.accountId AND (C.role = \"BasicUser\" OR C.role = \"PremiumUser\") GROUP BY CF.accountId) AS Se "
       + " WHERE Se.Relevance > 0 ORDER BY Se.Relevance DESC";
 
     return customerRepository.searchCustomers(query);

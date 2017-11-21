@@ -43,6 +43,11 @@ public class Album {
   public Album() {
   }
 
+  public Album(Long albumId, String albumTitle) {
+    this.albumId = albumId;
+    this.albumTitle = albumTitle;
+  }
+
   public Album(Long albumId, String title, Date releaseYear) {
     this.albumId = albumId;
     this.albumTitle = title;

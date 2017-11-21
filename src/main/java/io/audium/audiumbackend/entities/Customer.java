@@ -3,8 +3,10 @@ package io.audium.audiumbackend.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.audium.audiumbackend.entities.relationships.CustomerSong;
 import io.audium.audiumbackend.entities.relationships.SongPlay;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 import java.sql.Date;
 import java.util.List;
 
@@ -14,7 +16,8 @@ import java.util.List;
     @ColumnResult(name = "accountId"),
     @ColumnResult(name = "username"),
     @ColumnResult(name = "role"),
-    @ColumnResult(name = "bio")
+    @ColumnResult(name = "bio"),
+    @ColumnResult(name = "followerCount")
   })
   }
 )
@@ -73,14 +76,21 @@ public class Customer extends Account {
   @JsonIgnore
   private List<SongPlay> songPlays;
 
+  @Formula("(SELECT COUNT(CF.accountId) FROM Customer AS C JOIN customer_follower AS CF ON C.accountId = CF.accountId WHERE CF.accountId = accountId)")
+  private int followerCount;
+
+  @Formula("(SELECT COUNT(CF.accountId) FROM Customer AS C JOIN customer_follower AS CF ON C.accountId = CF.followerId WHERE CF.followerId = accountId)")
+  private int followingCount;
+
   public Customer() {
   }
 
-  public Customer(Integer accountId, String username, String role, String bio) {
+  public Customer(Integer accountId, String username, String role, String bio, BigInteger followerCount) {
     this.setAccountId(accountId.longValue());
     this.setUsername(username);
     this.setRole(role);
     this.bio = bio;
+    this.followerCount = followerCount.intValue();
   }
 
   public Customer(Long accountId, String username, String role) {
@@ -163,5 +173,11 @@ public class Customer extends Account {
   }
   public void setBio(String bio) {
     this.bio = bio;
+  }
+  public int getFollowerCount() {
+    return followerCount;
+  }
+  public int getFollowingCount() {
+    return followingCount;
   }
 }
