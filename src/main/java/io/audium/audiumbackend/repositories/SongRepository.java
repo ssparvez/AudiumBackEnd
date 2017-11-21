@@ -6,6 +6,7 @@ import io.audium.audiumbackend.entities.projections.LibrarySong;
 import io.audium.audiumbackend.entities.projections.PlaylistTrack;
 import io.audium.audiumbackend.entities.projections.PopularTrack;
 import io.audium.audiumbackend.repositories.custom.SongRepositoryCustom;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public interface SongRepository extends CrudRepository<Song, Long>, SongReposito
   public List<LibrarySong> findCustomerSongs(long accountId);
 
   @Transactional(readOnly = true)
-  @Query("SELECT PS.song.songId AS songId, PS.song.title AS title, Art.artistId AS artistId, Art.artistName AS artistName, Alb.albumId AS albumId, Alb.albumTitle AS albumTitle, PS.song.duration AS duration, PS.song.isExplicit AS isExplicit, PS.timeAdded AS timeAdded FROM PlaylistSong PS INNER JOIN PS.song.artists Art INNER JOIN PS.song.albumSongs AlbSo INNER JOIN AlbSo.album Alb WHERE PS.playlist.playlistId = ?1 GROUP BY PS.song ORDER BY timeAdded DESC")
+  @Query("SELECT PS.song.songId AS songId, PS.song.title AS title, Art.artistId AS artistId, Art.artistName AS artistName, Alb.albumId AS albumId, Alb.albumTitle AS albumTitle, PS.song.duration AS duration, PS.song.isExplicit AS isExplicit, PS.timeAdded AS timeAdded FROM PlaylistSong PS INNER JOIN PS.song.artists Art INNER JOIN PS.song.albumSongs AlbSo INNER JOIN AlbSo.album Alb WHERE PS.playlist.playlistId = ?1 GROUP BY PS.song ORDER BY timeAdded ASC")
   public List<PlaylistTrack> findPlaylistSongs(long playlistId);
 
   @Transactional(readOnly = true)
@@ -40,4 +41,18 @@ public interface SongRepository extends CrudRepository<Song, Long>, SongReposito
 
   @Query("SELECT S.songId AS songId, S.title AS title, Art.artistId AS artistId, Art.artistName AS artistName, AlbS.album.albumId AS albumId, AlbS.album.albumTitle AS albumTitle, S.duration AS duration, S.isExplicit AS isExplicit, S.year AS year, S.genre.genreId AS genreId, S.genre.genreName AS genreName, S.playCount AS playCount FROM Song S INNER JOIN S.artists Art INNER JOIN S.albumSongs AlbS GROUP BY S ORDER BY playCount DESC, S.year DESC, S.title ASC")
   public List<PopularTrack> findTopSongs();
+
+  @Transactional
+  @Query(value = "SELECT CS.songId FROM Customer_Song CS WHERE CS.accountId = ?1 AND CS.songId = ?2", nativeQuery = true)
+  public Object checkIfSongisSaved(long accountId, long songId);
+
+  @Transactional
+  @Modifying
+  @Query(value = "INSERT INTO Customer_Song VALUES(?1,?2,0)", nativeQuery = true)
+  public int saveSongToMusic(long accountId, long songId);
+
+  @Transactional
+  @Modifying
+  @Query(value = "DELETE FROM Customer_Song WHERE accountId = ?1 AND songId = ?2", nativeQuery = true)
+  public int removeSongFromMusic(long accountId, long songId);
 }

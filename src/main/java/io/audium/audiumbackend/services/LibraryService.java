@@ -82,9 +82,6 @@ public class LibraryService {
     return albumRepository.findByAlbumId(albumId);
   }
 
-  public List<PlaylistTrack> getPlaylistSongs(long playlistId) {
-    return songRepository.findPlaylistSongs(playlistId);
-  }
 
   public List<AlbumTrack> getAlbumSongs(long albumId) {
     return songRepository.findAlbumSongs(albumId);
@@ -110,7 +107,22 @@ public class LibraryService {
     return HelperService.getResultsPage(pageIndex, pageSize, results);
   }
 
+  //** SONG **//
+
+  public boolean checkIfSongIsSaved(long accountId, long songId) {
+    return (songRepository.checkIfSongisSaved(accountId, songId) != null);
+  }
+
+  public boolean saveSongToMusic(long accountId, long songId) {
+      return (songRepository.saveSongToMusic(accountId, songId) == 1);
+  }
+
+  public boolean removeSongFromMusic(long accountId, long songId) {
+    return (songRepository.removeSongFromMusic(accountId,songId) ==1);
+  }
+
   //** PLAYLIST **//
+
   public JsonObject getPlaylist(long accountId, long playlistId) {
     LibraryPlaylist playlistToReturn = playlistRepository.findByPlaylistId(playlistId);
     if (playlistToReturn != null) {
@@ -131,6 +143,10 @@ public class LibraryService {
     } else {
       return null;
     }
+  }
+
+  public List<PlaylistTrack> getPlaylistSongs(long playlistId) {
+    return songRepository.findPlaylistSongs(playlistId);
   }
 
   private JsonObject buildPlaylistJSON(Playlist playlist) {

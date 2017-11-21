@@ -57,4 +57,5 @@ public interface PlaylistRepository extends CrudRepository<Playlist, Long>, Play
   @Query(value="INSERT INTO Playlist_Song VALUES(?1,?2,0)", nativeQuery = true)
   public int addSongToPlaylist(long playlistId, long accountId);
 
+
 }
