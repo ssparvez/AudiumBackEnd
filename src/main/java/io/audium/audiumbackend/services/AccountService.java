@@ -28,11 +28,11 @@ public class AccountService {
   @Autowired
   private VerificationService   verificationService;
   private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
   public void registerAccount(Customer customerAccount) {
 
-    customerAccount.setRole("BasicUser");
+    customerAccount.setRole(BASIC);
     customerAccount.setIsActive(true);
-//    customerAccount.setBio("");
     customerAccount.setPasswordHash(passwordEncoder.encode(customerAccount.getPasswordHash()));
     customerAccountRepository.save(customerAccount);
   }

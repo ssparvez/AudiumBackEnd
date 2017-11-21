@@ -78,10 +78,10 @@ public class LibraryService {
   public List<LibraryAlbum> getLibraryAlbums(long accountId) {
     return albumRepository.findCustomerAlbums(accountId);
   }
+
   public LibraryAlbum getAlbum(long albumId) {
     return albumRepository.findByAlbumId(albumId);
   }
-
 
   public List<AlbumTrack> getAlbumSongs(long albumId) {
     return songRepository.findAlbumSongs(albumId);
@@ -94,9 +94,11 @@ public class LibraryService {
   public List<LibraryAlbum> getArtistAlbums(long artistId) {
     return albumRepository.findArtistAlbums(artistId);
   }
+
   public List<PopularTrack> getArtistSongs(long artistId) {
     return songRepository.findArtistSongs(artistId);
   }
+
   public List<Event> getArtistEvents(long artistId) {
     return artistRepository.findArtistEvents(artistId);
   }
