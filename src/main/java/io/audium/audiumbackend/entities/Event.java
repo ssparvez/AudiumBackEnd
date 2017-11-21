@@ -22,15 +22,15 @@ import java.util.List;
 public class Event {
 
   @Id
-  private Long    eventId;
+  private Long eventId;
   @Column(name = "title")
-  private String  eventTitle;
+  private String eventTitle = "Upcoming Event";
   private Date    eventDate;
   @ManyToOne(targetEntity = Address.class)
   @JoinColumn(name = "addressId")
   private Address address;
-  private String  description;
-  private boolean isCancelled;
+  private String  description = "";
+  private boolean isCancelled = false;
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JsonIgnore

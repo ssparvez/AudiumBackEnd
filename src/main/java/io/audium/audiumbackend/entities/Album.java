@@ -22,11 +22,11 @@ import java.util.List;
 public class Album {
 
   @Id
-  private Long   albumId;
+  private Long albumId;
   @Column(name = "title")
-  private String albumTitle;
+  private String albumTitle = "Untitled";
   @Column(name = "year")
-  private Date   releaseYear;
+  private Date releaseYear;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "artistId")
@@ -41,6 +41,11 @@ public class Album {
   private List<Customer> followers;
 
   public Album() {
+  }
+
+  public Album(Long albumId, String albumTitle) {
+    this.albumId = albumId;
+    this.albumTitle = albumTitle;
   }
 
   public Album(Long albumId, String title, Date releaseYear) {

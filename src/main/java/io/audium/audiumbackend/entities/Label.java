@@ -10,7 +10,7 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name = "accountId", referencedColumnName = "accountId")
 public class Label extends Partner {
 
-  private String info;
+  private String info = "";
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "label")
   @JsonIgnore

@@ -20,6 +20,10 @@ import java.util.List;
     @ColumnResult(name = "duration"),
     @ColumnResult(name = "year"),
     @ColumnResult(name = "isExplicit"),
+    @ColumnResult(name = "artistId"),
+    @ColumnResult(name = "artistName"),
+    @ColumnResult(name = "albumId"),
+    @ColumnResult(name = "albumTitle"),
     @ColumnResult(name = "genreId"),
     @ColumnResult(name = "genreName")
   })
@@ -29,8 +33,8 @@ import java.util.List;
 public class Song {
 
   @Id
-  private Long    songId;
-  private String  title;
+  private Long songId;
+  private String title = "Untitled";
   private Time    duration;
   @JsonIgnore
   private String  file;
@@ -66,6 +70,18 @@ public class Song {
   @JsonIgnore
   private List<SongPlay> songPlays;
 
+  @Formula("(SELECT A.artistId FROM Song AS S JOIN artist_song AS ArtS ON S.songId = ArtS.songId JOIN Artist A ON ArtS.artistId = A.artistId WHERE ArtS.isArtist = TRUE AND ArtS.songId = songId GROUP BY S.songId LIMIT 1)")
+  private Integer artistId;
+
+  @Formula("(SELECT A.name FROM Song AS S JOIN artist_song AS ArtS ON S.songId = ArtS.songId JOIN Artist A ON ArtS.artistId = A.artistId WHERE ArtS.isArtist = TRUE AND ArtS.songId = songId GROUP BY S.songId LIMIT 1)")
+  private String artistName;
+
+  @Formula("(SELECT A.albumId FROM Song AS S JOIN album_song AS AlbS ON S.songId = AlbS.songId JOIN Album A ON AlbS.albumId = A.albumId WHERE AlbS.songId = songId GROUP BY S.songId LIMIT 1)")
+  private Integer albumId;
+
+  @Formula("(SELECT A.title FROM Song AS S JOIN album_song AS AlbS ON S.songId = AlbS.songId JOIN Album A ON AlbS.albumId = A.albumId WHERE AlbS.songId = songId GROUP BY S.songId LIMIT 1)")
+  private String albumTitle;
+
   @JsonIgnore
   @Formula("(SELECT COUNT(SP.songId) FROM Song AS S JOIN song_play AS SP ON S.songId = SP.songId WHERE SP.songId = songId)")
   private int playCount;
@@ -73,13 +89,17 @@ public class Song {
   public Song() {
   }
 
-  public Song(Integer songId, String title, java.util.Date duration, java.util.Date year, Boolean isExplicit, Integer genreId, String genreName) {
+  public Song(Integer songId, String title, java.util.Date duration, java.util.Date year, Boolean isExplicit, Integer artistId, String artistName, Integer albumId, String albumTitle, Integer genreId, String genreName) {
     this.songId = songId.longValue();
     this.title = title;
     this.duration = new Time(duration.getTime());
     this.year = new Date(year.getTime());
     this.isExplicit = isExplicit;
     this.genre = new Genre(genreId.longValue(), genreName);
+    this.artistId = artistId;
+    this.artistName = artistName;
+    this.albumId = albumId;
+    this.albumTitle = albumTitle;
   }
 
   public Song(Long songId, String title, Time duration, String file, Date year, Genre genre, boolean isExplicit, String lyrics) {
@@ -191,5 +211,29 @@ public class Song {
   }
   public void setGenre(Genre genre) {
     this.genre = genre;
+  }
+  public Integer getArtistId() {
+    return artistId;
+  }
+  public void setArtistId(Integer artistId) {
+    this.artistId = artistId;
+  }
+  public Integer getAlbumId() {
+    return albumId;
+  }
+  public void setAlbumId(Integer albumId) {
+    this.albumId = albumId;
+  }
+  public String getArtistName() {
+    return artistName;
+  }
+  public void setArtistName(String artistName) {
+    this.artistName = artistName;
+  }
+  public String getAlbumTitle() {
+    return albumTitle;
+  }
+  public void setAlbumTitle(String albumTitle) {
+    this.albumTitle = albumTitle;
   }
 }

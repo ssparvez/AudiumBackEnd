@@ -13,13 +13,13 @@ public class UserPreferences {
   private Long accountId;
 
   @Column(name = "language")
-  private String  language;
+  private String  language             = "English";
   @Column(name = "publicProfile")
-  private boolean publicProfile;
+  private boolean publicProfile        = true;
   @Column(name = "defaultPublicSession")
-  private boolean defaultPublicSession;
+  private boolean defaultPublicSession = true;
   @Column(name = "showExplicitContent")
-  private boolean showExplicitContent;
+  private boolean showExplicitContent  = false;
 
   //@Formula("(SELECT A.accountId, A.email, A.passwordHash, A.firstName, A.lastName, A.role, A.isActive, A.username FROM Account AS A WHERE A.accountId = accountId)")
   //private Account account;

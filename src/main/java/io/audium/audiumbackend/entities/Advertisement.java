@@ -7,9 +7,9 @@ import javax.persistence.*;
 public class Advertisement {
 
   @Id
-  private Long    advertisementId;
-  private String  url;
-  private boolean isActive;
+  private Long   advertisementId;
+  private String url;
+  private boolean isActive = true;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "accountId", referencedColumnName = "accountId")
