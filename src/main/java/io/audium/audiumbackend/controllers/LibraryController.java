@@ -368,33 +368,4 @@ public class LibraryController {
     return libraryService.getEvent(eventId);
   }
 
-  @GetMapping(value = "/search/songs/{searchQuery}")
-  public List<Song> searchSongs(@PathVariable String searchQuery) {
-    return searchService.searchSongs(searchQuery);
-  }
-
-  @GetMapping(value = "/search/albums/{searchQuery}")
-  public List<Album> searchAlbums(@PathVariable String searchQuery) {
-    return searchService.searchAlbums(searchQuery);
-  }
-
-  @GetMapping(value = "/search/artists/{searchQuery}")
-  public List<Artist> searchArtists(@PathVariable String searchQuery) {
-    return searchService.searchArtists(searchQuery);
-  }
-
-  @GetMapping(value = "/search/playlists/{searchQuery}")
-  public List<Playlist> searchPlaylists(@PathVariable String searchQuery) {
-    return searchService.searchPlaylists(searchQuery);
-  }
-
-  @GetMapping(value = "/search/events/{searchQuery}")
-  public List<Event> searchEvents(@PathVariable String searchQuery) {
-    return searchService.searchEvents(searchQuery);
-  }
-
-  @GetMapping(value = "/search/profiles/{searchQuery}")
-  public List<Customer> searchCustomers(@PathVariable String searchQuery) {
-    return searchService.searchCustomers(searchQuery);
-  }
 }
