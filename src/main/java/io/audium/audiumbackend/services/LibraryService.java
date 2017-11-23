@@ -109,6 +109,25 @@ public class LibraryService {
     return HelperService.getResultsPage(pageIndex, pageSize, results);
   }
 
+  //** ARTIST **//
+
+  public boolean changeArtistFollowStatus(long accountId, long artistId, boolean status) {
+    if (status) {
+      return (artistRepository.followArtist(artistId, accountId) == 1);
+    } else {
+      return (artistRepository.unfollowArtist(artistId, accountId) == 1);
+    }
+  }
+  public List<Long> getListOfFollowedArtistIds(long accountId) {
+    List<Long> artistsFollowed = artistRepository.getListOfFollowedArtistIds(accountId);
+
+    if ( artistsFollowed != null ) {
+      return artistsFollowed;
+    }
+    else return null;
+  }
+
+
   //** SONG **//
 
   public boolean checkIfSongIsSaved(long accountId, long songId) {
@@ -123,28 +142,38 @@ public class LibraryService {
     return (songRepository.removeSongFromMusic(accountId,songId) ==1);
   }
 
+
   //** PLAYLIST **//
 
-  public JsonObject getPlaylist(long accountId, long playlistId) {
-    LibraryPlaylist playlistToReturn = playlistRepository.findByPlaylistId(playlistId);
-    if (playlistToReturn != null) {
-      JsonObject obj = new JsonObject();
-      obj.addProperty("playlistId", playlistToReturn.getPlaylistId());
-      obj.addProperty("name", playlistToReturn.getName());
-      obj.addProperty("description", playlistToReturn.getDescription());
-      obj.addProperty("isPublic", playlistToReturn.getIsPublic());
-      obj.addProperty("accountId", playlistToReturn.getAccountId());
-      obj.addProperty("username", playlistToReturn.getUsername());
-      if (playlistRepository.checkIfPlaylistIsFollowed(accountId, playlistId) != null) {
-        obj.addProperty("followed", true);
-        return obj;
-      } else {
-        obj.addProperty("followed", false);
-        return obj;
-      }
-    } else {
+  public List<LibraryPlaylist> getCreatedAndFollowedPlaylists(long accountId) {
+    try {
+      return playlistRepository.findCreatedAndFollowedPlaylists(accountId);
+    } catch (Exception e) {
       return null;
     }
+  }
+
+  public LibraryPlaylist getPlaylist(long accountId, long playlistId) {
+//    LibraryPlaylist playlistToReturn = playlistRepository.findByPlaylistId(playlistId);
+//    if (playlistToReturn != null) {
+//      JsonObject obj = new JsonObject();
+//      obj.addProperty("playlistId", playlistToReturn.getPlaylistId());
+//      obj.addProperty("name", playlistToReturn.getName());
+//      obj.addProperty("description", playlistToReturn.getDescription());
+//      obj.addProperty("isPublic", playlistToReturn.getIsPublic());
+//      obj.addProperty("accountId", playlistToReturn.getAccountId());
+//      obj.addProperty("username", playlistToReturn.getUsername());
+//      if (playlistRepository.checkIfPlaylistIsFollowed(accountId, playlistId)) {
+//        obj.addProperty("followed", true);
+//        return obj;
+//      } else {
+//        obj.addProperty("followed", false);
+//        return obj;
+//      }
+//    } else {
+//      return null;
+//    }
+    return playlistRepository.findByPlaylistId(playlistId);
   }
 
   public List<PlaylistTrack> getPlaylistSongs(long playlistId) {
@@ -171,17 +200,17 @@ public class LibraryService {
     }
   }
 
-  public List<LibraryPlaylist> getCreatedAndFollowedPlaylists(long accountId) {
+  public List<LibraryPlaylist> getCreatedPlaylists(long accountId) {
     try {
-      return playlistRepository.findCreatedAndFollowedPlaylists(accountId);
-    } catch (Exception e) {
+      return playlistRepository.findCreatedPlaylists(accountId);
+    } catch ( Exception e) {
       return null;
     }
   }
 
-  public List<LibraryPlaylist> getCreatedPlaylists(long accountId) {
+  public List<Long> getPlaylistFollowedIds(long accountId) {
     try {
-      return playlistRepository.findCreatedPlaylists(accountId);
+      return playlistRepository.getListOfPlaylistsFollowed(accountId);
     } catch ( Exception e) {
       return null;
     }
@@ -209,8 +238,7 @@ public class LibraryService {
     }
   }
 
-  public boolean changeFollowStatus(long accountId, long playlistId, boolean status) {
-
+  public boolean changePlaylistFollowStatus(long accountId, long playlistId, boolean status) {
     if (status) {
       return (playlistRepository.followPlaylist(playlistId, accountId) == 1);
     } else {
@@ -228,8 +256,25 @@ public class LibraryService {
     return (playlistRepository.addSongToPlaylist(playlistId, songId) == 1);
   }
 
+  public boolean editCustomerPlaylist(Playlist playlistToEdit) {
+    Playlist playlist = playlistRepository.findOne(playlistToEdit.getPlaylistId());
+    if (playlist != null) {
+     try {
+       playlist.setName(playlistToEdit.getName());
+       playlistRepository.save(playlist);
+       return true;
+     }
+     catch (Exception e) {
+       return false;
+     }
+    }
+    else return false;
+  }
+
   //** EVENT **//
+
   public Event getEvent(long eventId) {
     return eventRepository.findOne(eventId);
   }
+
 }
