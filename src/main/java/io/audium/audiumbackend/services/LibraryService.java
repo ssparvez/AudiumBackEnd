@@ -173,7 +173,12 @@ public class LibraryService {
 //    } else {
 //      return null;
 //    }
-    return playlistRepository.findByPlaylistId(playlistId);
+    try {
+      return playlistRepository.findByPlaylistId(playlistId);
+    }
+    catch ( Exception e) {
+      return null;
+    }
   }
 
   public List<PlaylistTrack> getPlaylistSongs(long playlistId) {
