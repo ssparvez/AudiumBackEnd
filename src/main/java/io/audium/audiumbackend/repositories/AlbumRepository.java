@@ -3,6 +3,7 @@ package io.audium.audiumbackend.repositories;
 import io.audium.audiumbackend.entities.Album;
 import io.audium.audiumbackend.entities.projections.LibraryAlbum;
 import io.audium.audiumbackend.repositories.custom.AlbumRepositoryCustom;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,4 +23,18 @@ public interface AlbumRepository extends CrudRepository<Album, Long>, AlbumRepos
   @Transactional(readOnly = true)
   @Query("SELECT A.albumId AS albumId, A.albumTitle AS albumTitle, A.releaseYear AS releaseYear, A.artist.artistId AS artistId, A.artist.artistName AS artistName FROM Album A WHERE A.albumId = ?1")
   public LibraryAlbum findByAlbumId(long albumId);
+
+  @Transactional(readOnly = true)
+  @Query(value= "SELECT A.albumId FROM Customer_Album A WHERE A.accountId = ?1", nativeQuery = true)
+  public  List<Long> getListOfSavedAlbumIds(long accountId);
+
+  @Transactional
+  @Modifying
+  @Query(value="INSERT INTO Customer_Album VALUES(?1,?2)", nativeQuery = true)
+  public int saveAlbum(long accountId, long albumId);
+
+  @Transactional
+  @Modifying
+  @Query(value="DELETE FROM Customer_Album WHERE albumId = ?1 AND accountId = ?2", nativeQuery = true)
+  public int removeAlbum(long albumId, long accountId);
 }

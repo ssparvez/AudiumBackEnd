@@ -109,6 +109,25 @@ public class LibraryService {
     return HelperService.getResultsPage(pageIndex, pageSize, results);
   }
 
+  //** ALBUM **//
+
+  public boolean changeAlbumSavedStatus(long accountId, long albumId, boolean status) {
+    if (status) {
+      return (albumRepository.saveAlbum(accountId,albumId) == 1);
+    } else {
+      return (albumRepository.removeAlbum(albumId, accountId) == 1);
+    }
+  }
+
+  public List<Long> getListOfSavedAlbumIds(long accountId) {
+    List<Long> albumsSaved = albumRepository.getListOfSavedAlbumIds(accountId);
+    if ( albumsSaved != null ) {
+      return albumsSaved;
+    }
+    else return null;
+  }
+
+
   //** ARTIST **//
 
   public boolean changeArtistFollowStatus(long accountId, long artistId, boolean status) {

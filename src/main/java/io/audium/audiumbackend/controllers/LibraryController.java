@@ -297,6 +297,34 @@ public class LibraryController {
     return libraryService.getAlbumSongs(albumId);
   }
 
+  @GetMapping(value="/accounts/{accountId}/albums/allsaved")
+  public ResponseEntity getSavedAlbumIds(@RequestHeader(value = "Authorization") String token,
+                                         @PathVariable long accountId ) {
+    if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
+      List<Long> albumIds;
+      if ( (albumIds = libraryService.getListOfSavedAlbumIds(accountId)) != null ) {
+        return ResponseEntity.status(HttpStatus.OK).body(albumIds);
+      }
+      else  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    }
+    else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    }
+  }
+  @PutMapping(value="/accounts/{accountId}/album/{albumId}/save/{status}")
+  public ResponseEntity changeAlbumSavedStatus(@RequestHeader(value = "Authorization") String token,
+                                                 @PathVariable long accountId,
+                                                 @PathVariable long albumId,
+                                                 @PathVariable boolean status) {
+    if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
+      if (libraryService.changeAlbumSavedStatus(accountId,albumId,status)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      }
+      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    }else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    }
+  }
 
   //** ARTIST **//
 
@@ -343,7 +371,7 @@ public class LibraryController {
     }
   }
 
-  @GetMapping(value="/accounts/{accountId}/artists/allsaved")
+  @GetMapping(value="/accounts/{accountId}/artists/allfollowed")
   public ResponseEntity getFollowedArtistIds(@RequestHeader(value = "Authorization") String token, @PathVariable long accountId ) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
       List<Long> artistIds;
