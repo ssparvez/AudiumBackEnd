@@ -124,21 +124,43 @@ public class AccountController {
 
       if (tokenToReturn != null) {
         return ResponseEntity.status(HttpStatus.OK).body(tokenToReturn.toString());
-      } else {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-      }
+      } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
     } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
   }
 
   @GetMapping(value = "/accounts/{accountId}/followers")
-  public List<CustomerFollower> getCustomerFollowers(@PathVariable long accountId) {
-    return accountService.getCustomerFollowers(accountId);
+  public ResponseEntity getCustomerFollowers(@RequestHeader(value = "Authorization") String token,
+                                             @PathVariable long accountId) {
+    if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
+      List<CustomerFollower> customerFollowers;
+      if ( (customerFollowers = accountService.getCustomerFollowers(accountId)) != null) {
+        return ResponseEntity.status(HttpStatus.OK).body(customerFollowers);
+      }
+      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    }
+    else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
   }
 
   @GetMapping(value = "/accounts/{accountId}/following")
   public List<CustomerFollower> getCustomerFollowing(@PathVariable long accountId) {
+
     return accountService.getCustomerFollowing(accountId);
   }
+
+  @GetMapping(value = "/accounts/{accountId}/profile/{profileId}/following")
+  public ResponseEntity checkIfFollowing(@RequestHeader(value = "Authorization") String token,
+                                         @PathVariable long accountId,
+                                         @PathVariable long profileId) {
+    if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
+      if ( accountService.checkIfFollowing(profileId,accountId)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      }
+      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    }
+    else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+  }
+
+
 }

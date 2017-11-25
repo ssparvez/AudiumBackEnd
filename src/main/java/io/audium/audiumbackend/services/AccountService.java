@@ -19,6 +19,7 @@ import java.util.List;
 public class AccountService {
   static final private String PREMIUM = "PremiumUser";
   static final private String BASIC   = "BasicUser";
+  static final private String ADMIN   = "Admin";
   @Autowired
   private AccountRepository     accountRepository;
   @Autowired
@@ -127,6 +128,11 @@ public class AccountService {
 
   public List<CustomerFollower> getCustomerFollowing(long accountId) {
     return customerAccountRepository.findCustomerFollowing(accountId);
+  }
+
+  public boolean checkIfFollowing(long profileId, long accountId) {
+    System.out.println(customerAccountRepository.checkIfFollowing(profileId,accountId));
+    return ( customerAccountRepository.checkIfFollowing(profileId,accountId) != null);
   }
 
   private JsonObject createJsonToken(Customer account) {

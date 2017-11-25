@@ -42,7 +42,7 @@ public interface SongRepository extends CrudRepository<Song, Long>, SongReposito
   @Query("SELECT S.songId AS songId, S.title AS title, Art.artistId AS artistId, Art.artistName AS artistName, AlbS.album.albumId AS albumId, AlbS.album.albumTitle AS albumTitle, S.duration AS duration, S.isExplicit AS isExplicit, S.year AS year, S.genre.genreId AS genreId, S.genre.genreName AS genreName, S.playCount AS playCount FROM Song S INNER JOIN S.artists Art INNER JOIN S.albumSongs AlbS GROUP BY S ORDER BY playCount DESC, S.year DESC, S.title ASC")
   public List<PopularTrack> findTopSongs();
 
-  @Transactional
+  @Transactional(readOnly = true)
   @Query(value = "SELECT CS.songId FROM Customer_Song CS WHERE CS.accountId = ?1 AND CS.songId = ?2", nativeQuery = true)
   public Object checkIfSongisSaved(long accountId, long songId);
 
@@ -56,7 +56,7 @@ public interface SongRepository extends CrudRepository<Song, Long>, SongReposito
   @Query(value = "DELETE FROM Customer_Song WHERE accountId = ?1 AND songId = ?2", nativeQuery = true)
   public int removeSongFromMusic(long accountId, long songId);
 
-  @Transactional
+  @Transactional(readOnly = true)
   @Query(value = "SELECT CS.songId FROM Customer_Song CS WHERE CS.accountId = ?1", nativeQuery = true)
   public List<Long> getListOfSavedSongsIds(long accountId);
 

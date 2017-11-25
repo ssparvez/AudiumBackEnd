@@ -8,6 +8,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import io.audium.audiumbackend.entities.Account;
 import io.audium.audiumbackend.entities.Customer;
+import io.audium.audiumbackend.repositories.AccountRepository;
 import io.audium.audiumbackend.repositories.AuthenticationRepository;
 import io.audium.audiumbackend.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class VerificationService {
   private AuthenticationRepository authenticationRepository;
   @Autowired
   private CustomerRepository       customerRepository;
+  @Autowired
+  private AccountRepository accountRepo;
+
 
   public Customer verifyIntegrityCustomerAccount(String token, long accountId) {
     try {
@@ -51,7 +55,30 @@ public class VerificationService {
     }
     return null;
   }
+  public Account verifyIntegrityAdminAccount(String token, long accountId) {
+    try {
+      token = token.substring(token.indexOf(" ") + 1);
+      Account  account   = accountRepo.findOne(accountId);
+      Algorithm algorithm = Algorithm.HMAC256("cse308");
+      JWTVerifier verifier = JWT.require(algorithm)
+        .withClaim("username", account.getUsername())
+        .withClaim("accountId", account.getAccountId())
+        .withClaim("firstName", account.getFirstName())
+        .withClaim("lastName", account.getLastName())
+        .withClaim("email", account.getEmail())
+        .withClaim("role", account.getRole())
+        .withIssuer("audium")
+        .build(); //Reusable verifier instance
 
+      DecodedJWT jwt = verifier.verify(token);
+      return account;
+    } catch (UnsupportedEncodingException exception) {
+      //UTF-8 encoding not supported
+    } catch (JWTVerificationException exception) {
+      //Invalid signature/claims
+    }
+    return null;
+  }
   public DecodedJWT decodeToken(String token) {
     try {
       Algorithm algorithm = Algorithm.HMAC256("cse308");
@@ -101,9 +128,31 @@ public class VerificationService {
     return null;
   }
 
+
+  public String createAdminToken(Account account) {
+    try {
+      Algorithm algorithm = Algorithm.HMAC256("cse308");
+      String token = JWT.create()
+        .withClaim("username", account.getUsername())
+        .withClaim("accountId", account.getAccountId())
+        .withClaim("firstName", account.getFirstName())
+        .withClaim("lastName", account.getLastName())
+        .withClaim("email", account.getEmail())
+        .withClaim("role", account.getRole())
+        .withIssuer("audium")
+        //.withExpiresAt( new Date(1800000))
+        .sign(algorithm);
+      return token;
+    } catch (UnsupportedEncodingException exception) {
+      //UTF-8 encoding not supported
+    } catch (JWTCreationException exception) {
+      //Invalid Signing configuration / Couldn't convert Claims.
+    }
+    return null;
+  }
+
   public String aesEncrypt(long accountId, String sensitiveData) {
     Object[] salt = authenticationRepository.findSaltByAccountId(accountId);
-    /* @TODO: Better system for obtaining or generating encryption key (currently using username which is awful) */
     if (salt != null) {
       Account        account       = customerRepository.findByAccountId(accountId);
       BytesEncryptor bcEncryptor   = new BouncyCastleAesGcmBytesEncryptor(account.getUsername(), salt[0].toString());
@@ -116,7 +165,6 @@ public class VerificationService {
 
   public String aesDecrypt(long accountId, String encryptedData) {
     Object[] salt = authenticationRepository.findSaltByAccountId(accountId);
-    /* @TODO: Better system for obtaining or generating encryption key (currently using username which is awful) */
     if (salt != null) {
       Account        account     = customerRepository.findByAccountId(accountId);
       BytesEncryptor bcEncryptor = new BouncyCastleAesGcmBytesEncryptor(account.getUsername(), salt[0].toString());

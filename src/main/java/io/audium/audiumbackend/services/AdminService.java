@@ -14,6 +14,11 @@ public class AdminService {
 
   private BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
 
+
+  public AdminService() {
+
+  }
+
   /* Testing function: Returns Bcrypt hash of a string */
   public JsonObject testBcrypt(String rawData) {
     String hash = bcryptEncoder.encode(rawData);

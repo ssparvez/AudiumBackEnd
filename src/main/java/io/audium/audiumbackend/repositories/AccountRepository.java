@@ -16,4 +16,6 @@ public interface AccountRepository extends CrudRepository<Account, Long> {
   @Transactional(readOnly = true)
   @Query("SELECT A FROM Account A WHERE A.accountId = ?1 ")
   public Account findPassHashByAccountId(Long accountId);
+
 }
+
