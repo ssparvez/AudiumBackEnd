@@ -1,14 +1,13 @@
 package io.audium.audiumbackend.controllers;
 
 import com.google.gson.JsonObject;
+import io.audium.audiumbackend.entities.Song;
 import io.audium.audiumbackend.services.AdminService;
 import io.audium.audiumbackend.services.VerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AdminController {
@@ -50,5 +49,20 @@ public class AdminController {
     response.addProperty("encryptedData", encryptedData);
     response.addProperty("decryptedData", decryptedData);
     return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+  }
+
+  @PostMapping(value = "/songs")
+  public void addSong(@RequestBody Song song) { // request body takes a json format of object and converts to java obj
+    adminService.addSong(song);
+  }
+
+  @PutMapping(value = "/songs/{songId}")
+  public void updateSong(@PathVariable long songId, @RequestBody Song song) { // request body takes a json format of object and converts to java obj
+    adminService.updateSong(songId, song);
+  }
+
+  @DeleteMapping(value = "/songs/{songId}")
+  public void removeSong(@PathVariable long songId) {
+    adminService.removeSong(songId);
   }
 }

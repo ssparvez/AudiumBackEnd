@@ -43,18 +43,6 @@ public class LibraryService {
     return songRepository.findBySongId(songId);
   }
 
-  public void addSong(Song song) {
-    songRepository.save(song);
-  }
-
-  public void updateSong(Long songId, Song song) {
-    songRepository.save(song);
-  }
-
-  public void removeSong(long songId) {
-    songRepository.delete(songId);
-  }
-
   public List<LibraryArtist> getLibraryArtists(long accountId) {
     return artistRepository.findByFollowerAccountId(accountId);
   }
