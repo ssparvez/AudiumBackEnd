@@ -57,12 +57,6 @@ public class LibraryService {
     return HelperService.getResultsPage(pageIndex, pageSize, results);
   }
 
-  public List<PopularTrack> getCustomerAlbumSongPlays(long accountId, int pageIndex, int pageSize) {
-    List<PopularTrack> results = songRepository.findCustomerAlbumSongPlays(accountId);
-
-    return HelperService.getResultsPage(pageIndex, pageSize, results);
-  }
-
   public List<LibraryAlbum> getLibraryAlbums(long accountId) {
     return albumRepository.findCustomerAlbums(accountId);
   }
@@ -89,12 +83,6 @@ public class LibraryService {
 
   public List<Event> getArtistEvents(long artistId) {
     return artistRepository.findArtistEvents(artistId);
-  }
-
-  public List<PopularTrack> getTopSongs(int pageIndex, int pageSize) {
-    List<PopularTrack> results = songRepository.findTopSongs();
-
-    return HelperService.getResultsPage(pageIndex, pageSize, results);
   }
 
   //** ALBUM **//
