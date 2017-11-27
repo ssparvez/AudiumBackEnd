@@ -168,6 +168,7 @@ public class VerificationService {
     if (salt != null) {
       Account        account     = customerRepository.findByAccountId(accountId);
       BytesEncryptor bcEncryptor = new BouncyCastleAesGcmBytesEncryptor(account.getUsername(), salt[0].toString());
+      System.out.println(encryptedData);
       return new String(bcEncryptor.decrypt(Hex.decode(encryptedData)));
     } else {
       return null;

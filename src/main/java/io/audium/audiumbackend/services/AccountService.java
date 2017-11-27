@@ -38,9 +38,10 @@ public class AccountService {
     customerAccountRepository.save(customerAccount);
   }
 
-  public void deleteAccount(Long accountId) {
-    accountRepository.deleteById(accountId);
+  public boolean deleteAccount(long accountId) {
+    return (accountRepository.deleteById(accountId) == 1);
   }
+
 
   public JsonObject updateCustomerAccount(Customer accountToSave, Customer savedAccount) {
 

@@ -32,6 +32,21 @@ public class AccountController {
     return ResponseEntity.status(HttpStatus.OK).body(true);
   }
 
+  @DeleteMapping(value="/accounts/{adminId}/delete")
+  public ResponseEntity deleteAccount(@RequestHeader(value = "Authorization") String token,
+                                      @PathVariable long accountId) {
+    if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
+      if (accountService.deleteAccount(accountId)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+
+      }
+      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+
+    }
+    else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+
+  }
+
   @GetMapping(value = "/paymentinfo/{accountId}", produces = ("application/json"))
   public ResponseEntity getPaymentInfo(@PathVariable Long accountId) {
 

@@ -1,6 +1,7 @@
 package io.audium.audiumbackend.services;
 
 import com.google.gson.JsonObject;
+import io.audium.audiumbackend.repositories.AccountRepository;
 import io.audium.audiumbackend.repositories.AuthenticationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,9 +15,10 @@ public class AdminService {
 
   private BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
 
+ private  AccountRepository accountRepo;
 
-  public AdminService() {
-
+  public AdminService( AccountRepository accountRepo) {
+    this.accountRepo = accountRepo;
   }
 
   /* Testing function: Returns Bcrypt hash of a string */
@@ -37,5 +39,10 @@ public class AdminService {
     } else {
       return null;
     }
+  }
+
+
+  public boolean deleteAccount(long accountId) {
+    return (accountRepo.deleteById(accountId) == 1);
   }
 }
