@@ -1,6 +1,7 @@
 package io.audium.audiumbackend.controllers;
 
 import com.google.gson.JsonObject;
+import io.audium.audiumbackend.entities.Song;
 import io.audium.audiumbackend.services.AdminService;
 import io.audium.audiumbackend.services.VerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,5 +67,21 @@ public class AdminController {
     }
     else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
 
+  }
+
+
+  @PostMapping(value = "/songs")
+  public void addSong(@RequestBody Song song) { // request body takes a json format of object and converts to java obj
+    adminService.addSong(song);
+  }
+
+  @PutMapping(value = "/songs/{songId}")
+  public void updateSong(@PathVariable long songId, @RequestBody Song song) { // request body takes a json format of object and converts to java obj
+    adminService.updateSong(songId, song);
+  }
+
+  @DeleteMapping(value = "/songs/{songId}")
+  public void removeSong(@PathVariable long songId) {
+    adminService.removeSong(songId);
   }
 }

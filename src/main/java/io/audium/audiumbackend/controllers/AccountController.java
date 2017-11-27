@@ -47,7 +47,7 @@ public class AccountController {
 
   }
 
-  @GetMapping(value = "/paymentinfo/{accountId}", produces = ("application/json"))
+  @GetMapping(value = "/accounts/{accountId}/paymentinfo", produces = ("application/json"))
   public ResponseEntity getPaymentInfo(@PathVariable Long accountId) {
 
     JsonObject info = accountService.getPaymentInfo(accountId);
@@ -74,7 +74,7 @@ public class AccountController {
   }
 
   @CrossOrigin
-  @DeleteMapping(value = "/downgradeaccount/{accountId}")
+  @DeleteMapping(value = "/accounts/{accountId}/downgrade")
   public ResponseEntity downgrade(@RequestHeader(value = "Authorization") String token,
                                   @PathVariable Long accountId) {
 
@@ -106,7 +106,7 @@ public class AccountController {
     }
   }
   @CrossOrigin
-  @PutMapping(value = "/changepassword/{accountId}")
+  @PutMapping(value = "/accounts/{accountId}/password")
   public ResponseEntity changePassword(@RequestHeader(value = "Authorization") String token,
                                        @RequestBody LinkedHashMap<String, String> credentials,
                                        @PathVariable Long accountId) {
@@ -123,7 +123,7 @@ public class AccountController {
     }
   }
   @CrossOrigin
-  @DeleteMapping(value = "/register/{accountId}")
+  @DeleteMapping(value = "/accounts/{accountId}")
   public void deleteAccount(@PathVariable Long accountId) {
     accountService.deleteAccount(accountId);
   }

@@ -23,35 +23,11 @@ public class LibraryController {
   @Autowired
   private VerificationService verificationService;
 
-  @Autowired
-  private SearchService searchService;
-
-  @GetMapping(value = "/songs")
-  public List<Song> getAllSongs() {
-    return libraryService.getAllSongs();
-  }
-
   @GetMapping(value = "/songs/{songId}")
   public Song getSong(@PathVariable long songId) {
     return libraryService.getSong(songId);
   }
 
-  @PostMapping(value = "/songs")
-  public void addSong(@RequestBody Song song) { // request body takes a json format of object and converts to java obj
-    libraryService.addSong(song);
-  }
-
-  @PutMapping(value = "/songs/{songId}")
-  public void updateSong(@PathVariable long songId, @RequestBody Song song) { // request body takes a json format of object and converts to java obj
-    libraryService.updateSong(songId, song);
-  }
-
-  @DeleteMapping(value = "/songs/{songId}")
-  public void removeSong(@PathVariable long songId) {
-    libraryService.removeSong(songId);
-  }
-
-  // ACTUAL LIBRARY OPERATIONS
   @GetMapping(value = "/accounts/{accountId}/songs")
   public List<LibrarySong> getLibrarySongs(@PathVariable long accountId) {
     return libraryService.getLibrarySongs(accountId);

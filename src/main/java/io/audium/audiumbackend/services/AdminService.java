@@ -2,7 +2,9 @@ package io.audium.audiumbackend.services;
 
 import com.google.gson.JsonObject;
 import io.audium.audiumbackend.repositories.AccountRepository;
+import io.audium.audiumbackend.entities.Song;
 import io.audium.audiumbackend.repositories.AuthenticationRepository;
+import io.audium.audiumbackend.repositories.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,9 +18,11 @@ public class AdminService {
   private BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
 
  private  AccountRepository accountRepo;
+ private SongRepository songRepository;
 
-  public AdminService( AccountRepository accountRepo) {
+  public AdminService( AccountRepository accountRepo, SongRepository songRepository;) {
     this.accountRepo = accountRepo;
+    this.songRepository = songRepository;
   }
 
   /* Testing function: Returns Bcrypt hash of a string */
@@ -44,5 +48,17 @@ public class AdminService {
 
   public boolean deleteAccount(long accountId) {
     return (accountRepo.deleteById(accountId) == 1);
+  }
+
+  public void addSong(Song song) {
+    songRepository.save(song);
+  }
+
+  public void updateSong(Long songId, Song song) {
+    songRepository.save(song);
+  }
+
+  public void removeSong(long songId) {
+    songRepository.delete(songId);
   }
 }
