@@ -32,7 +32,7 @@ public class AccountController {
     return ResponseEntity.status(HttpStatus.OK).body(true);
   }
 
-  @DeleteMapping(value="/accounts/{adminId}/delete")
+  @DeleteMapping(value="/accounts/{accountId}/delete")
   public ResponseEntity deleteAccount(@RequestHeader(value = "Authorization") String token,
                                       @PathVariable long accountId) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {

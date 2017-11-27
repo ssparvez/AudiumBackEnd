@@ -20,7 +20,7 @@ public class AdminService {
  private  AccountRepository accountRepo;
  private SongRepository songRepository;
 
-  public AdminService( AccountRepository accountRepo, SongRepository songRepository;) {
+  public AdminService( AccountRepository accountRepo, SongRepository songRepository) {
     this.accountRepo = accountRepo;
     this.songRepository = songRepository;
   }
@@ -44,7 +44,6 @@ public class AdminService {
       return null;
     }
   }
-
 
   public boolean deleteAccount(long accountId) {
     return (accountRepo.deleteById(accountId) == 1);
