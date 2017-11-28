@@ -24,6 +24,7 @@ import java.util.List;
     @ColumnResult(name = "artistName"),
     @ColumnResult(name = "albumId"),
     @ColumnResult(name = "albumTitle"),
+    @ColumnResult(name = "file"),
     @ColumnResult(name = "genreId"),
     @ColumnResult(name = "genreName")
   })
@@ -88,7 +89,7 @@ public class Song {
   public Song() {
   }
 
-  public Song(Integer songId, String title, java.util.Date duration, java.util.Date year, Boolean isExplicit, Integer artistId, String artistName, Integer albumId, String albumTitle, Integer genreId, String genreName) {
+  public Song(Integer songId, String title, java.util.Date duration, java.util.Date year, Boolean isExplicit, Integer artistId, String artistName, Integer albumId, String albumTitle, String file, Integer genreId, String genreName) {
     this.songId = songId.longValue();
     this.title = title;
     this.duration = new Time(duration.getTime());
@@ -97,6 +98,7 @@ public class Song {
     this.genre = new Genre(genreId.longValue(), genreName);
     this.artistId = artistId;
     this.artistName = artistName;
+    this.file = file;
     this.albumId = albumId;
     this.albumTitle = albumTitle;
   }
