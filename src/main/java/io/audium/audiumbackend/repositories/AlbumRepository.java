@@ -37,4 +37,15 @@ public interface AlbumRepository extends CrudRepository<Album, Long>, AlbumRepos
   @Modifying
   @Query(value="DELETE FROM Customer_Album WHERE albumId = ?1 AND accountId = ?2", nativeQuery = true)
   public int removeAlbum(long albumId, long accountId);
+
+  @Transactional
+  @Modifying
+  @Query("DELETE FROM Album A WHERE A.albumId = ?1")
+  public int deleteById(long albumId);
+
+  @Transactional
+  @Modifying
+  @Query(value="INSERT INTO Album_Song VALUES(?1,?2, 0)", nativeQuery = true)
+  public int addSongToAlbum(long albumId, long accountId);
+
 }

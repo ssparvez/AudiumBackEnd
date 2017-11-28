@@ -1,8 +1,11 @@
 package io.audium.audiumbackend.controllers;
 
 import com.google.gson.JsonObject;
+import io.audium.audiumbackend.entities.Album;
+import io.audium.audiumbackend.entities.Playlist;
 import io.audium.audiumbackend.entities.Song;
 import io.audium.audiumbackend.services.AdminService;
+import io.audium.audiumbackend.services.LibraryService;
 import io.audium.audiumbackend.services.VerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,11 @@ public class AdminController {
   @Autowired
   private AdminService        adminService;
 
+  private LibraryService libraryService;
+
+  public AdminController( LibraryService libraryService) {
+    this.libraryService = libraryService;
+  }
   /* Bcrypt hashing test function */
   @GetMapping(value = "/bcrypt/{rawData}")
   public ResponseEntity testBcrypt(@PathVariable String rawData) {
@@ -52,36 +60,140 @@ public class AdminController {
     return ResponseEntity.status(HttpStatus.OK).body(response.toString());
   }
 
-
-  @DeleteMapping(value="/admin/{adminId}/accounts/{accountId}/delete")
+  @DeleteMapping(value = "/admin/{adminId}/accounts/{accountId}/delete")
   public ResponseEntity deleteAccount(@RequestHeader(value = "Authorization") String token,
                                       @PathVariable long adminId,
                                       @PathVariable long accountId) {
     if (verificationService.verifyIntegrityAdminAccount(token, adminId) != null) {
       if (adminService.deleteAccount(accountId)) {
         return ResponseEntity.status(HttpStatus.OK).body(true);
-
-      }
-      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-
-    }
-    else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
-
+      } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
   }
 
+  //** SONG **//
 
-  @PostMapping(value = "/songs")
-  public void addSong(@RequestBody Song song) { // request body takes a json format of object and converts to java obj
-    adminService.addSong(song);
+  @PostMapping(value = "/admin/{adminId}/song/add")
+  public ResponseEntity addSong(@RequestHeader(value = "Authorization") String token,
+                                @PathVariable long adminId,
+                                @RequestBody Song song) {
+    System.out.println(song.getSongId());
+    if (verificationService.verifyIntegrityAdminAccount(token, adminId) != null) {
+      if ( adminService.addSong(song)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      }
+      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    }
+    else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
   }
 
   @PutMapping(value = "/songs/{songId}")
-  public void updateSong(@PathVariable long songId, @RequestBody Song song) { // request body takes a json format of object and converts to java obj
+  public void updateSong(@PathVariable long songId, @RequestBody Song song) {
     adminService.updateSong(songId, song);
   }
 
-  @DeleteMapping(value = "/songs/{songId}")
-  public void removeSong(@PathVariable long songId) {
-    adminService.removeSong(songId);
+  @DeleteMapping(value = "/admin/{adminId}/song/{songId}/delete")
+  public ResponseEntity removeSong(@RequestHeader(value = "Authorization") String token,
+                                   @PathVariable long adminId,
+                                   @PathVariable long songId) {
+    if (verificationService.verifyIntegrityAdminAccount(token, adminId) != null) {
+      if (adminService.removeSong(songId)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+  }
+
+//** PLAYLIST **//
+
+  @PostMapping(value = "/admin/{adminId}/playlist/add")
+  public ResponseEntity createNewPlaylist(@RequestHeader(value = "Authorization") String token,
+                                          @PathVariable long adminId,
+                                          @RequestBody Playlist playlist) {
+    System.out.println(playlist.getCreator().getAccountId());
+    if (verificationService.verifyIntegrityAdminAccount(token, adminId) != null) {
+      if ((libraryService.createNewPlaylist(playlist)) != null) {
+        return ResponseEntity.status(HttpStatus.OK).body(playlist.getPlaylistId());
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+      }
+    }
+    else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+  }
+
+  @CrossOrigin
+  @DeleteMapping(value = "/admin/{adminId}/playlist/{playlistId}/delete")
+  public ResponseEntity deletePlaylist(@RequestHeader(value = "Authorization") String token,
+                                       @PathVariable long adminId,
+                                       @PathVariable long playlistId) {
+    if (verificationService.verifyIntegrityAdminAccount(token, adminId) != null) {
+      if (adminService.deletePlaylist(playlistId)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    }
+  }
+
+  @PostMapping(value="/admin/{adminId}/playlist/{playlistId}/add/song/{songId}")
+  public ResponseEntity addSongToPlaylist(@RequestHeader(value = "Authorization") String token,
+                                          @PathVariable long adminId,
+                                          @PathVariable long playlistId,
+                                          @PathVariable long songId) {
+    if (verificationService.verifyIntegrityAdminAccount(token, adminId) != null) {
+
+      if ( libraryService.addSongToPlaylist(playlistId, songId)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      }
+      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    }
+    else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    }
+  }
+
+  //** ALBUM **//
+
+  @CrossOrigin
+  @DeleteMapping(value = "/admin/{adminId}/album/{albumId}/delete")
+  public ResponseEntity deleteAlbum(@RequestHeader(value = "Authorization") String token,
+                                       @PathVariable long adminId,
+                                       @PathVariable long albumId) {
+    if (verificationService.verifyIntegrityAdminAccount(token, adminId) != null) {
+      if (adminService.deleteAlbum(albumId)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    }
+  }
+
+  @PostMapping(value = "/admin/{adminId}/album/add")
+  public ResponseEntity addAlbum(@RequestHeader(value = "Authorization") String token,
+                                @PathVariable long adminId,
+                                @RequestBody Album album) {
+    if (verificationService.verifyIntegrityAdminAccount(token, adminId) != null) {
+      if ( adminService.addAlbum(album)) {
+        return ResponseEntity.status(HttpStatus.OK).body(album.getAlbumId());
+      }
+      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    }
+    else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+  }
+
+  @PostMapping(value="/admin/{adminId}/album/{albumId}/add/song/{songId}")
+  public ResponseEntity addSongToAlbum(@RequestHeader(value = "Authorization") String token,
+                                          @PathVariable long adminId,
+                                          @PathVariable long albumId,
+                                          @PathVariable long songId) {
+    if (verificationService.verifyIntegrityAdminAccount(token, adminId) != null) {
+
+      if ( libraryService.addSongToAlbum(albumId, songId)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      }
+      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    }
+    else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    }
   }
 }

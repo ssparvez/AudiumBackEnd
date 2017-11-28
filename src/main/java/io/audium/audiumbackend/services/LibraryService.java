@@ -4,9 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import io.audium.audiumbackend.entities.Event;
-import io.audium.audiumbackend.entities.Playlist;
-import io.audium.audiumbackend.entities.Song;
+import io.audium.audiumbackend.entities.*;
 import io.audium.audiumbackend.entities.projections.*;
 import io.audium.audiumbackend.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +27,11 @@ public class LibraryService {
   private PlaylistRepository playlistRepository;
   @Autowired
   private EventRepository    eventRepository;
+  @Autowired
+  private GenreRepository    genreRepository;
+
+
+
 
   public List<Song> getAllSongs() {
     List<Song> songs = new ArrayList<>();
@@ -97,6 +100,13 @@ public class LibraryService {
     return HelperService.getResultsPage(pageIndex, pageSize, results);
   }
 
+  //** GENRE **//
+
+  public Iterable<Genre> getAllGenres() {
+    return genreRepository.findAll();
+  }
+
+
   //** ALBUM **//
 
   public boolean changeAlbumSavedStatus(long accountId, long albumId, boolean status) {
@@ -113,6 +123,15 @@ public class LibraryService {
       return albumsSaved;
     }
     else return null;
+  }
+
+  public boolean addSongToAlbum(long albumId, long songId) {
+
+    return (albumRepository.addSongToAlbum(albumId, songId) == 1);
+  }
+
+  public boolean verifyAlbumExists(long albumId) {
+    return albumRepository.exists(albumId);
   }
 
 
@@ -132,6 +151,9 @@ public class LibraryService {
       return artistsFollowed;
     }
     else return null;
+  }
+  public Iterable<Artist> getAllArtists() {
+    return artistRepository.findAll();
   }
 
 
@@ -204,12 +226,20 @@ public class LibraryService {
   }
 
   public JsonObject createNewPlaylist(Playlist playlist) {
-    try {
-      playlistRepository.save(playlist);
-      return buildPlaylistJSON(playlist);
-    } catch (Exception e) {
-      return null;
-    }
+//    try {
+//      playlistRepository.save(playlist);
+//      return buildPlaylistJSON(playlist);
+//    } catch (Exception e) {
+//      return null;
+//    }
+   if (playlistRepository.save(playlist) != null  ) {
+     return buildPlaylistJSON(playlist);
+   }
+   else {
+     playlistRepository.deletePlaylistById(playlist.getPlaylistId());
+     return null;
+   }
+
   }
 
   public List<LibraryPlaylist> getCreatedPlaylists(long accountId) {
@@ -281,6 +311,10 @@ public class LibraryService {
      }
     }
     else return false;
+  }
+
+  public boolean verifyPlaylistExists(long playlistId) {
+    return playlistRepository.exists(playlistId);
   }
 
   //** EVENT **//

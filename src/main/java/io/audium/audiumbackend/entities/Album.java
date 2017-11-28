@@ -22,6 +22,7 @@ import java.util.List;
 public class Album {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long albumId;
   @Column(name = "title")
   private String albumTitle = "Untitled";

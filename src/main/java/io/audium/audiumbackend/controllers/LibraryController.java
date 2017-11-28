@@ -66,7 +66,7 @@ public class LibraryController {
   public List<LibraryArtist> getAllArtists(@PathVariable long accountId) {
     return libraryService.getLibraryArtists(accountId);
   }
-  //** MUSIC **//
+  //** SONGS **//
 
 
   @PostMapping(value="/accounts/{accountId}/song/{songId}/save")
@@ -261,6 +261,14 @@ public class LibraryController {
     }
   }
 
+  @GetMapping(value="/playlist/{playlistId}/exists")
+  public ResponseEntity verifyPlaylistExists(@PathVariable long playlistId) {
+    if (libraryService.verifyPlaylistExists(playlistId)) {
+      return ResponseEntity.status(HttpStatus.OK).body(true);
+    }
+    else return ResponseEntity.status(HttpStatus.OK).body(false);
+  }
+
   //** ALBUM **//
 
   @GetMapping(value = "/albums/{albumId}")
@@ -302,7 +310,23 @@ public class LibraryController {
     }
   }
 
+  @GetMapping(value="/album/{albumId}/exists")
+  public ResponseEntity verifyAlbumtExists(@PathVariable long albumId) {
+    if (libraryService.verifyAlbumExists(albumId)) {
+      return ResponseEntity.status(HttpStatus.OK).body(true);
+    }
+    else return ResponseEntity.status(HttpStatus.OK).body(false);
+  }
   //** ARTIST **//
+
+  @GetMapping(value = "/artists/all")
+  public ResponseEntity getAllArtists() {
+    Iterable<Artist> allArtists;
+    if ( (allArtists = libraryService.getAllArtists() )!= null) {
+      return ResponseEntity.status(HttpStatus.OK).body(allArtists);
+    }
+    else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+  }
 
   @GetMapping(value = "/artists/{artistId}")
   public LibraryArtist getArtist(@PathVariable long artistId) {
@@ -370,6 +394,18 @@ public class LibraryController {
   @GetMapping(value = "/events/{eventId}")
   public Event getEvent(@PathVariable long eventId) {
     return libraryService.getEvent(eventId);
+  }
+
+
+  //** GENRE **//
+
+  @GetMapping(value = "/genres/all")
+  public ResponseEntity getAllGenres() {
+    Iterable<Genre> allGenres;
+    if ( (allGenres = libraryService.getAllGenres() )!= null) {
+      return ResponseEntity.status(HttpStatus.OK).body(allGenres);
+    }
+    else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
   }
 
 }

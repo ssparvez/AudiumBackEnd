@@ -60,4 +60,15 @@ public interface SongRepository extends CrudRepository<Song, Long>, SongReposito
   @Query(value = "SELECT CS.songId FROM Customer_Song CS WHERE CS.accountId = ?1", nativeQuery = true)
   public List<Long> getListOfSavedSongsIds(long accountId);
 
+  @Transactional
+  @Modifying
+  @Query("DELETE FROM Song S WHERE S.songId = ?1")
+  public int deleteById(long songId);
+
+  @Transactional
+  @Modifying
+  @Query(value = "INSERT INTO Artist_Song VALUES(?1,?2,1)", nativeQuery = true)
+  public int linkSongToArtist(long artistId, long songId);
+
+
 }

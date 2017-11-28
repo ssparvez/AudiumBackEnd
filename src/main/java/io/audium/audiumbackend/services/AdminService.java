@@ -1,10 +1,9 @@
 package io.audium.audiumbackend.services;
 
 import com.google.gson.JsonObject;
-import io.audium.audiumbackend.repositories.AccountRepository;
+import io.audium.audiumbackend.entities.Album;
+import io.audium.audiumbackend.repositories.*;
 import io.audium.audiumbackend.entities.Song;
-import io.audium.audiumbackend.repositories.AuthenticationRepository;
-import io.audium.audiumbackend.repositories.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,10 +18,17 @@ public class AdminService {
 
  private  AccountRepository accountRepo;
  private SongRepository songRepository;
+ private PlaylistRepository playlistRepo;
+ private AlbumRepository albumRepo;
+ private ArtistRepository artistRepo;
 
-  public AdminService( AccountRepository accountRepo, SongRepository songRepository) {
+  public AdminService( AccountRepository accountRepo, SongRepository songRepository,PlaylistRepository playlistRepo,
+                       AlbumRepository albumRepo, ArtistRepository artistRepo) {
     this.accountRepo = accountRepo;
     this.songRepository = songRepository;
+    this.playlistRepo = playlistRepo;
+    this.albumRepo = albumRepo;
+    this.artistRepo = artistRepo;
   }
 
   /* Testing function: Returns Bcrypt hash of a string */
@@ -49,15 +55,47 @@ public class AdminService {
     return (accountRepo.deleteById(accountId) == 1);
   }
 
-  public void addSong(Song song) {
-    songRepository.save(song);
+  //** SONG **//
+
+  public boolean addSong(Song song) {
+
+    if ( artistRepo.exists(new Long(song.getArtistId()))) {
+      if ( songRepository.save(song) != null) {
+        songRepository.linkSongToArtist(song.getArtistId(), song.getSongId());
+        return true;
+      }
+      else return false;
+    }
+    else return false;
+
   }
 
   public void updateSong(Long songId, Song song) {
     songRepository.save(song);
   }
 
-  public void removeSong(long songId) {
-    songRepository.delete(songId);
+  public boolean removeSong(long songId) {
+    return (songRepository.deleteById(songId) == 1);
   }
+
+  //** PLAYLIST **//
+
+  public boolean deletePlaylist(long playlistId) {
+    return (playlistRepo.deletePlaylistById(playlistId) == 1);
+  }
+
+
+  //** ALBUM **/
+
+  public boolean deleteAlbum(long albumId) {
+    return (albumRepo.deleteById(albumId) == 1);
+  }
+
+  public boolean addAlbum(Album album) {
+    if ( artistRepo.exists(album.getArtist().getArtistId())) {
+      return ( albumRepo.save(album) != null);
+    }
+    else return false;
+  }
+
 }

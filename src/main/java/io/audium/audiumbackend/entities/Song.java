@@ -33,10 +33,10 @@ import java.util.List;
 public class Song {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long songId;
   private String title = "Untitled";
   private Time    duration;
-  @JsonIgnore
   private String  file;
   private Date    year;
   private boolean isExplicit;
