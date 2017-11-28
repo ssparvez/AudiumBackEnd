@@ -24,6 +24,7 @@ import java.util.List;
     @ColumnResult(name = "artistName"),
     @ColumnResult(name = "albumId"),
     @ColumnResult(name = "albumTitle"),
+    @ColumnResult(name = "file"),
     @ColumnResult(name = "genreId"),
     @ColumnResult(name = "genreName")
   })
@@ -70,10 +71,10 @@ public class Song {
   @JsonIgnore
   private List<SongPlay> songPlays;
 
-  @Formula("(SELECT A.artistId FROM Song AS S JOIN artist_song AS ArtS ON S.songId = ArtS.songId JOIN Artist A ON ArtS.artistId = A.artistId WHERE ArtS.isArtist = TRUE AND ArtS.songId = songId GROUP BY S.songId LIMIT 1)")
+  @Formula("(SELECT A.artistId FROM Song AS S JOIN artist_song AS ArtS ON S.songId = ArtS.songId JOIN Artist A ON ArtS.artistId = A.artistId WHERE ArtS.isPrimaryArtist AND ArtS.songId = songId GROUP BY S.songId LIMIT 1)")
   private Integer artistId;
 
-  @Formula("(SELECT A.name FROM Song AS S JOIN artist_song AS ArtS ON S.songId = ArtS.songId JOIN Artist A ON ArtS.artistId = A.artistId WHERE ArtS.isArtist = TRUE AND ArtS.songId = songId GROUP BY S.songId LIMIT 1)")
+  @Formula("(SELECT A.name FROM Song AS S JOIN artist_song AS ArtS ON S.songId = ArtS.songId JOIN Artist A ON ArtS.artistId = A.artistId WHERE ArtS.isPrimaryArtist AND ArtS.songId = songId GROUP BY S.songId LIMIT 1)")
   private String artistName;
 
   @Formula("(SELECT A.albumId FROM Song AS S JOIN album_song AS AlbS ON S.songId = AlbS.songId JOIN Album A ON AlbS.albumId = A.albumId WHERE AlbS.songId = songId GROUP BY S.songId LIMIT 1)")
@@ -89,7 +90,7 @@ public class Song {
   public Song() {
   }
 
-  public Song(Integer songId, String title, java.util.Date duration, java.util.Date year, Boolean isExplicit, Integer artistId, String artistName, Integer albumId, String albumTitle, Integer genreId, String genreName) {
+  public Song(Integer songId, String title, java.util.Date duration, java.util.Date year, Boolean isExplicit, Integer artistId, String artistName, Integer albumId, String albumTitle, String file, Integer genreId, String genreName) {
     this.songId = songId.longValue();
     this.title = title;
     this.duration = new Time(duration.getTime());
@@ -98,6 +99,7 @@ public class Song {
     this.genre = new Genre(genreId.longValue(), genreName);
     this.artistId = artistId;
     this.artistName = artistName;
+    this.file = file;
     this.albumId = albumId;
     this.albumTitle = albumTitle;
   }

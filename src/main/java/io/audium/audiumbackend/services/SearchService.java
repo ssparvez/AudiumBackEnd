@@ -62,7 +62,7 @@ public class SearchService {
 
     /* Build full query */
     String query = "SELECT Se.songId AS songId, Se.title AS title, Se.duration AS duration, Se.year AS year, Se.isExplicit AS isExplicit, "
-      + " Art.artistId AS artistId, Art.name AS artistName, Alb.albumId AS albumId, Alb.title AS albumTitle, G.genreId AS genreId, G.name AS genreName FROM "
+      + " Art.artistId AS artistId, Art.name AS artistName, Alb.albumId AS albumId, Alb.title AS albumTitle, Se.file AS file, G.genreId AS genreId, G.name AS genreName FROM "
       + " (SELECT S.*, " + relevanceLevelStatement + " FROM Song AS S) AS Se, Artist AS Art, artist_song AS ArtS, Album AS Alb, album_song AS AlbS, Genre AS G "
       + " WHERE Se.Relevance > 0 AND G.genreId = Se.genreId AND ArtS.songId = Se.songId AND ArtS.artistId = Art.artistId AND ArtS.isPrimaryArtist = TRUE AND AlbS.songId = Se.songId AND AlbS.albumId = Alb.albumId "
       + " GROUP BY Se.songId ORDER BY Se.Relevance DESC";

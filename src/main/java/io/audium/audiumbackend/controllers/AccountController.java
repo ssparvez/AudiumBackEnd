@@ -31,8 +31,8 @@ public class AccountController {
     accountService.registerAccount(customerAccount);
     return ResponseEntity.status(HttpStatus.OK).body(true);
   }
-
-  @DeleteMapping(value="/accounts/{accountId}/delete")
+  @CrossOrigin
+  @DeleteMapping(value="/accounts/{accountId}")
   public ResponseEntity deleteAccount(@RequestHeader(value = "Authorization") String token,
                                       @PathVariable long accountId) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
@@ -121,11 +121,6 @@ public class AccountController {
     } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
-  }
-  @CrossOrigin
-  @DeleteMapping(value = "/accounts/{accountId}")
-  public void deleteAccount(@PathVariable Long accountId) {
-    accountService.deleteAccount(accountId);
   }
 
   @CrossOrigin
