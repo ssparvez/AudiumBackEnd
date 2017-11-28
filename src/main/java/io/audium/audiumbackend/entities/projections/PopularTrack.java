@@ -19,6 +19,7 @@ public interface PopularTrack {
   //List<Artist> getArtists();
   Long getAlbumId();
   String getAlbumTitle();
+  String getFile();
   Time getDuration();
   boolean getIsExplicit();
   Date getYear();

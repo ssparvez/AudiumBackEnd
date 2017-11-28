@@ -11,14 +11,15 @@ import java.sql.Timestamp;
 
 @Projection(name = "PlaylistTrack", types = {Song.class, Artist.class, PlaylistSong.class, Album.class})
 public interface PlaylistTrack {
-    Long getSongId();
-    String getTitle();
-    Long getArtistId();
-    String getArtistName();
-    //List<Artist> getArtists();
-    Long getAlbumId();
-    String getAlbumTitle();
-    Time getDuration();
-    boolean getIsExplicit();
-    Timestamp getTimeAdded();
+  Long getSongId();
+  String getTitle();
+  Long getArtistId();
+  String getArtistName();
+  //List<Artist> getArtists();
+  Long getAlbumId();
+  String getAlbumTitle();
+  String getFile();
+  Time getDuration();
+  boolean getIsExplicit();
+  Timestamp getTimeAdded();
 }

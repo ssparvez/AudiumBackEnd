@@ -36,7 +36,6 @@ public class Song {
   private Long songId;
   private String title = "Untitled";
   private Time    duration;
-  @JsonIgnore
   private String  file;
   private Date    year;
   private boolean isExplicit;

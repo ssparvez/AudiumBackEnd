@@ -10,14 +10,15 @@ import java.sql.Time;
 
 @Projection(name = "AlbumTrack", types = {Song.class, Artist.class, AlbumSong.class, Album.class})
 public interface AlbumTrack {
-    Long getSongId();
-    String getTitle();
-    Long getArtistId();
-    String getArtistName();
-    //List<Artist> getArtists();
-    Long getAlbumId();
-    String getAlbumTitle();
-    Time getDuration();
-    boolean getIsExplicit();
-    int getTrackNumber();
+  Long getSongId();
+  String getTitle();
+  Long getArtistId();
+  String getArtistName();
+  //List<Artist> getArtists();
+  Long getAlbumId();
+  String getAlbumTitle();
+  String getFile();
+  Time getDuration();
+  boolean getIsExplicit();
+  int getTrackNumber();
 }
