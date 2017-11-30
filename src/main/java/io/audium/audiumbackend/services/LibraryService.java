@@ -1,8 +1,5 @@
 package io.audium.audiumbackend.services;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.audium.audiumbackend.entities.*;
 import io.audium.audiumbackend.entities.projections.*;
@@ -30,9 +27,6 @@ public class LibraryService {
   @Autowired
   private GenreRepository    genreRepository;
 
-
-
-
   public List<Song> getAllSongs() {
     List<Song> songs = new ArrayList<>();
     songRepository.findAll().forEach(songs::add);
@@ -52,6 +46,10 @@ public class LibraryService {
 
   public List<LibrarySong> getLibrarySongs(long accountId) {
     return songRepository.findCustomerSongs(accountId);
+  }
+
+  public List<RecentTrack> getPublicSongPlays(long accountId) {
+    return songRepository.findPublicSongPlays(accountId);
   }
 
   public List<PopularTrack> getCustomerSongPlays(long accountId, int pageIndex, int pageSize) {
@@ -88,19 +86,17 @@ public class LibraryService {
     return artistRepository.findArtistEvents(artistId);
   }
 
-
   //** GENRE **//
 
   public Iterable<Genre> getAllGenres() {
     return genreRepository.findAll();
   }
 
-
   //** ALBUM **//
 
   public boolean changeAlbumSavedStatus(long accountId, long albumId, boolean status) {
     if (status) {
-      return (albumRepository.saveAlbum(accountId,albumId) == 1);
+      return (albumRepository.saveAlbum(accountId, albumId) == 1);
     } else {
       return (albumRepository.removeAlbum(albumId, accountId) == 1);
     }
@@ -108,10 +104,11 @@ public class LibraryService {
 
   public List<Long> getListOfSavedAlbumIds(long accountId) {
     List<Long> albumsSaved = albumRepository.getListOfSavedAlbumIds(accountId);
-    if ( albumsSaved != null ) {
+    if (albumsSaved != null) {
       return albumsSaved;
+    } else {
+      return null;
     }
-    else return null;
   }
 
   public boolean addSongToAlbum(long albumId, long songId) {
@@ -122,7 +119,6 @@ public class LibraryService {
   public boolean verifyAlbumExists(long albumId) {
     return albumRepository.exists(albumId);
   }
-
 
   //** ARTIST **//
 
@@ -136,15 +132,15 @@ public class LibraryService {
   public List<Long> getListOfFollowedArtistIds(long accountId) {
     List<Long> artistsFollowed = artistRepository.getListOfFollowedArtistIds(accountId);
 
-    if ( artistsFollowed != null ) {
+    if (artistsFollowed != null) {
       return artistsFollowed;
+    } else {
+      return null;
     }
-    else return null;
   }
   public Iterable<Artist> getAllArtists() {
     return artistRepository.findAll();
   }
-
 
   //** SONG **//
 
@@ -153,13 +149,12 @@ public class LibraryService {
   }
 
   public boolean saveSongToMusic(long accountId, long songId) {
-      return (songRepository.saveSongToMusic(accountId, songId) == 1);
+    return (songRepository.saveSongToMusic(accountId, songId) == 1);
   }
 
   public boolean removeSongFromMusic(long accountId, long songId) {
-    return (songRepository.removeSongFromMusic(accountId,songId) ==1);
+    return (songRepository.removeSongFromMusic(accountId, songId) == 1);
   }
-
 
   //** PLAYLIST **//
 
@@ -193,8 +188,7 @@ public class LibraryService {
 //    }
     try {
       return playlistRepository.findByPlaylistId(playlistId);
-    }
-    catch ( Exception e) {
+    } catch (Exception e) {
       return null;
     }
   }
@@ -215,20 +209,18 @@ public class LibraryService {
   }
 
   public JsonObject createNewPlaylist(Playlist playlist) {
-   if (playlistRepository.save(playlist) != null  ) {
-     return buildPlaylistJSON(playlist);
-   }
-   else {
-     playlistRepository.deletePlaylistById(playlist.getPlaylistId());
-     return null;
-   }
-
+    if (playlistRepository.save(playlist) != null) {
+      return buildPlaylistJSON(playlist);
+    } else {
+      playlistRepository.deletePlaylistById(playlist.getPlaylistId());
+      return null;
+    }
   }
 
   public List<LibraryPlaylist> getCreatedPlaylists(long accountId) {
     try {
       return playlistRepository.findCreatedPlaylists(accountId);
-    } catch ( Exception e) {
+    } catch (Exception e) {
       return null;
     }
   }
@@ -236,7 +228,7 @@ public class LibraryService {
   public List<Long> getPlaylistFollowedIds(long accountId) {
     try {
       return playlistRepository.getListOfPlaylistsFollowed(accountId);
-    } catch ( Exception e) {
+    } catch (Exception e) {
       return null;
     }
   }
@@ -284,20 +276,29 @@ public class LibraryService {
   public boolean editCustomerPlaylist(Playlist playlistToEdit) {
     Playlist playlist = playlistRepository.findOne(playlistToEdit.getPlaylistId());
     if (playlist != null) {
-     try {
-       playlist.setName(playlistToEdit.getName());
-       playlistRepository.save(playlist);
-       return true;
-     }
-     catch (Exception e) {
-       return false;
-     }
+      try {
+        playlist.setName(playlistToEdit.getName());
+        playlistRepository.save(playlist);
+        return true;
+      } catch (Exception e) {
+        return false;
+      }
+    } else {
+      return false;
     }
-    else return false;
   }
 
   public boolean verifyPlaylistExists(long playlistId) {
     return playlistRepository.exists(playlistId);
+  }
+
+  public List<LibraryPlaylist> getProfilePlaylists(long accountId) {
+    try {
+      return playlistRepository.findPublicPlaylistsByAccountId(accountId);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   //** EVENT **//
@@ -306,4 +307,26 @@ public class LibraryService {
     return eventRepository.findOne(eventId);
   }
 
+  //** PROFILE **//
+  public Profile getCustomerProfile(long accountId) {
+    Profile profile = customerRepository.findCustomerProfile(accountId);
+    if (profile != null && (profile.getRole().equals("PremiumUser") || profile.getRole().equals("BasicUser"))) {
+      if (!profile.getPublicProfile()) {
+        // Private profile; remove follower data
+        profile.setFollowerCount(0);
+        profile.setFollowingCount(0);
+      }
+      return profile;
+    } else {
+      return null;
+    }
+  }
+
+  public List<Profile> getProfileFollowers(long accountId) {
+    return customerRepository.findProfileFollowers(accountId);
+  }
+
+  public List<Profile> getProfileFollowing(long accountId) {
+    return customerRepository.findProfileFollowing(accountId);
+  }
 }
