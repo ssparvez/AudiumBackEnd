@@ -1,9 +1,15 @@
 package io.audium.audiumbackend.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@SqlResultSetMapping(
+  name = "SearchGenreMapping",
+  classes = {@ConstructorResult(targetClass = Genre.class, columns = {
+    @ColumnResult(name = "genreId"),
+    @ColumnResult(name = "genreName")
+  })
+  }
+)
 @Entity
 public class Genre {
 
@@ -14,6 +20,11 @@ public class Genre {
   private String genreName;
 
   public Genre() {
+  }
+
+  public Genre(Integer genreId, String genreName) {
+    this.genreId = genreId.longValue();
+    this.genreName = genreName;
   }
 
   public Genre(Long genreId, String genreName) {
