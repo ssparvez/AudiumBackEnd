@@ -54,40 +54,38 @@ public class LibraryController {
   }
   //** SONGS **//
 
-
-  @PostMapping(value="/accounts/{accountId}/song/{songId}/save")
+  @PostMapping(value = "/accounts/{accountId}/song/{songId}/save")
   public ResponseEntity savedSongToMusic(@RequestHeader(value = "Authorization") String token,
                                          @PathVariable long accountId,
                                          @PathVariable long songId) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
-      if ( !libraryService.checkIfSongIsSaved(accountId, songId)) {
+      if (!libraryService.checkIfSongIsSaved(accountId, songId)) {
         if (libraryService.saveSongToMusic(accountId, songId)) {
           return ResponseEntity.status(HttpStatus.OK).body(true);
-        }
-        else {
+        } else {
           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
         }
-      }
-      else {
+      } else {
         return ResponseEntity.status(HttpStatus.OK).body(false);
       }
-
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
-    else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
   }
 
-  @DeleteMapping(value="/accounts/{accountId}/song/{songId}/remove")
+  @DeleteMapping(value = "/accounts/{accountId}/song/{songId}/remove")
   public ResponseEntity removeSongFromMusic(@RequestHeader(value = "Authorization") String token,
                                             @PathVariable long accountId,
                                             @PathVariable long songId) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
-      if ( libraryService.removeSongFromMusic(accountId, songId) ) {
+      if (libraryService.removeSongFromMusic(accountId, songId)) {
         return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
-      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
-    else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
   }
 
   @GetMapping(value = "/profiles/{accountId}/recent")
@@ -102,37 +100,37 @@ public class LibraryController {
     return libraryService.getCreatedAndFollowedPlaylists(accountId);
   }
 
-  @GetMapping(value="/accounts/{accountId}/playlists/owned")
+  @GetMapping(value = "/accounts/{accountId}/playlists/owned")
   public ResponseEntity getPlaylistsCreated(@RequestHeader(value = "Authorization") String token,
-                                            @PathVariable long accountId ) {
+                                            @PathVariable long accountId) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
       List<LibraryPlaylist> createdPlaylists;
-      if ( (createdPlaylists =libraryService.getCreatedPlaylists(accountId)) != null ) {
+      if ((createdPlaylists = libraryService.getCreatedPlaylists(accountId)) != null) {
         return ResponseEntity.status(HttpStatus.OK).body(createdPlaylists);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
-      else  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-    }
-    else {
+    } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
   }
 
-  @GetMapping(value="/accounts/{accountId}/playlists/allfollowed")
+  @GetMapping(value = "/accounts/{accountId}/playlists/allfollowed")
   public ResponseEntity getPlaylistFollowedIds(@RequestHeader(value = "Authorization") String token,
-                                               @PathVariable long accountId ) {
+                                               @PathVariable long accountId) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
       List<Long> playlistIds;
-      if ( (playlistIds =libraryService.getPlaylistFollowedIds(accountId)) != null ) {
+      if ((playlistIds = libraryService.getPlaylistFollowedIds(accountId)) != null) {
         return ResponseEntity.status(HttpStatus.OK).body(playlistIds);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
-      else  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-    }
-    else {
+    } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
   }
 
-  @GetMapping(value = "/playlist/{playlistId}/{accountId}",  produces = ("application/json"))
+  @GetMapping(value = "/playlist/{playlistId}/{accountId}", produces = ("application/json"))
   public ResponseEntity getPlaylist(@PathVariable long playlistId,
                                     @PathVariable long accountId) {
 
@@ -165,99 +163,102 @@ public class LibraryController {
                                        @PathVariable long accountId,
                                        @PathVariable long playlistId) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
-       if (libraryService.deletePlaylist(playlistId) ) {
-         return ResponseEntity.status(HttpStatus.OK).body(true);
-       } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+      if (libraryService.deletePlaylist(playlistId)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+      }
     } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
   }
 
-  @PutMapping(value="/playlist/visibility")
+  @PutMapping(value = "/playlist/visibility")
   public ResponseEntity changePlaylistVisiblity(@RequestHeader(value = "Authorization") String token,
                                                 @RequestBody Playlist playlist) {
     if (verificationService.verifyIntegrityCustomerAccount(token, playlist.getCreator().getAccountId()) != null) {
-      if ( libraryService.changePlaylistVisibility(playlist.getPlaylistId(),playlist.getIsPublic()) ) {
+      if (libraryService.changePlaylistVisibility(playlist.getPlaylistId(), playlist.getIsPublic())) {
         return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
-      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-    }
-    else {
+    } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
   }
 
-  @PutMapping(value="/accounts/{accountId}/playlist/{playlistId}/follow/{status}")
+  @PutMapping(value = "/accounts/{accountId}/playlist/{playlistId}/follow/{status}")
   public ResponseEntity changePlaylistFollowStatus(@RequestHeader(value = "Authorization") String token,
                                                    @PathVariable long accountId,
                                                    @PathVariable long playlistId,
                                                    @PathVariable boolean status) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
-      if (libraryService.changePlaylistFollowStatus(accountId,playlistId,status)) {
+      if (libraryService.changePlaylistFollowStatus(accountId, playlistId, status)) {
         return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
-      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-    }else {
+    } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
   }
 
-  @PostMapping(value="/accounts/{accountId}/playlist/{playlistId}/add/song/{songId}")
+  @PostMapping(value = "/accounts/{accountId}/playlist/{playlistId}/add/song/{songId}")
   public ResponseEntity addSongToPlaylist(@RequestHeader(value = "Authorization") String token,
-                                               @PathVariable long accountId,
-                                               @PathVariable long playlistId,
-                                               @PathVariable long songId) {
+                                          @PathVariable long accountId,
+                                          @PathVariable long playlistId,
+                                          @PathVariable long songId) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
 
-      if ( libraryService.addSongToPlaylist(playlistId, songId)) {
+      if (libraryService.addSongToPlaylist(playlistId, songId)) {
         return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
-      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-    }
-    else {
+    } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
   }
   @CrossOrigin
-  @DeleteMapping(value="/accounts/{accountId}/playlist/{playlistId}/remove/song/{songId}")
+  @DeleteMapping(value = "/accounts/{accountId}/playlist/{playlistId}/remove/song/{songId}")
   public ResponseEntity removeSongFromPlaylist(@RequestHeader(value = "Authorization") String token,
                                                @PathVariable long accountId,
                                                @PathVariable long playlistId,
                                                @PathVariable long songId) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
 
-      if ( libraryService.deleteSongFromPlaylist(playlistId, songId)) {
+      if (libraryService.deleteSongFromPlaylist(playlistId, songId)) {
         return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
-      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-    }
-    else {
+    } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
   }
 
-  @PutMapping(value="/accounts/{accountId}/playlist/edit")
+  @PutMapping(value = "/accounts/{accountId}/playlist/edit")
   public ResponseEntity editCustomerPlaylist(@RequestHeader(value = "Authorization") String token,
                                              @PathVariable long accountId,
                                              @RequestBody Playlist playlist) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
-      if ( libraryService.editCustomerPlaylist(playlist)) {
+      if (libraryService.editCustomerPlaylist(playlist)) {
         return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
-      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-
-    }
-    else {
+    } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
   }
 
-  @GetMapping(value="/playlist/{playlistId}/exists")
+  @GetMapping(value = "/playlist/{playlistId}/exists")
   public ResponseEntity verifyPlaylistExists(@PathVariable long playlistId) {
     if (libraryService.verifyPlaylistExists(playlistId)) {
       return ResponseEntity.status(HttpStatus.OK).body(true);
+    } else {
+      return ResponseEntity.status(HttpStatus.OK).body(false);
     }
-    else return ResponseEntity.status(HttpStatus.OK).body(false);
   }
 
   @GetMapping(value = "/profiles/{accountId}/playlists")
@@ -277,51 +278,54 @@ public class LibraryController {
     return libraryService.getAlbumSongs(albumId);
   }
 
-  @GetMapping(value="/accounts/{accountId}/albums/allsaved")
+  @GetMapping(value = "/accounts/{accountId}/albums/allsaved")
   public ResponseEntity getSavedAlbumIds(@RequestHeader(value = "Authorization") String token,
-                                         @PathVariable long accountId ) {
+                                         @PathVariable long accountId) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
       List<Long> albumIds;
-      if ( (albumIds = libraryService.getListOfSavedAlbumIds(accountId)) != null ) {
+      if ((albumIds = libraryService.getListOfSavedAlbumIds(accountId)) != null) {
         return ResponseEntity.status(HttpStatus.OK).body(albumIds);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
-      else  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-    }
-    else {
+    } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
   }
-  @PutMapping(value="/accounts/{accountId}/album/{albumId}/save/{status}")
+  @PutMapping(value = "/accounts/{accountId}/album/{albumId}/save/{status}")
   public ResponseEntity changeAlbumSavedStatus(@RequestHeader(value = "Authorization") String token,
-                                                 @PathVariable long accountId,
-                                                 @PathVariable long albumId,
-                                                 @PathVariable boolean status) {
+                                               @PathVariable long accountId,
+                                               @PathVariable long albumId,
+                                               @PathVariable boolean status) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
-      if (libraryService.changeAlbumSavedStatus(accountId,albumId,status)) {
+      if (libraryService.changeAlbumSavedStatus(accountId, albumId, status)) {
         return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
-      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-    }else {
+    } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
   }
 
-  @GetMapping(value="/album/{albumId}/exists")
+  @GetMapping(value = "/album/{albumId}/exists")
   public ResponseEntity verifyAlbumtExists(@PathVariable long albumId) {
     if (libraryService.verifyAlbumExists(albumId)) {
       return ResponseEntity.status(HttpStatus.OK).body(true);
+    } else {
+      return ResponseEntity.status(HttpStatus.OK).body(false);
     }
-    else return ResponseEntity.status(HttpStatus.OK).body(false);
   }
   //** ARTIST **//
 
   @GetMapping(value = "/artists/all")
   public ResponseEntity getAllArtists() {
     Iterable<Artist> allArtists;
-    if ( (allArtists = libraryService.getAllArtists() )!= null) {
+    if ((allArtists = libraryService.getAllArtists()) != null) {
       return ResponseEntity.status(HttpStatus.OK).body(allArtists);
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
     }
-    else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
   }
 
   @GetMapping(value = "/artists/{artistId}")
@@ -339,37 +343,43 @@ public class LibraryController {
     return libraryService.getArtistSongs(artistId);
   }
 
-  @PutMapping(value="/accounts/{accountId}/artist/{artistId}/follow/{status}")
+  @GetMapping(value = "/artists/{artistId}/similar")
+  public List<LibraryArtist> getSimilarArtists(@PathVariable long artistId) {
+    return libraryService.getSimilarArtists(artistId);
+  }
+
+  @PutMapping(value = "/accounts/{accountId}/artist/{artistId}/follow/{status}")
   public ResponseEntity changeArtistFollowStatus(@RequestHeader(value = "Authorization") String token,
-                                                   @PathVariable long accountId,
-                                                   @PathVariable long artistId,
-                                                   @PathVariable boolean status) {
+                                                 @PathVariable long accountId,
+                                                 @PathVariable long artistId,
+                                                 @PathVariable boolean status) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
-      if (libraryService.changeArtistFollowStatus(accountId,artistId,status)) {
+      if (libraryService.changeArtistFollowStatus(accountId, artistId, status)) {
         return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
-      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-    }else {
+    } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
   }
 
-  @GetMapping(value="/accounts/{accountId}/artists/allfollowed")
-  public ResponseEntity getFollowedArtistIds(@RequestHeader(value = "Authorization") String token, @PathVariable long accountId ) {
+  @GetMapping(value = "/accounts/{accountId}/artists/allfollowed")
+  public ResponseEntity getFollowedArtistIds(@RequestHeader(value = "Authorization") String token, @PathVariable long accountId) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
       List<Long> artistIds;
-      if ( (artistIds = libraryService.getListOfFollowedArtistIds(accountId)) != null ) {
+      if ((artistIds = libraryService.getListOfFollowedArtistIds(accountId)) != null) {
         return ResponseEntity.status(HttpStatus.OK).body(artistIds);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
-      else  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-    }
-    else {
+    } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
   }
 
   //** EVENT **//
-  @GetMapping(value = "/artist/{artistId}/events")
+  @GetMapping(value = "/artists/{artistId}/events")
   public List<Event> getArtistEvents(@PathVariable long artistId) {
     return libraryService.getArtistEvents(artistId);
   }
@@ -379,16 +389,16 @@ public class LibraryController {
     return libraryService.getEvent(eventId);
   }
 
-
   //** GENRE **//
 
   @GetMapping(value = "/genres/all")
   public ResponseEntity getAllGenres() {
     Iterable<Genre> allGenres;
-    if ( (allGenres = libraryService.getAllGenres() )!= null) {
+    if ((allGenres = libraryService.getAllGenres()) != null) {
       return ResponseEntity.status(HttpStatus.OK).body(allGenres);
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
     }
-    else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
   }
 
   //** LABEL **/
@@ -396,12 +406,12 @@ public class LibraryController {
   @GetMapping(value = "/labels/all")
   public ResponseEntity getAllLabels() {
     Iterable<Object> allLabels;
-    if ( (allLabels = libraryService.getAllLabels() )!= null) {
+    if ((allLabels = libraryService.getAllLabels()) != null) {
       return ResponseEntity.status(HttpStatus.OK).body(allLabels);
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
     }
-    else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
   }
-
 
   //** PROFILE **//
 

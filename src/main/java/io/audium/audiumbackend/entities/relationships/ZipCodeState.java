@@ -2,12 +2,10 @@ package io.audium.audiumbackend.entities.relationships;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.audium.audiumbackend.entities.Address;
-import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Immutable
 @Entity
 @Table(name = "zipcode_state")
 public class ZipCodeState {
@@ -29,10 +27,16 @@ public class ZipCodeState {
   }
 
   public Integer getZipCode() {
-    return zipCode;
+    return this.zipCode;
+  }
+  public void setZipCode(Integer zipCode) {
+    this.zipCode = zipCode;
   }
   public String getState() {
-    return state;
+    return this.state;
+  }
+  public void setState(String state) {
+    this.state = state;
   }
   public List<Address> getAddresses() {
     return addresses;

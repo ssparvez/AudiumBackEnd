@@ -21,22 +21,22 @@ public interface ArtistRepository extends CrudRepository<Artist, Long>, ArtistRe
   @Query("SELECT A.artistId AS artistId, A.artistName AS artistName, A.bio AS bio FROM Artist A WHERE A.artistId = ?1")
   public LibraryArtist findByArtistId(long artistId);
 
-  @Query("SELECT E FROM Artist A INNER JOIN A.events AS E WHERE A.artistId = ?1 AND E.eventDate >= CURRENT_TIMESTAMP() AND (NOT E.isCancelled = true) ORDER BY E.eventDate DESC")
+  @Query("SELECT E FROM Artist A INNER JOIN A.events AS E WHERE A.artistId = ?1 AND E.eventDate >= CURRENT_DATE() AND (E.isCancelled = FALSE) ORDER BY (ABS(E.eventDate - CURRENT_DATE()) - E.isCancelled) ASC")
   public List<Event> findArtistEvents(long artistId);
 
   @Transactional
   @Modifying
-  @Query(value="INSERT INTO Artist_Follower VALUES(?1,?2)", nativeQuery = true)
+  @Query(value = "INSERT INTO Artist_Follower VALUES(?1,?2)", nativeQuery = true)
   public int followArtist(long artistId, long accountId);
 
   @Transactional
   @Modifying
-  @Query(value="DELETE FROM Artist_Follower WHERE artistId = ?1 AND accountId = ?2", nativeQuery = true)
+  @Query(value = "DELETE FROM Artist_Follower WHERE artistId = ?1 AND accountId = ?2", nativeQuery = true)
   public int unfollowArtist(long artistId, long accountId);
 
   @Transactional(readOnly = true)
-  @Query(value= "SELECT A.artistId FROM Artist_Follower A WHERE A.accountId = ?1", nativeQuery = true)
-  public  List<Long> getListOfFollowedArtistIds(long accountId);
+  @Query(value = "SELECT A.artistId FROM Artist_Follower A WHERE A.accountId = ?1", nativeQuery = true)
+  public List<Long> getListOfFollowedArtistIds(long accountId);
 
   @Transactional
   @Modifying
@@ -45,6 +45,6 @@ public interface ArtistRepository extends CrudRepository<Artist, Long>, ArtistRe
 
   @Transactional
   @Modifying
-  @Query(value = "INSERT INTO Artist VALUES(?1,?2,null,?3,?4)", nativeQuery = true)
+  @Query(value = "INSERT INTO Artist VALUES(?1, ?2, NULL, ?3, ?4)", nativeQuery = true)
   public int insertIntoArtist(long artistId, long labelId, String name, String bio);
 }

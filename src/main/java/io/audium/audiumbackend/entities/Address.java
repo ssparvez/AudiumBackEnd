@@ -45,6 +45,14 @@ public class Address {
     this.city = city;
     this.zipCodeState = zipCodeState;
   }
+
+  public Address(Long addressId, String addressLine1, String city, Integer zipCode, String state) {
+    this.addressId = addressId;
+    this.addressLine1 = addressLine1;
+    this.city = city;
+    this.zipCodeState = new ZipCodeState(zipCode, state);
+  }
+
   public Long getAddressId() {
     return addressId;
   }
@@ -69,11 +77,20 @@ public class Address {
   public void setZipCodeState(ZipCodeState zipCodeState) {
     this.zipCodeState = zipCodeState;
   }
-  public int getZipCode() {
-    return zipCode;
+  public void setZipCodeState(Integer zipCode, String state) {
+    this.zipCodeState = new ZipCodeState(zipCode, state);
+  }
+  public Integer getZipCode() {
+    return this.zipCode;
+  }
+  public void setZipCode(Integer zipCode) {
+    this.zipCode = zipCode;
   }
   public String getState() {
-    return state;
+    return this.state;
+  }
+  public void setState(String state) {
+    this.state = state;
   }
   public List<Event> getEvents() {
     return events;
