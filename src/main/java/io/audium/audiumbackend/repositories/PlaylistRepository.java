@@ -39,27 +39,29 @@ public interface PlaylistRepository extends CrudRepository<Playlist, Long>, Play
 
   @Transactional
   @Modifying
-  @Query(value="INSERT INTO Playlist_Follower VALUES(?1,?2)", nativeQuery = true)
+  @Query(value = "INSERT INTO Playlist_Follower VALUES(?1,?2)", nativeQuery = true)
   public int followPlaylist(long playlistId, long accountId);
 
   @Transactional
   @Modifying
-  @Query(value="DELETE FROM Playlist_Follower WHERE playlistId = ?1 AND accountId = ?2", nativeQuery = true)
+  @Query(value = "DELETE FROM Playlist_Follower WHERE playlistId = ?1 AND accountId = ?2", nativeQuery = true)
   public int unfollowPlaylist(long playlistId, long accountId);
 
   @Transactional
   @Modifying
-  @Query(value="DELETE FROM Playlist_Song WHERE playlistId = ?1 AND songId = ?2", nativeQuery = true)
+  @Query(value = "DELETE FROM Playlist_Song WHERE playlistId = ?1 AND songId = ?2", nativeQuery = true)
   public int deleteSongFromPlaylist(long playlistId, long songId);
 
   @Transactional
   @Modifying
-  @Query(value="INSERT INTO Playlist_Song VALUES(?1,?2,0)", nativeQuery = true)
+  @Query(value = "INSERT INTO Playlist_Song VALUES(?1,?2,0)", nativeQuery = true)
   public int addSongToPlaylist(long playlistId, long accountId);
 
   @Transactional(readOnly = true)
-  @Query(value="SELECT P.playlistId FROM Playlist_Follower P WHERE P.accountId = ?1", nativeQuery = true)
+  @Query(value = "SELECT P.playlistId FROM Playlist_Follower P WHERE P.accountId = ?1", nativeQuery = true)
   public List<Long> getListOfPlaylistsFollowed(long accountId);
 
-
+  @Transactional(readOnly = true)
+  @Query("SELECT P.playlistId AS playlistId, P.name AS name, P.isPublic AS isPublic, P.creator.accountId AS accountId, P.creator.username AS username FROM Playlist AS P WHERE P.creator.accountId = ?1 AND P.isPublic = TRUE ORDER BY P.name ASC")
+  public List<LibraryPlaylist> findPublicPlaylistsByAccountId(long accountId);
 }

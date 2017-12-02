@@ -53,6 +53,10 @@ public class LibraryService {
     return songRepository.findCustomerSongs(accountId);
   }
 
+  public List<RecentTrack> getPublicSongPlays(long accountId) {
+    return songRepository.findPublicSongPlays(accountId);
+  }
+
   public List<PopularTrack> getCustomerSongPlays(long accountId, int pageIndex, int pageSize) {
     List<PopularTrack> results = songRepository.findCustomerSongPlays(accountId);
 
@@ -86,7 +90,6 @@ public class LibraryService {
   public List<Event> getArtistEvents(long artistId) {
     return artistRepository.findArtistEvents(artistId);
   }
-
 
   //** GENRE **//
 
@@ -197,8 +200,7 @@ public class LibraryService {
 //    }
     try {
       return playlistRepository.findByPlaylistId(playlistId);
-    }
-    catch ( Exception e) {
+    } catch (Exception e) {
       return null;
     }
   }
@@ -304,10 +306,41 @@ public class LibraryService {
     return playlistRepository.exists(playlistId);
   }
 
+  public List<LibraryPlaylist> getProfilePlaylists(long accountId) {
+    try {
+      return playlistRepository.findPublicPlaylistsByAccountId(accountId);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
   //** EVENT **//
 
   public Event getEvent(long eventId) {
     return eventRepository.findOne(eventId);
   }
 
+  //** PROFILE **//
+  public Profile getCustomerProfile(long accountId) {
+    Profile profile = customerRepository.findCustomerProfile(accountId);
+    if (profile != null && (profile.getRole().equals("PremiumUser") || profile.getRole().equals("BasicUser"))) {
+      if (!profile.getPublicProfile()) {
+        // Private profile; remove follower data
+        profile.setFollowerCount(0);
+        profile.setFollowingCount(0);
+      }
+      return profile;
+    } else {
+      return null;
+    }
+  }
+
+  public List<Profile> getProfileFollowers(long accountId) {
+    return customerRepository.findProfileFollowers(accountId);
+  }
+
+  public List<Profile> getProfileFollowing(long accountId) {
+    return customerRepository.findProfileFollowing(accountId);
+  }
 }

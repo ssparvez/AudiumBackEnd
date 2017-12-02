@@ -1,10 +1,7 @@
 package io.audium.audiumbackend.repositories;
 
 import io.audium.audiumbackend.entities.Song;
-import io.audium.audiumbackend.entities.projections.AlbumTrack;
-import io.audium.audiumbackend.entities.projections.LibrarySong;
-import io.audium.audiumbackend.entities.projections.PlaylistTrack;
-import io.audium.audiumbackend.entities.projections.PopularTrack;
+import io.audium.audiumbackend.entities.projections.*;
 import io.audium.audiumbackend.repositories.custom.SongRepositoryCustom;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -35,6 +32,9 @@ public interface SongRepository extends CrudRepository<Song, Long>, SongReposito
 
   @Query("SELECT S.songId AS songId, S.title AS title, Art.artistId AS artistId, Art.artistName AS artistName, AlbS.album.albumId AS albumId, AlbS.album.albumTitle AS albumTitle, S.file AS file, S.duration AS duration, S.isExplicit AS isExplicit, S.year AS year, S.genre.genreId AS genreId, S.genre.genreName AS genreName, S.playCount AS playCount FROM SongPlay SP INNER JOIN SP.song S INNER JOIN S.artists Art INNER JOIN S.albumSongs AlbS WHERE SP.customer.accountId = ?1 GROUP BY S ORDER BY SP.timePlayed DESC")
   public List<PopularTrack> findCustomerSongPlays(long accountId);
+
+  @Query("SELECT S.songId AS songId, S.title AS title, Art.artistId AS artistId, Art.artistName AS artistName, AlbS.album.albumId AS albumId, AlbS.album.albumTitle AS albumTitle, S.file AS file, S.duration AS duration, S.isExplicit AS isExplicit, S.year AS year, S.genre.genreId AS genreId, S.genre.genreName AS genreName, SP.timePlayed AS timePlayed FROM SongPlay SP INNER JOIN SP.song S INNER JOIN S.artists Art INNER JOIN S.albumSongs AlbS WHERE SP.customer.accountId = ?1 AND SP.isPublic = TRUE GROUP BY S, SP.timePlayed ORDER BY SP.timePlayed DESC")
+  public List<RecentTrack> findPublicSongPlays(long accountId);
 
   @Query("SELECT ArtS.songId AS songId, ArtS.title AS title, A.artistId AS artistId, A.artistName AS artistName, ArtAlbS.album.albumId AS albumId, ArtAlbS.album.albumTitle AS albumTitle, ArtS.file AS file, ArtS.duration AS duration, ArtS.isExplicit AS isExplicit, ArtS.year AS year, ArtS.genre.genreId AS genreId, ArtS.genre.genreName AS genreName, ArtS.playCount AS playCount FROM Artist A INNER JOIN A.songs ArtS INNER JOIN ArtS.albumSongs ArtAlbS WHERE A.artistId = ?1 GROUP BY ArtS ORDER BY playCount DESC")
   public List<PopularTrack> findArtistSongs(long artistId);
@@ -69,6 +69,4 @@ public interface SongRepository extends CrudRepository<Song, Long>, SongReposito
   @Modifying
   @Query(value = "INSERT INTO Artist_Song VALUES(?1,?2,1)", nativeQuery = true)
   public int linkSongToArtist(long artistId, long songId);
-
-
 }

@@ -1,6 +1,9 @@
 package io.audium.audiumbackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -16,6 +19,11 @@ public class Account {
   private String  role     = "BasicUser";
   private boolean isActive = true;
   private String username;
+
+  @OneToMany(fetch = FetchType.LAZY)
+  @JsonIgnore
+  @JoinColumn(name = "accountId")
+  private List<Playlist> createdPlaylists;
 
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "accountId")
@@ -101,5 +109,11 @@ public class Account {
   }
   public void setUserPreferences(UserPreferences userPreferences) {
     this.userPreferences = userPreferences;
+  }
+  public List<Playlist> getCreatedPlaylists() {
+    return createdPlaylists;
+  }
+  public void setCreatedPlaylists(List<Playlist> createdPlaylists) {
+    this.createdPlaylists = createdPlaylists;
   }
 }

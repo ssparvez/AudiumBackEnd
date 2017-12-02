@@ -34,6 +34,7 @@ public class Playlist {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "accountId")
+  @JsonIgnore
   private Account creator;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "playlist")
@@ -57,7 +58,7 @@ public class Playlist {
     this.name = name;
     this.description = description;
     this.isPublic = isPublic;
-    this.creator = new Customer(accountId.longValue(), username, role);
+    this.creator = new Account(accountId.longValue(), username, role);
   }
 
   public Playlist(Long playlistId, Account creator, String name, String description, boolean isPublic) {

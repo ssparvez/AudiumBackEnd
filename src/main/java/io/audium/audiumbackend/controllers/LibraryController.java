@@ -1,12 +1,10 @@
 package io.audium.audiumbackend.controllers;
 
 import com.google.gson.JsonObject;
-import com.sun.org.apache.regexp.internal.RE;
 import io.audium.audiumbackend.entities.*;
 import io.audium.audiumbackend.entities.projections.*;
 import io.audium.audiumbackend.services.LibraryService;
 import io.audium.audiumbackend.services.VerificationService;
-import io.audium.audiumbackend.services.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -90,6 +88,11 @@ public class LibraryController {
 
     }
     else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+  }
+
+  @GetMapping(value = "/profiles/{accountId}/recent")
+  public List<RecentTrack> getPublicSongPlays(@PathVariable long accountId) {
+    return libraryService.getPublicSongPlays(accountId);
   }
 
   //** PLAYLIST **//
@@ -257,6 +260,11 @@ public class LibraryController {
     else return ResponseEntity.status(HttpStatus.OK).body(false);
   }
 
+  @GetMapping(value = "/profiles/{accountId}/playlists")
+  public List<LibraryPlaylist> getProfilePlaylists(@PathVariable long accountId) {
+    return libraryService.getProfilePlaylists(accountId);
+  }
+
   //** ALBUM **//
 
   @GetMapping(value = "/albums/{albumId}")
@@ -383,7 +391,6 @@ public class LibraryController {
     else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
   }
 
-
   //** LABEL **/
 
   @GetMapping(value = "/labels/all")
@@ -396,4 +403,20 @@ public class LibraryController {
   }
 
 
+  //** PROFILE **//
+
+  @GetMapping(value = "/profiles/{accountId}")
+  public Profile getCustomerProfile(@PathVariable long accountId) {
+    return libraryService.getCustomerProfile(accountId);
+  }
+
+  @GetMapping(value = "/profiles/{accountId}/followers")
+  public List<Profile> getProfileFollowers(@PathVariable long accountId) {
+    return libraryService.getProfileFollowers(accountId);
+  }
+
+  @GetMapping(value = "/profiles/{accountId}/following")
+  public List<Profile> getProfileFollowing(@PathVariable long accountId) {
+    return libraryService.getProfileFollowing(accountId);
+  }
 }
