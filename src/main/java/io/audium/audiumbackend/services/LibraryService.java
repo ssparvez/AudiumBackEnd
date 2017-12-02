@@ -1,8 +1,5 @@
 package io.audium.audiumbackend.services;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.audium.audiumbackend.entities.*;
 import io.audium.audiumbackend.entities.projections.*;
@@ -107,7 +104,7 @@ public class LibraryService {
 
   public boolean changeAlbumSavedStatus(long accountId, long albumId, boolean status) {
     if (status) {
-      return (albumRepository.saveAlbum(accountId,albumId) == 1);
+      return (albumRepository.saveAlbum(accountId, albumId) == 1);
     } else {
       return (albumRepository.removeAlbum(albumId, accountId) == 1);
     }
@@ -115,10 +112,11 @@ public class LibraryService {
 
   public List<Long> getListOfSavedAlbumIds(long accountId) {
     List<Long> albumsSaved = albumRepository.getListOfSavedAlbumIds(accountId);
-    if ( albumsSaved != null ) {
+    if (albumsSaved != null) {
       return albumsSaved;
+    } else {
+      return null;
     }
-    else return null;
   }
 
   public boolean addSongToAlbum(long albumId, long songId) {
@@ -129,7 +127,6 @@ public class LibraryService {
   public boolean verifyAlbumExists(long albumId) {
     return albumRepository.exists(albumId);
   }
-
 
   //** ARTIST **//
 
@@ -143,15 +140,28 @@ public class LibraryService {
   public List<Long> getListOfFollowedArtistIds(long accountId) {
     List<Long> artistsFollowed = artistRepository.getListOfFollowedArtistIds(accountId);
 
-    if ( artistsFollowed != null ) {
+    if (artistsFollowed != null) {
       return artistsFollowed;
+    } else {
+      return null;
     }
-    else return null;
   }
+
+  public List<LibraryArtist> getSimilarArtists(long artistId) {
+    String query =
+      "     SELECT Sim.artistId AS artistId, Sim.name AS artistName, Sim.bio AS bio FROM ( "
+        + "    SELECT A.*, SUM(IF(AG.primaryGenre = TRUE, 2, 1)) AS Similarity FROM Artist A, artist_genre AG "
+        + "    WHERE A.artistId = AG.artistId AND A.artistId != " + artistId + " AND AG.genreId IN "
+        + "    ( "
+        + "        SELECT AG1.genreId AS genreId FROM artist_genre AG1 WHERE AG1.artistId = " + artistId
+        + "    ) "
+        + "    GROUP BY A.artistId ORDER BY Similarity DESC) AS Sim WHERE Sim.Similarity > 1;";
+    return artistRepository.getSimilarArtists(query);
+  }
+
   public Iterable<Artist> getAllArtists() {
     return artistRepository.findAll();
   }
-
 
   //** SONG **//
 
@@ -160,13 +170,12 @@ public class LibraryService {
   }
 
   public boolean saveSongToMusic(long accountId, long songId) {
-      return (songRepository.saveSongToMusic(accountId, songId) == 1);
+    return (songRepository.saveSongToMusic(accountId, songId) == 1);
   }
 
   public boolean removeSongFromMusic(long accountId, long songId) {
-    return (songRepository.removeSongFromMusic(accountId,songId) ==1);
+    return (songRepository.removeSongFromMusic(accountId, songId) == 1);
   }
-
 
   //** PLAYLIST **//
 
@@ -221,20 +230,18 @@ public class LibraryService {
   }
 
   public JsonObject createNewPlaylist(Playlist playlist) {
-   if (playlistRepository.save(playlist) != null  ) {
-     return buildPlaylistJSON(playlist);
-   }
-   else {
-     playlistRepository.deletePlaylistById(playlist.getPlaylistId());
-     return null;
-   }
-
+    if (playlistRepository.save(playlist) != null) {
+      return buildPlaylistJSON(playlist);
+    } else {
+      playlistRepository.deletePlaylistById(playlist.getPlaylistId());
+      return null;
+    }
   }
 
   public List<LibraryPlaylist> getCreatedPlaylists(long accountId) {
     try {
       return playlistRepository.findCreatedPlaylists(accountId);
-    } catch ( Exception e) {
+    } catch (Exception e) {
       return null;
     }
   }
@@ -242,7 +249,7 @@ public class LibraryService {
   public List<Long> getPlaylistFollowedIds(long accountId) {
     try {
       return playlistRepository.getListOfPlaylistsFollowed(accountId);
-    } catch ( Exception e) {
+    } catch (Exception e) {
       return null;
     }
   }
@@ -290,16 +297,16 @@ public class LibraryService {
   public boolean editCustomerPlaylist(Playlist playlistToEdit) {
     Playlist playlist = playlistRepository.findOne(playlistToEdit.getPlaylistId());
     if (playlist != null) {
-     try {
-       playlist.setName(playlistToEdit.getName());
-       playlistRepository.save(playlist);
-       return true;
-     }
-     catch (Exception e) {
-       return false;
-     }
+      try {
+        playlist.setName(playlistToEdit.getName());
+        playlistRepository.save(playlist);
+        return true;
+      } catch (Exception e) {
+        return false;
+      }
+    } else {
+      return false;
     }
-    else return false;
   }
 
   public boolean verifyPlaylistExists(long playlistId) {
