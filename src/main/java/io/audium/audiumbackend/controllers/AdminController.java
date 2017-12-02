@@ -1,9 +1,7 @@
 package io.audium.audiumbackend.controllers;
 
 import com.google.gson.JsonObject;
-import io.audium.audiumbackend.entities.Album;
-import io.audium.audiumbackend.entities.Playlist;
-import io.audium.audiumbackend.entities.Song;
+import io.audium.audiumbackend.entities.*;
 import io.audium.audiumbackend.services.AdminService;
 import io.audium.audiumbackend.services.LibraryService;
 import io.audium.audiumbackend.services.VerificationService;
@@ -92,6 +90,7 @@ public class AdminController {
     adminService.updateSong(songId, song);
   }
 
+  @CrossOrigin
   @DeleteMapping(value = "/admin/{adminId}/song/{songId}/delete")
   public ResponseEntity removeSong(@RequestHeader(value = "Authorization") String token,
                                    @PathVariable long adminId,
@@ -195,5 +194,40 @@ public class AdminController {
     else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
+  }
+
+
+
+  //** ARTIST **//
+
+  @CrossOrigin
+  @DeleteMapping(value = "/admin/{adminId}/artist/{artistId}/delete")
+  public ResponseEntity deleteArtist(@RequestHeader(value = "Authorization") String token,
+                                      @PathVariable long adminId,
+                                      @PathVariable long artistId) {
+    if (verificationService.verifyIntegrityAdminAccount(token, adminId) != null) {
+      if (adminService.deleteArtist(artistId)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+  }
+
+  @PostMapping(value = "/admin/{adminId}/artists/label/{labelId}/create")
+  public ResponseEntity addArtist(@RequestHeader(value = "Authorization") String token,
+                                  @PathVariable long adminId,
+                                  @PathVariable long labelId,
+                                  @RequestBody Artist artist) {
+    artist.setLabel(new Label());
+    artist.getLabel().setAccountId(labelId);
+    System.out.println(artist.getLabel().getAccountId());
+    if (verificationService.verifyIntegrityAdminAccount(token, adminId) != null) {
+      if (adminService.addArtist(artist, labelId)) {
+        return ResponseEntity.status(HttpStatus.OK).body(artist.getArtistId());
+      }
+      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+
+
+    } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+
   }
 }

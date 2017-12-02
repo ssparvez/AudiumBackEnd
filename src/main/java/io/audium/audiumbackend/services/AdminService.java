@@ -2,6 +2,7 @@ package io.audium.audiumbackend.services;
 
 import com.google.gson.JsonObject;
 import io.audium.audiumbackend.entities.Album;
+import io.audium.audiumbackend.entities.Artist;
 import io.audium.audiumbackend.repositories.*;
 import io.audium.audiumbackend.entities.Song;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,6 +97,16 @@ public class AdminService {
       return ( albumRepo.save(album) != null);
     }
     else return false;
+  }
+
+  //** ARTIST **/
+
+  public boolean deleteArtist( long artistId) {
+    return ( artistRepo.deleteById(artistId) == 1);
+  }
+
+  public boolean addArtist(Artist artist, long labelId) {
+    return ( artistRepo.save(artist) != null );
   }
 
 }

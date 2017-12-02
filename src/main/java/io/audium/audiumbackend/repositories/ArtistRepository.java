@@ -38,4 +38,13 @@ public interface ArtistRepository extends CrudRepository<Artist, Long>, ArtistRe
   @Query(value= "SELECT A.artistId FROM Artist_Follower A WHERE A.accountId = ?1", nativeQuery = true)
   public  List<Long> getListOfFollowedArtistIds(long accountId);
 
+  @Transactional
+  @Modifying
+  @Query("DELETE FROM Artist A WHERE A.artistId = ?1")
+  public int deleteById(long artistId);
+
+  @Transactional
+  @Modifying
+  @Query(value = "INSERT INTO Artist VALUES(?1,?2,null,?3,?4)", nativeQuery = true)
+  public int insertIntoArtist(long artistId, long labelId, String name, String bio);
 }

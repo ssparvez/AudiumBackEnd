@@ -29,9 +29,8 @@ public class LibraryService {
   private EventRepository    eventRepository;
   @Autowired
   private GenreRepository    genreRepository;
-
-
-
+  @Autowired
+  private LabelRepository    labelRepository;
 
   public List<Song> getAllSongs() {
     List<Song> songs = new ArrayList<>();
@@ -95,6 +94,11 @@ public class LibraryService {
     return genreRepository.findAll();
   }
 
+  // LABEL **/
+
+  public Iterable<Object> getAllLabels() {
+    return labelRepository.getAllLabels();
+  }
 
   //** ALBUM **//
 

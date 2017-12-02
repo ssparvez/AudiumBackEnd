@@ -18,6 +18,7 @@ import java.util.List;
 public class Artist {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long   artistId;
   private Long   accountId;
   @Column(name = "name")
@@ -123,4 +124,6 @@ public class Artist {
   public List<Customer> getFollowers() {
     return followers;
   }
+
+
 }

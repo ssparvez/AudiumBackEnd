@@ -383,4 +383,17 @@ public class LibraryController {
     else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
   }
 
+
+  //** LABEL **/
+
+  @GetMapping(value = "/labels/all")
+  public ResponseEntity getAllLabels() {
+    Iterable<Object> allLabels;
+    if ( (allLabels = libraryService.getAllLabels() )!= null) {
+      return ResponseEntity.status(HttpStatus.OK).body(allLabels);
+    }
+    else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+  }
+
+
 }
