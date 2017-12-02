@@ -117,9 +117,14 @@ public class SearchService {
     String relevanceLevelStatement = buildRelevanceLevelStatement(searchQuery, "E", "title");
 
     /* Build full query */
-    String query = "SELECT Se.eventId AS eventId, Se.title AS eventTitle, Se.eventDate AS eventDate, Se.isCancelled AS isCancelled, Se.description AS description "
-      + " FROM (SELECT E.*, " + relevanceLevelStatement + " FROM Event E) AS Se "
-      + " WHERE Se.Relevance > 0 ORDER BY Se.Relevance DESC";
+    String query = "SELECT Se.eventId AS eventId, Se.title AS eventTitle, Se.eventDate AS eventDate, Se.isCancelled AS isCancelled, Se.description AS description, "
+      + " Se.addressId AS addressId, A.addressLine1 AS addressLine1, A.city AS city, A.zipCode AS zipCode, ZS.state AS state "
+      + " FROM (SELECT E.*, " + relevanceLevelStatement + " FROM Event E) AS Se, Address AS A, zipcode_state AS ZS "
+      + " WHERE Se.Relevance > 0 AND Se.addressId = A.addressId AND ZS.zipCode = A.zipCode "
+      //+ " ORDER BY Se.Relevance DESC, ABS( DATEDIFF( DATE(Se.eventDate), DATE(NOW()) ) ) ASC";
+      + " ORDER BY IF(UNIX_TIMESTAMP(DATE(NOW())) - UNIX_TIMESTAMP(DATE(Se.eventDate)) = 0, 2, IF(UNIX_TIMESTAMP(DATE(NOW())) - UNIX_TIMESTAMP(DATE(Se.eventDate)) < 0, 1, 0)) DESC, "
+      + " IF(Se.isCancelled = FALSE, 1, 0) DESC, "
+      + " ABS(UNIX_TIMESTAMP(DATE(NOW())) - UNIX_TIMESTAMP(DATE(Se.eventDate))) ASC, Se.Relevance DESC";
     return eventRepository.searchEvents(query);
   }
 

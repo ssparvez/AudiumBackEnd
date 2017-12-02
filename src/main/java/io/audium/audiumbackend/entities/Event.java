@@ -1,6 +1,7 @@
 package io.audium.audiumbackend.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.audium.audiumbackend.entities.relationships.ZipCodeState;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -13,7 +14,12 @@ import java.util.List;
     @ColumnResult(name = "eventTitle"),
     @ColumnResult(name = "eventDate"),
     @ColumnResult(name = "isCancelled"),
-    @ColumnResult(name = "description")
+    @ColumnResult(name = "description"),
+    @ColumnResult(name = "addressId"),
+    @ColumnResult(name = "addressLine1"),
+    @ColumnResult(name = "city"),
+    @ColumnResult(name = "zipCode"),
+    @ColumnResult(name = "state")
   })
   }
 )
@@ -43,12 +49,16 @@ public class Event {
   public Event() {
   }
 
-  public Event(Integer eventId, String eventTitle, java.util.Date eventDate, Boolean isCancelled, String description) {
+  public Event(Integer eventId, String eventTitle, java.util.Date eventDate, Boolean isCancelled, String description,
+               Integer addressId, String addressLine1, String city, Integer zipCode, String state) {
     this.eventId = eventId.longValue();
     this.eventTitle = eventTitle;
     this.eventDate = new Date(eventDate.getTime());
     this.isCancelled = isCancelled;
     this.description = description;
+    this.address = new Address(addressId.longValue(), addressLine1, city, new ZipCodeState(zipCode, state));
+    this.address.setZipCode(zipCode);
+    this.address.setState(state);
   }
 
   public Event(Long eventId, String eventTitle, Date eventDate, Address address, String description, boolean isCancelled) {
@@ -95,6 +105,12 @@ public class Event {
   }
   public void setAddress(Address address) {
     this.address = address;
+  }
+  public void setAddress(Integer addressId, String addressLine1, String city, ZipCodeState zipCodeState) {
+    this.address = new Address(addressId.longValue(), addressLine1, city, zipCodeState);
+  }
+  public void setAddress(Integer addressId, String addressLine1, String city, Integer zipCode, String state) {
+    this.address = new Address(addressId.longValue(), addressLine1, city, new ZipCodeState(zipCode, state));
   }
   public List<Artist> getArtists() {
     return artists;

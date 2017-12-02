@@ -369,7 +369,7 @@ public class LibraryController {
   }
 
   //** EVENT **//
-  @GetMapping(value = "/artist/{artistId}/events")
+  @GetMapping(value = "/artists/{artistId}/events")
   public List<Event> getArtistEvents(@PathVariable long artistId) {
     return libraryService.getArtistEvents(artistId);
   }
