@@ -50,6 +50,8 @@ public class AuthenticationService {
             return verification.createAdminToken(admin);
 
           case ARTIST:
+            Account artist = accountRepo.findOne(loginInfo.getAccountId());
+            return verification.createArtistToken(artist);
 
           default:
             Customer account = customerRepository.findOne(loginInfo.getAccountId());

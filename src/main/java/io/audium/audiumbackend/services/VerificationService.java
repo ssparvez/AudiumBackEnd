@@ -151,6 +151,28 @@ public class VerificationService {
     return null;
   }
 
+  public String createArtistToken(Account account) {
+    try {
+      Algorithm algorithm = Algorithm.HMAC256("cse308");
+      String token = JWT.create()
+        .withClaim("username", account.getUsername())
+        .withClaim("accountId", account.getAccountId())
+        .withClaim("firstName", account.getFirstName())
+        .withClaim("lastName", account.getLastName())
+        .withClaim("email", account.getEmail())
+        .withClaim("role", account.getRole())
+        .withIssuer("audium")
+        //.withExpiresAt( new Date(1800000))
+        .sign(algorithm);
+      return token;
+    } catch (UnsupportedEncodingException exception) {
+      //UTF-8 encoding not supported
+    } catch (JWTCreationException exception) {
+      //Invalid Signing configuration / Couldn't convert Claims.
+    }
+    return null;
+  }
+
   public String aesEncrypt(long accountId, String sensitiveData) {
     Object[] salt = authenticationRepository.findSaltByAccountId(accountId);
     if (salt != null) {
