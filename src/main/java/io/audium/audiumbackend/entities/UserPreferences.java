@@ -19,7 +19,7 @@ public class UserPreferences {
   @Column(name = "defaultPublicSession")
   private boolean defaultPublicSession = true;
   @Column(name = "showExplicitContent")
-  private boolean showExplicitContent  = false;
+  private boolean showExplicitContent  = true;
   @Column(name = "quality")
   private String  quality              = "192kbps";
 
