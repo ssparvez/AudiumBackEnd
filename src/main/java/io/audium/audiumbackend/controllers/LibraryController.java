@@ -174,7 +174,7 @@ public class LibraryController {
   }
 
   @PutMapping(value = "/playlist/visibility")
-  public ResponseEntity changePlaylistVisiblity(@RequestHeader(value = "Authorization") String token,
+  public ResponseEntity changePlaylistVisibility(@RequestHeader(value = "Authorization") String token,
                                                 @RequestBody Playlist playlist) {
     if (verificationService.verifyIntegrityCustomerAccount(token, playlist.getCreator().getAccountId()) != null) {
       if (libraryService.changePlaylistVisibility(playlist.getPlaylistId(), playlist.getIsPublic())) {

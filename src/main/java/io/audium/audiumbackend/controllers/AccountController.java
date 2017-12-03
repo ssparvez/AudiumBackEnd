@@ -172,5 +172,22 @@ public class AccountController {
     else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
   }
 
+  @CrossOrigin
+  @PutMapping(value = "/accounts/{accountId}/profile/{profileId}/follow/{status}")
+  public ResponseEntity changeProfileFollowStatus(@RequestHeader(value = "Authorization") String token,
+                                                 @PathVariable long accountId,
+                                                 @PathVariable long profileId,
+                                                 @PathVariable boolean status) {
+    if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
+      if (accountService.changeProfileFollowStatus(accountId, profileId, status)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+      }
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    }
+  }
+
 
 }

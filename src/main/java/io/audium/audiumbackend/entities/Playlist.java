@@ -34,7 +34,6 @@ public class Playlist {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "accountId")
-  @JsonIgnore
   private Account creator;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "playlist")
