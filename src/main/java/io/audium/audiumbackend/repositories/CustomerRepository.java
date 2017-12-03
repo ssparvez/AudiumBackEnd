@@ -50,7 +50,7 @@ public interface CustomerRepository extends CrudRepository<Customer, Long>, Cust
 
   @Transactional
   @Modifying
-  @Query(value = "DELETE FROM Customer_Follower CF WHERE CF.accountId = ?1 AND CF.followerId = ?2", nativeQuery = true)
+  @Query(value = "DELETE FROM Customer_Follower WHERE accountId = ?1 AND followerId = ?2", nativeQuery = true)
   public int unFollowCustomer(long accountIdToUnfollow, long accountId);
 
 

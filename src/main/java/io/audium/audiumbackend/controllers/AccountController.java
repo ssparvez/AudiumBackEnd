@@ -172,8 +172,8 @@ public class AccountController {
     else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
   }
 
-
-  @PutMapping(value = "/accounts/{accountId}/profile/{}/follow/{status}")
+  @CrossOrigin
+  @PutMapping(value = "/accounts/{accountId}/profile/{profileId}/follow/{status}")
   public ResponseEntity changeProfileFollowStatus(@RequestHeader(value = "Authorization") String token,
                                                  @PathVariable long accountId,
                                                  @PathVariable long profileId,
