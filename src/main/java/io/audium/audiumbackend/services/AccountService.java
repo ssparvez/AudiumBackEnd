@@ -146,4 +146,13 @@ public class AccountService {
       return null;
     }
   }
+
+  public boolean changeProfileFollowStatus(long accountId, long profileId, boolean status) {
+    if (status) {
+      return (customerAccountRepository.followCustomer(profileId, accountId) == 1);
+    } else {
+      return (customerAccountRepository.unFollowCustomer(profileId, accountId) == 1);
+    }
+  }
+
 }

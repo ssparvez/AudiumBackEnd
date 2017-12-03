@@ -4,6 +4,7 @@ import io.audium.audiumbackend.entities.Customer;
 import io.audium.audiumbackend.entities.projections.CustomerFollower;
 import io.audium.audiumbackend.entities.projections.Profile;
 import io.audium.audiumbackend.repositories.custom.CustomerRepositoryCustom;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,4 +42,16 @@ public interface CustomerRepository extends CrudRepository<Customer, Long>, Cust
   @Transactional(readOnly = true)
   @Query("SELECT F.accountId AS accountId, F.username AS username, F.role AS role, F.userPreferences.publicProfile AS publicProfile, F.followerCount AS followerCount, F.followingCount AS followingCount FROM Customer AS C JOIN C.following AS F WHERE C.accountId = ?1 AND F.userPreferences.publicProfile = TRUE")
   public List<Profile> findProfileFollowing(long accountId);
+
+  @Transactional
+  @Modifying
+  @Query(value = "INSERT INTO Customer_Follower VALUES(?1,?2)", nativeQuery = true)
+  public int followCustomer(long accountIdToFollow, long accountId);
+
+  @Transactional
+  @Modifying
+  @Query(value = "DELETE FROM Customer_Follower CF WHERE CF.accountId = ?1 AND CF.followerId = ?2", nativeQuery = true)
+  public int unFollowCustomer(long accountIdToUnfollow, long accountId);
+
+
 }
