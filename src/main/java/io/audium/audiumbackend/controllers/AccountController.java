@@ -25,7 +25,7 @@ public class AccountController {
   @Autowired
   private VerificationService verificationService;
 
-  @RequestMapping(method = RequestMethod.POST, value = "/register")
+  @PostMapping(value = "/register")
   public ResponseEntity register(@RequestBody Customer customerAccount) {
 
     accountService.registerAccount(customerAccount);

@@ -13,6 +13,10 @@ import java.util.List;
 public interface AlbumRepository extends CrudRepository<Album, Long>, AlbumRepositoryCustom {
 
   @Transactional(readOnly = true)
+  @Query("SELECT LibA.albumId AS albumId, LibA.albumTitle AS albumTitle, LibA.releaseYear AS releaseYear, LibA.artist.artistId AS artistId, LibA.artist.artistName AS artistName FROM Artist A JOIN A.albums LibA WHERE A.accountId = ?1 ORDER BY year DESC")
+  public List<LibraryAlbum> findArtistAlbumsByAccountId(long accountId);
+
+  @Transactional(readOnly = true)
   @Query("SELECT LibA.albumId AS albumId, LibA.albumTitle AS albumTitle, LibA.releaseYear AS releaseYear, LibA.artist.artistId AS artistId, LibA.artist.artistName AS artistName FROM Customer C JOIN C.albums LibA WHERE C.accountId = ?1  ORDER BY albumTitle ASC")
   public List<LibraryAlbum> findCustomerAlbums(long accountId);
 
