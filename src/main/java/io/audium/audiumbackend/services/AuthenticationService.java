@@ -55,20 +55,7 @@ public class AuthenticationService {
 
           default:
             Customer account = customerRepository.findOne(loginInfo.getAccountId());
-
-            String token = JWT.create()
-              .withClaim("username", account.getUsername())
-              .withClaim("accountId", account.getAccountId())
-              .withClaim("firstName", account.getFirstName())
-              .withClaim("lastName", account.getLastName())
-              .withClaim("email", account.getEmail())
-              .withClaim("role", account.getRole())
-              .withClaim("dob", account.getDateOfBirth().toString())
-              .withClaim("gender", account.getGender())
-              .withIssuer("audium")
-              //.withExpiresAt( new Date(1800000))
-              .sign(algorithm);
-            return token;
+            return verification.createCustomerToken(account);
         }
       } catch (UnsupportedEncodingException exception) {
         //UTF-8 encoding not supported

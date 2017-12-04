@@ -116,6 +116,7 @@ public class VerificationService {
         .withClaim("role", account.getRole())
         .withClaim("dob", account.getDateOfBirth().toString())
         .withClaim("gender", account.getGender())
+        .withClaim("isValid", account.getIsActive())
         .withIssuer("audium")
         //.withExpiresAt( new Date(1800000))
         .sign(algorithm);
@@ -139,6 +140,7 @@ public class VerificationService {
         .withClaim("lastName", account.getLastName())
         .withClaim("email", account.getEmail())
         .withClaim("role", account.getRole())
+        .withClaim("isValid", account.getIsActive())
         .withIssuer("audium")
         //.withExpiresAt( new Date(1800000))
         .sign(algorithm);
@@ -161,6 +163,7 @@ public class VerificationService {
         .withClaim("lastName", account.getLastName())
         .withClaim("email", account.getEmail())
         .withClaim("role", account.getRole())
+        .withClaim("isValid", account.getIsActive())
         .withIssuer("audium")
         //.withExpiresAt( new Date(1800000))
         .sign(algorithm);

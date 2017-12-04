@@ -1,6 +1,7 @@
 package io.audium.audiumbackend.controllers;
 
 import com.google.gson.JsonObject;
+import com.sun.org.apache.regexp.internal.RE;
 import io.audium.audiumbackend.entities.*;
 import io.audium.audiumbackend.services.AdminService;
 import io.audium.audiumbackend.services.LibraryService;
@@ -58,6 +59,8 @@ public class AdminController {
     return ResponseEntity.status(HttpStatus.OK).body(response.toString());
   }
 
+  //** ACCOUNT **//
+  @CrossOrigin
   @DeleteMapping(value = "/admin/{adminId}/accounts/{accountId}/delete")
   public ResponseEntity deleteAccount(@RequestHeader(value = "Authorization") String token,
                                       @PathVariable long adminId,
@@ -68,6 +71,19 @@ public class AdminController {
       } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
     } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
   }
+
+  @PutMapping(value="/admin/{adminId}/accounts/{accountId}/banstatus/{status}")
+  public ResponseEntity banAccount(@RequestHeader(value = "Authorization") String token,
+                                   @PathVariable long adminId,
+                                   @PathVariable long accountId,
+                                   @PathVariable boolean status) {
+    if (verificationService.verifyIntegrityAdminAccount(token, adminId) != null) {
+      if (adminService.changeBanStatus(accountId, status)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+  }
+
 
   //** SONG **//
 

@@ -1,6 +1,7 @@
 package io.audium.audiumbackend.services;
 
 import com.google.gson.JsonObject;
+import io.audium.audiumbackend.entities.Account;
 import io.audium.audiumbackend.entities.Album;
 import io.audium.audiumbackend.entities.Artist;
 import io.audium.audiumbackend.repositories.*;
@@ -52,8 +53,22 @@ public class AdminService {
     }
   }
 
+  //** ACCOUNT **//
+
   public boolean deleteAccount(long accountId) {
     return (accountRepo.deleteById(accountId) == 1);
+  }
+
+  public boolean changeBanStatus( long accountId, boolean status) {
+    Account account = accountRepo.findOne(accountId);
+
+    if ( account != null) {
+      account.setIsActive(!status);
+      accountRepo.save(account);
+      return true;
+    }
+    else return false;
+
   }
 
   //** SONG **//
