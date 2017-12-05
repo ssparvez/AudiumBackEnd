@@ -103,6 +103,7 @@ public class Song {
 
   //@JsonIgnore
   //@Formula("(SELECT COUNT(SP.songId) FROM Song AS S1 JOIN song_play AS SP ON S1.songId = SP.songId WHERE SP.songId = songId AND YEAR(SP.timePlayed) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(SP.timePlayed) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH))")
+  @Transient
   private int playCountLastMonth;
 
   public Song() {
