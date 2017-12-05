@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface SongRepositoryCustom {
   List<Song> searchSongs(String query);
+
+  List<Song> getMonthSongStats(String query);
 }
