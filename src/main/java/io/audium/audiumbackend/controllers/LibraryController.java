@@ -175,7 +175,7 @@ public class LibraryController {
 
   @PutMapping(value = "/playlist/visibility")
   public ResponseEntity changePlaylistVisibility(@RequestHeader(value = "Authorization") String token,
-                                                @RequestBody Playlist playlist) {
+                                                 @RequestBody Playlist playlist) {
     if (verificationService.verifyIntegrityCustomerAccount(token, playlist.getCreator().getAccountId()) != null) {
       if (libraryService.changePlaylistVisibility(playlist.getPlaylistId(), playlist.getIsPublic())) {
         return ResponseEntity.status(HttpStatus.OK).body(true);
@@ -416,8 +416,12 @@ public class LibraryController {
   //** PROFILE **//
 
   @GetMapping(value = "/profiles/{accountId}")
-  public Profile getCustomerProfile(@PathVariable long accountId) {
-    return libraryService.getCustomerProfile(accountId);
+  public ResponseEntity getCustomerProfile(@PathVariable long accountId) {
+    Profile profile = libraryService.getCustomerProfile(accountId);
+    if (profile == null) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    }
+    return ResponseEntity.status(HttpStatus.OK).body(profile);
   }
 
   @GetMapping(value = "/profiles/{accountId}/followers")

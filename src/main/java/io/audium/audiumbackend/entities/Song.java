@@ -8,28 +8,42 @@ import io.audium.audiumbackend.entities.relationships.SongPlay;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 
-@SqlResultSetMapping(
-  name = "SearchSongMapping",
-  classes = {@ConstructorResult(targetClass = Song.class, columns = {
-    @ColumnResult(name = "songId"),
-    @ColumnResult(name = "title"),
-    @ColumnResult(name = "duration"),
-    @ColumnResult(name = "year"),
-    @ColumnResult(name = "isExplicit"),
-    @ColumnResult(name = "artistId"),
-    @ColumnResult(name = "artistName"),
-    @ColumnResult(name = "albumId"),
-    @ColumnResult(name = "albumTitle"),
-    @ColumnResult(name = "file"),
-    @ColumnResult(name = "genreId"),
-    @ColumnResult(name = "genreName")
-  })
-  }
-)
+@SqlResultSetMappings({
+  @SqlResultSetMapping(
+    name = "SongStatsMapping",
+    classes = {@ConstructorResult(targetClass = Song.class, columns = {
+      @ColumnResult(name = "songId"),
+      @ColumnResult(name = "title"),
+      @ColumnResult(name = "artistId"),
+      @ColumnResult(name = "artistName"),
+      @ColumnResult(name = "playCountLastMonth")
+    })
+    }
+  ),
+  @SqlResultSetMapping(
+    name = "SearchSongMapping",
+    classes = {@ConstructorResult(targetClass = Song.class, columns = {
+      @ColumnResult(name = "songId"),
+      @ColumnResult(name = "title"),
+      @ColumnResult(name = "duration"),
+      @ColumnResult(name = "year"),
+      @ColumnResult(name = "isExplicit"),
+      @ColumnResult(name = "artistId"),
+      @ColumnResult(name = "artistName"),
+      @ColumnResult(name = "albumId"),
+      @ColumnResult(name = "albumTitle"),
+      @ColumnResult(name = "file"),
+      @ColumnResult(name = "genreId"),
+      @ColumnResult(name = "genreName")
+    })
+    }
+  )
+})
 @Entity
 public class Song {
 
@@ -87,6 +101,11 @@ public class Song {
   @Formula("(SELECT COUNT(SP.songId) FROM Song AS S JOIN song_play AS SP ON S.songId = SP.songId WHERE SP.songId = songId)")
   private int playCount;
 
+  //@JsonIgnore
+  //@Formula("(SELECT COUNT(SP.songId) FROM Song AS S1 JOIN song_play AS SP ON S1.songId = SP.songId WHERE SP.songId = songId AND YEAR(SP.timePlayed) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(SP.timePlayed) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH))")
+  @Transient
+  private int playCountLastMonth;
+
   public Song() {
   }
 
@@ -114,6 +133,14 @@ public class Song {
     this.genre = genre;
     this.isExplicit = isExplicit;
     this.lyrics = lyrics;
+  }
+
+  public Song(Integer songId, String title, Integer artistId, String artistName, BigInteger playCountLastMonth) {
+    this.songId = songId.longValue();
+    this.title = title;
+    this.artistId = artistId;
+    this.artistName = artistName;
+    this.playCountLastMonth = playCountLastMonth.intValue();
   }
 
   public Long getSongId() {
@@ -237,5 +264,11 @@ public class Song {
   }
   public void setAlbumTitle(String albumTitle) {
     this.albumTitle = albumTitle;
+  }
+  public int getPlayCountLastMonth() {
+    return playCountLastMonth;
+  }
+  public void setPlayCountLastMonth(int playCountLastMonth) {
+    this.playCountLastMonth = playCountLastMonth;
   }
 }

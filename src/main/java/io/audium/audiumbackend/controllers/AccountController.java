@@ -159,7 +159,7 @@ public class AccountController {
     return accountService.getCustomerFollowing(accountId);
   }
 
-  @GetMapping(value = "/accounts/{accountId}/profile/{profileId}/following")
+  @GetMapping(value = "/accounts/{accountId}/profile/{profileId}/isfollowing")
   public ResponseEntity checkIfFollowing(@RequestHeader(value = "Authorization") String token,
                                          @PathVariable long accountId,
                                          @PathVariable long profileId) {

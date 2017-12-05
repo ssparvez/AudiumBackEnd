@@ -1,6 +1,6 @@
 package io.audium.audiumbackend.controllers;
 
-import io.audium.audiumbackend.entities.Album;
+import io.audium.audiumbackend.entities.Song;
 import io.audium.audiumbackend.entities.projections.LibraryAlbum;
 import io.audium.audiumbackend.services.ArtistManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,11 @@ public class ArtistController {
   @GetMapping(value = "/artists/accounts/{accountId}/albums")
   public List<LibraryAlbum> getArtistAlbums(@PathVariable long accountId) {
     return artistManagementService.getArtistAlbums(accountId);
+  }
+
+  @GetMapping(value = "/artists/accounts/{accountId}/stats")
+  public List<Song> getArtistStats(@PathVariable long accountId) {
+    return artistManagementService.getArtistMonthStats(accountId);
   }
 
   @DeleteMapping(value = "/albums/{albumId}")

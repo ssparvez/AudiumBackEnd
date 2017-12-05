@@ -15,4 +15,9 @@ public class SongRepositoryImpl implements SongRepositoryCustom {
   public List<Song> searchSongs(String query) {
     return entityManager.createNativeQuery(query, "SearchSongMapping").getResultList();
   }
+
+  @Override
+  public List<Song> getMonthSongStats(String query) {
+    return entityManager.createNativeQuery(query, "SongStatsMapping").getResultList();
+  }
 }
