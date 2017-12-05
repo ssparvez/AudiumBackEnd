@@ -219,7 +219,7 @@ public class LibraryController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
   }
-  @CrossOrigin
+
   @DeleteMapping(value = "/accounts/{accountId}/playlist/{playlistId}/remove/song/{songId}")
   public ResponseEntity removeSongFromPlaylist(@RequestHeader(value = "Authorization") String token,
                                                @PathVariable long accountId,

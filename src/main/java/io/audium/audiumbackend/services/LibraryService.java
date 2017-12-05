@@ -286,7 +286,9 @@ public class LibraryService {
 
   public boolean deleteSongFromPlaylist(long playlistId, long songId) {
 
-    return (playlistRepository.deleteSongFromPlaylist(playlistId, songId) == 1);
+    int tst = playlistRepository.deleteSongFromPlaylist(playlistId, songId);
+    System.out.println(tst);
+    return ( tst == 1);
   }
 
   public boolean addSongToPlaylist(long playlistId, long songId) {
