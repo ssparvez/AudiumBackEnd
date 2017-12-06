@@ -21,6 +21,10 @@ public interface ArtistRepository extends CrudRepository<Artist, Long>, ArtistRe
   @Query("SELECT A.artistId AS artistId, A.artistName AS artistName, A.bio AS bio FROM Artist A WHERE A.artistId = ?1")
   public LibraryArtist findByArtistId(long artistId);
 
+  @Transactional(readOnly = true)
+  @Query("SELECT A.artistId AS artistId, A.artistName AS artistName, A.bio AS bio FROM Artist A WHERE A.accountId = ?1")
+  public LibraryArtist findByAccountId(long accountId);
+
   @Query("SELECT E FROM Artist A INNER JOIN A.events AS E WHERE A.artistId = ?1 AND E.eventDate >= CURRENT_DATE() AND (E.isCancelled = FALSE) ORDER BY (ABS(E.eventDate - CURRENT_DATE()) - E.isCancelled) ASC")
   public List<Event> findArtistEvents(long artistId);
 

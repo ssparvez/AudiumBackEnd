@@ -79,6 +79,10 @@ public class LibraryService {
     return artistRepository.findByArtistId(artistId);
   }
 
+  public LibraryArtist getArtistByAccountId(long accountId) {
+    return artistRepository.findByAccountId(accountId);
+  }
+
   public List<LibraryAlbum> getArtistAlbums(long artistId) {
     return albumRepository.findArtistAlbums(artistId);
   }
