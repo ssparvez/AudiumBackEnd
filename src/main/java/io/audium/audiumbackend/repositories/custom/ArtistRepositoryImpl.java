@@ -13,7 +13,7 @@ public class ArtistRepositoryImpl implements ArtistRepositoryCustom {
   private EntityManager entityManager;
 
   @Override
-  public List<Artist> searchArtists(String query) {
+  public List<Artist> getArtistsByCustomQuery(String query) {
     return entityManager.createNativeQuery(query, "SearchArtistMapping").getResultList();
   }
 

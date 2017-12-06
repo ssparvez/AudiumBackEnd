@@ -12,6 +12,9 @@ import java.util.List;
 
 @Service
 public class LibraryService {
+  // Number of top songs to retrieve from the database when browsing a genre page
+  public static long GENRE_TOP_SONG_COUNT = 50;
+
   @Autowired
   private CustomerRepository customerRepository;
   @Autowired
@@ -92,6 +95,23 @@ public class LibraryService {
 
   public Iterable<Genre> getAllGenres() {
     return genreRepository.findAll();
+  }
+
+  public Genre getGenreSongsAndAlbums(long genreId) {
+    Genre genre = genreRepository.findOne(genreId);
+    if (genre == null) {
+      return null;
+    }
+    // NOTE: In songQuery, playCountLastMonth is actually playCount; just using playCountLastMonth to circumvent JPA
+    String songQuery =
+      "   SELECT S.songId AS songId, S.title AS title, Art.artistId AS artistId, Art.name AS artistName, Alb.albumId AS albumId, Alb.title AS albumTitle, S.file AS file, S.duration AS duration, S.isExplicit AS isExplicit, S.year AS year, S.genreId AS genreId, \"" + genre.getGenreName() + "\" AS genreName, S.playCountLastMonth AS playCountLastMonth "
+        + " FROM (SELECT GS.*, COUNT(GS.songId) AS playCountLastMonth FROM Song GS, song_play SP WHERE GS.songId = SP.songId AND GS.genreId = " + genreId + " GROUP BY GS.songId LIMIT " + LibraryService.GENRE_TOP_SONG_COUNT + ") AS S, "
+        + " artist_song ArtS, Artist Art, album_song AlbS, Album Alb WHERE S.songId = ArtS.songId AND S.songId = AlbS.songId AND Art.artistId = ArtS.artistId AND Alb.albumId = AlbS.albumId GROUP BY S.songId ORDER BY S.playCountLastMonth DESC, S.year DESC, S.title ASC";
+
+    String artistQuery = "SELECT A.artistId AS artistId, A.name AS artistName, A.bio AS bio FROM Artist A, artist_genre AG WHERE A.artistId = AG.artistId AND AG.genreId = " + genreId + " ORDER BY A.name ASC";
+    genre.setSongs(songRepository.findSongsByGenreId(songQuery));
+    genre.setArtists(artistRepository.getArtistsByCustomQuery(artistQuery));
+    return genre;
   }
 
   // LABEL **/
@@ -288,7 +308,7 @@ public class LibraryService {
 
     int tst = playlistRepository.deleteSongFromPlaylist(playlistId, songId);
     System.out.println(tst);
-    return ( tst == 1);
+    return (tst == 1);
   }
 
   public boolean addSongToPlaylist(long playlistId, long songId) {

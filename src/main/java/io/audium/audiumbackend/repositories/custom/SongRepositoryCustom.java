@@ -8,4 +8,6 @@ public interface SongRepositoryCustom {
   List<Song> searchSongs(String query);
 
   List<Song> getMonthSongStats(String query);
+
+  List<Song> findSongsByGenreId(String query);
 }

@@ -6,7 +6,7 @@ import io.audium.audiumbackend.entities.projections.LibraryArtist;
 import java.util.List;
 
 public interface ArtistRepositoryCustom {
-  List<Artist> searchArtists(String query);
+  List<Artist> getArtistsByCustomQuery(String query);
 
   List<LibraryArtist> getSimilarArtists(String query);
 }

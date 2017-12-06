@@ -26,6 +26,26 @@ import java.util.List;
     }
   ),
   @SqlResultSetMapping(
+    name = "PopularSongMapping",
+    classes = {@ConstructorResult(targetClass = Song.class, columns = {
+      @ColumnResult(name = "songId"),
+      @ColumnResult(name = "title"),
+      @ColumnResult(name = "artistId"),
+      @ColumnResult(name = "artistName"),
+      @ColumnResult(name = "albumId"),
+      @ColumnResult(name = "albumTitle"),
+      @ColumnResult(name = "file"),
+      @ColumnResult(name = "duration"),
+      @ColumnResult(name = "isExplicit"),
+      @ColumnResult(name = "year"),
+      @ColumnResult(name = "genreId"),
+      @ColumnResult(name = "genreName"),
+      // NOTE: In this mapping, playCountLastMonth is actually playCount; just using playCountLastMonth to circumvent JPA
+      @ColumnResult(name = "playCountLastMonth")
+    })
+    }
+  ),
+  @SqlResultSetMapping(
     name = "SearchSongMapping",
     classes = {@ConstructorResult(targetClass = Song.class, columns = {
       @ColumnResult(name = "songId"),
@@ -109,7 +129,10 @@ public class Song {
   public Song() {
   }
 
-  public Song(Integer songId, String title, java.util.Date duration, java.util.Date year, Boolean isExplicit, Integer artistId, String artistName, Integer albumId, String albumTitle, String file, Integer genreId, String genreName) {
+  // SearchSongMapping
+  public Song(Integer songId, String title, java.util.Date duration, java.util.Date year,
+              Boolean isExplicit, Integer artistId, String artistName, Integer albumId,
+              String albumTitle, String file, Integer genreId, String genreName) {
     this.songId = songId.longValue();
     this.title = title;
     this.duration = new Time(duration.getTime());
@@ -123,10 +146,28 @@ public class Song {
     this.albumTitle = albumTitle;
   }
 
+  // PopularSongMapping
+  public Song(Integer songId, String title, Integer artistId, String artistName, Integer albumId,
+              String albumTitle, String file, java.util.Date duration, Boolean isExplicit,
+              java.util.Date year, Integer genreId, String genreName, BigInteger playCountLastMonth) {
+    this.songId = songId.longValue();
+    this.title = title;
+    this.duration = new Time(duration.getTime());
+    this.year = new Date(year.getTime());
+    this.isExplicit = isExplicit;
+    this.genre = new Genre(genreId.longValue(), genreName);
+    this.artistId = artistId;
+    this.artistName = artistName;
+    this.file = file;
+    this.albumId = albumId;
+    this.albumTitle = albumTitle;
+    // This is actually playCount; just using playCountLastMonth to circumvent JPA
+    this.playCountLastMonth = playCountLastMonth.intValue();
+  }
+  //ConstructorResultColumnProcessor.resolveConstructor(Class targetClass, List<Type> types)
   public Song(Long songId, String title, Time duration, String file, Date year, Genre genre, boolean isExplicit, String lyrics) {
     this.songId = songId;
     this.title = title;
-    System.out.println("Java.sql:\n  Duration: " + duration.toString() + "\n  Year: " + year.toString());
     this.duration = duration;
     this.file = file;
     this.year = year;
@@ -135,6 +176,7 @@ public class Song {
     this.lyrics = lyrics;
   }
 
+  // SongStatsMapping
   public Song(Integer songId, String title, Integer artistId, String artistName, BigInteger playCountLastMonth) {
     this.songId = songId.longValue();
     this.title = title;

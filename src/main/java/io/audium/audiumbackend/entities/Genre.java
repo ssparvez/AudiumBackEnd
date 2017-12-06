@@ -1,6 +1,7 @@
 package io.audium.audiumbackend.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @SqlResultSetMapping(
   name = "SearchGenreMapping",
@@ -18,6 +19,12 @@ public class Genre {
   private Long   genreId;
   @Column(name = "name")
   private String genreName;
+
+  @Transient
+  private List<Song> songs;
+
+  @Transient
+  private List<Artist> artists;
 
   public Genre() {
   }
@@ -44,5 +51,17 @@ public class Genre {
   }
   public void setGenreName(String genreName) {
     this.genreName = genreName;
+  }
+  public List<Song> getSongs() {
+    return songs;
+  }
+  public void setSongs(List<Song> songs) {
+    this.songs = songs;
+  }
+  public List<Artist> getArtists() {
+    return artists;
+  }
+  public void setArtists(List<Artist> artists) {
+    this.artists = artists;
   }
 }

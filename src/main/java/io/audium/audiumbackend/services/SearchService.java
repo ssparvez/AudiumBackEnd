@@ -100,7 +100,7 @@ public class SearchService {
     String query = "SELECT Se.artistId AS artistId, Se.name AS artistName, Se.bio AS bio "
       + " FROM (SELECT A.*, " + relevanceLevelStatement + " FROM Artist A) AS Se "
       + " WHERE Se.Relevance > 0 ORDER BY Se.Relevance DESC";
-    return artistRepository.searchArtists(query);
+    return artistRepository.getArtistsByCustomQuery(query);
   }
 
   public List<Playlist> searchPlaylists(String searchQuery) {

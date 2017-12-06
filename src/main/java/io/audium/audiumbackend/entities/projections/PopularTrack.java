@@ -16,7 +16,6 @@ public interface PopularTrack {
   String getTitle();
   Long getArtistId();
   String getArtistName();
-  //List<Artist> getArtists();
   Long getAlbumId();
   String getAlbumTitle();
   String getFile();

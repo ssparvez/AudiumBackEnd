@@ -220,6 +220,7 @@ public class LibraryController {
     }
   }
 
+  @CrossOrigin
   @DeleteMapping(value = "/accounts/{accountId}/playlist/{playlistId}/remove/song/{songId}")
   public ResponseEntity removeSongFromPlaylist(@RequestHeader(value = "Authorization") String token,
                                                @PathVariable long accountId,
@@ -399,6 +400,11 @@ public class LibraryController {
     } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
     }
+  }
+
+  @GetMapping(value = "/genres/{genreId}/browse")
+  public Genre getGenreSongsAndAlbums(@PathVariable long genreId) {
+    return libraryService.getGenreSongsAndAlbums(genreId);
   }
 
   //** LABEL **/
