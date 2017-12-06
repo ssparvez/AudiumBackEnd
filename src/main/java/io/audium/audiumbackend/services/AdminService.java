@@ -124,4 +124,10 @@ public class AdminService {
     return ( artistRepo.save(artist) != null );
   }
 
+  public boolean updateArtist(Artist artist, long artistId) {
+    Artist artistToFind = artistRepo.findOne(artistId);
+    artistToFind.setBio(artist.getBio());
+    return ( artistRepo.save(artistToFind) != null );
+
+  }
 }

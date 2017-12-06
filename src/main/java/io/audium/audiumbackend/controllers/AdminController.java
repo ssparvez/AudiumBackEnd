@@ -228,6 +228,18 @@ public class AdminController {
     } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
   }
 
+  @PutMapping(value = "/admin/{adminId}/artist/{artistId}/update")
+  public ResponseEntity updateArtist(@RequestHeader(value = "Authorization") String token,
+                                     @PathVariable long adminId,
+                                     @PathVariable long artistId,
+                                     @RequestBody Artist artist) {
+    if (verificationService.verifyIntegrityAdminAccount(token, adminId) != null) {
+      if (adminService.updateArtist(artist, artistId)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+  }
+
   @PostMapping(value = "/admin/{adminId}/artists/label/{labelId}/create")
   public ResponseEntity addArtist(@RequestHeader(value = "Authorization") String token,
                                   @PathVariable long adminId,
