@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 public class AccountController {
 
   @Autowired
