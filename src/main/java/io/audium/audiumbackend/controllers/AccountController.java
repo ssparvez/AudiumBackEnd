@@ -179,10 +179,15 @@ public class AccountController {
                                                  @PathVariable long profileId,
                                                  @PathVariable boolean status) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
-      if (accountService.changeProfileFollowStatus(accountId, profileId, status)) {
-        return ResponseEntity.status(HttpStatus.OK).body(true);
-      } else {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+      if ( !accountService.checkIfFollowing(profileId, accountId)) {
+        if (accountService.changeProfileFollowStatus(accountId, profileId, status)) {
+          return ResponseEntity.status(HttpStatus.OK).body(true);
+        } else {
+          return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+        }
+      }
+      else {
+        return ResponseEntity.status(HttpStatus.OK).body(false);
       }
     } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
