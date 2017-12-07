@@ -4,10 +4,12 @@ import com.google.gson.JsonObject;
 import io.audium.audiumbackend.entities.Account;
 import io.audium.audiumbackend.entities.Customer;
 import io.audium.audiumbackend.entities.PaymentInfo;
+import io.audium.audiumbackend.entities.UserPreferences;
 import io.audium.audiumbackend.entities.projections.CustomerFollower;
 import io.audium.audiumbackend.repositories.AccountRepository;
 import io.audium.audiumbackend.repositories.CustomerRepository;
 import io.audium.audiumbackend.repositories.PaymentInfoRepository;
+import io.audium.audiumbackend.repositories.UserPreferencesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,13 +23,16 @@ public class AccountService {
   static final private String BASIC   = "BasicUser";
   static final private String ADMIN   = "Admin";
   @Autowired
-  private AccountRepository     accountRepository;
+  private AccountRepository         accountRepository;
   @Autowired
-  private CustomerRepository    customerAccountRepository;
+  private CustomerRepository        customerAccountRepository;
   @Autowired
-  private PaymentInfoRepository paymentRepository;
+  private PaymentInfoRepository     paymentRepository;
   @Autowired
-  private VerificationService   verificationService;
+  private VerificationService       verificationService;
+  @Autowired
+  private UserPreferencesRepository preferencesRepository;
+
   private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
   public void registerAccount(Customer customerAccount) {
@@ -41,7 +46,6 @@ public class AccountService {
   public boolean deleteAccount(long accountId) {
     return (accountRepository.deleteById(accountId) == 1);
   }
-
 
   public JsonObject updateCustomerAccount(Customer accountToSave, Customer savedAccount) {
 
@@ -90,6 +94,30 @@ public class AccountService {
     }
   }
 
+  public JsonObject getPreferences(Long accountId) {
+    UserPreferences preferences = preferencesRepository.findOne(accountId);
+    if (preferences != null) {
+      JsonObject obj = new JsonObject();
+      obj.addProperty("accountId", preferences.getAccountId());
+      obj.addProperty("language", preferences.getLanguage());
+      obj.addProperty("quality", preferences.getQuality());
+      obj.addProperty("publicProfile", preferences.getPublicProfile());
+      obj.addProperty("defaultPublicSession", preferences.getDefaultPublicSession());
+      obj.addProperty("showExplicitContent", preferences.getShowExplicitContent());
+      return obj;
+    } else {
+      return null;
+    }
+  }
+
+  public boolean updatePreferences(UserPreferences preferences) {
+    if (preferencesRepository.save(preferences) != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   public JsonObject upgradeAccount(PaymentInfo paymentInfo) {
     paymentInfo.setCreditCardHash(verificationService.aesEncrypt(paymentInfo.getAccountId(), paymentInfo.getCreditCardHash()));
     if (paymentRepository.save(paymentInfo) != null) {
@@ -132,8 +160,8 @@ public class AccountService {
   }
 
   public boolean checkIfFollowing(long profileId, long accountId) {
-    System.out.println(customerAccountRepository.checkIfFollowing(profileId,accountId));
-    return ( customerAccountRepository.checkIfFollowing(profileId,accountId) != null);
+    System.out.println(customerAccountRepository.checkIfFollowing(profileId, accountId));
+    return (customerAccountRepository.checkIfFollowing(profileId, accountId) != null);
   }
 
   private JsonObject createJsonToken(Customer account) {
@@ -154,5 +182,4 @@ public class AccountService {
       return (customerAccountRepository.unFollowCustomer(profileId, accountId) == 1);
     }
   }
-
 }
