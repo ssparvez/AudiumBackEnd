@@ -1,9 +1,9 @@
 package io.audium.audiumbackend.controllers;
 
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.audium.audiumbackend.entities.Customer;
 import io.audium.audiumbackend.entities.PaymentInfo;
+import io.audium.audiumbackend.entities.UserPreferences;
 import io.audium.audiumbackend.entities.projections.CustomerFollower;
 import io.audium.audiumbackend.services.AccountService;
 import io.audium.audiumbackend.services.VerificationService;
@@ -33,30 +33,62 @@ public class AccountController {
     return ResponseEntity.status(HttpStatus.OK).body(true);
   }
   @CrossOrigin
-  @DeleteMapping(value="/accounts/{accountId}")
+  @DeleteMapping(value = "/accounts/{accountId}")
   public ResponseEntity deleteAccount(@RequestHeader(value = "Authorization") String token,
                                       @PathVariable long accountId) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
       if (accountService.deleteAccount(accountId)) {
         return ResponseEntity.status(HttpStatus.OK).body(true);
-
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
-      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
-    else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
-
   }
 
   @GetMapping(value = "/accounts/{accountId}/paymentinfo", produces = ("application/json"))
   public ResponseEntity getPaymentInfo(@PathVariable Long accountId) {
-
     JsonObject info = accountService.getPaymentInfo(accountId);
     if (info == null) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
     } else {
       return ResponseEntity.status(HttpStatus.OK).body(info.toString());
     }
+  }
+
+  @GetMapping(value = "/accounts/{accountId}/preferences", produces = ("application/json"))
+  public ResponseEntity getPreferences(@PathVariable Long accountId) {
+    JsonObject preferences = accountService.getPreferences(accountId);
+    if (preferences == null) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    } else {
+      return ResponseEntity.status(HttpStatus.OK).body(preferences.toString());
+    }
+  }
+
+  @CrossOrigin
+  @PutMapping(value = "/accounts/{accountId}/preferences/update")
+  public ResponseEntity updatePreferences(@RequestHeader(value = "Authorization") String token,
+                                          @RequestBody UserPreferences userPreferences,
+                                          @PathVariable Long accountId) {
+    userPreferences.setAccountId(accountId);
+    System.out.println(userPreferences.getAccountId() + " " + userPreferences.getLanguage() + " " + userPreferences.getQuality() + " publicProfile? " + userPreferences.getPublicProfile());
+    if (accountService.updatePreferences(userPreferences)) {
+      return ResponseEntity.status(HttpStatus.OK).body(true);
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    }
+    /*
+    if (accountId == userPreferences.getAccountId() && verificationService.verifyIntegrityCustomerAccount(token, userPreferences.getAccountId()) != null) {
+      if (accountService.updatePreferences(userPreferences)) {
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+      }
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    }*/
   }
 
   @PostMapping(value = "/upgrade")
@@ -106,6 +138,7 @@ public class AccountController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
   }
+
   @CrossOrigin
   @PutMapping(value = "/accounts/{accountId}/password")
   public ResponseEntity changePassword(@RequestHeader(value = "Authorization") String token,
@@ -135,7 +168,9 @@ public class AccountController {
 
       if (tokenToReturn != null) {
         return ResponseEntity.status(HttpStatus.OK).body(tokenToReturn.toString());
-      } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+      }
     } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
@@ -146,12 +181,14 @@ public class AccountController {
                                              @PathVariable long accountId) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
       List<CustomerFollower> customerFollowers;
-      if ( (customerFollowers = accountService.getCustomerFollowers(accountId)) != null) {
+      if ((customerFollowers = accountService.getCustomerFollowers(accountId)) != null) {
         return ResponseEntity.status(HttpStatus.OK).body(customerFollowers);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
-      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
-    else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
   }
 
   @GetMapping(value = "/accounts/{accountId}/following")
@@ -165,20 +202,22 @@ public class AccountController {
                                          @PathVariable long accountId,
                                          @PathVariable long profileId) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
-      if ( accountService.checkIfFollowing(profileId,accountId)) {
+      if (accountService.checkIfFollowing(profileId, accountId)) {
         return ResponseEntity.status(HttpStatus.OK).body(true);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
       }
-      else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
-    else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
   }
 
   @CrossOrigin
   @PutMapping(value = "/accounts/{accountId}/profile/{profileId}/follow/{status}")
   public ResponseEntity changeProfileFollowStatus(@RequestHeader(value = "Authorization") String token,
-                                                 @PathVariable long accountId,
-                                                 @PathVariable long profileId,
-                                                 @PathVariable boolean status) {
+                                                  @PathVariable long accountId,
+                                                  @PathVariable long profileId,
+                                                  @PathVariable boolean status) {
     if (verificationService.verifyIntegrityCustomerAccount(token, accountId) != null) {
       if (accountService.changeProfileFollowStatus(accountId, profileId, status)) {
         return ResponseEntity.status(HttpStatus.OK).body(true);
@@ -189,6 +228,4 @@ public class AccountController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
   }
-
-
 }
