@@ -124,7 +124,7 @@ public class AccountController {
     }
   }
 
-  @PostMapping(value = "/editpaymentinfo")
+  @PutMapping(value = "/editpaymentinfo")
   public ResponseEntity editPaymentInfo(@RequestHeader(value = "Authorization") String token,
                                         @RequestBody PaymentInfo paymentInfo) {
     if (verificationService.verifyIntegrityCustomerAccount(token, paymentInfo.getAccountId()) != null) {
