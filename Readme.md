@@ -21,6 +21,7 @@ This repository contains all code/resources for the Audium backend.
 ## Built With  
   * [Spring Framework](https://spring.io/)  
   * [IntelliJ IDEA](https://www.jetbrains.com/idea/): IDE  
+  * [Amazon Web Services](https://aws.amazon.com/): Web hosting  
 
 ## Course Website  
 [CSE308 Homepage](http://www3.cs.stonybrook.edu/~cse308/index-Section2.html)  
