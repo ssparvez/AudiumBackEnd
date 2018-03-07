@@ -1,6 +1,8 @@
 # Audium Backend  
 Backend portion of semester project for CSE308 - Software Engineering (Fall 2017 semester at SBU)  
 
+## [Live website](http://app.audium.io.s3-website.us-east-2.amazonaws.com/)  
+
 ## [Frontend Repository](https://github.com/ssparvez/AudiumFrontEnd)  
 
 ## [Database Repository](https://github.com/SeanPesce/AudiumDatabase)  
