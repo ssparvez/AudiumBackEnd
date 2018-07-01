@@ -111,11 +111,7 @@ public class AccountService {
   }
 
   public boolean updatePreferences(UserPreferences preferences) {
-    if (preferencesRepository.save(preferences) != null) {
-      return true;
-    } else {
-      return false;
-    }
+    return (preferencesRepository.save(preferences) != null);
   }
 
   public JsonObject upgradeAccount(PaymentInfo paymentInfo) {
@@ -144,11 +140,7 @@ public class AccountService {
 
   public boolean editPaymentInfo(PaymentInfo paymentInfo) {
     paymentInfo.setCreditCardHash(verificationService.aesEncrypt(paymentInfo.getAccountId(), paymentInfo.getCreditCardHash()));
-    if (paymentRepository.save(paymentInfo) != null) {
-      return true;
-    } else {
-      return false;
-    }
+    return (paymentRepository.save(paymentInfo) != null);
   }
 
   public List<CustomerFollower> getCustomerFollowers(long accountId) {
